@@ -392,18 +392,26 @@ export default function Page() {
                 <a href="#services" className="hover:text-lime-400 transition-colors">Services</a>
                 <a href="#process" className="hover:text-lime-400 transition-colors">Process</a>
                 <a href="#roadmap" className="hover:text-lime-400 transition-colors">Roadmap</a>
-                {/* <a href="#pricing" className="hover:text-lime-400 transition-colors">Pricing</a> */}
                 <Link href="/docs" className="hover:text-lime-400 transition-colors">
                   Docs
                 </Link>
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              {/* <a href="#contact" className="glass-effect text-white px-6 py-2 rounded-lg hover:bg-lime-300 transition-colors font-semibold">Get Audit</a> */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link href="/hexichat" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 border border-lime-400/30 hover:text-lime-400 hover:border-lime-400/60 hover:bg-lime-400/5 rounded-lg transition-all">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                HexiChat
+              </Link>
               <WalletConnectButton onMobile={false} />
-              {/* <WalletConnectButton /> */}
             </div>
-            <div className="flex items-center space-x-3 md:hidden">
+            <div className="flex items-center space-x-2 md:hidden">
+              <Link href="/hexichat" className="flex items-center justify-center w-9 h-9 text-gray-300 border border-lime-400/30 hover:text-lime-400 hover:border-lime-400/60 hover:bg-lime-400/5 rounded-lg transition-all">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </Link>
               <WalletConnectButton onMobile={true} />
               <button className="text-lime-400">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -685,13 +693,13 @@ export default function Page() {
             <div className="group relative service-card">
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 rounded-3xl blur opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
               <div className="relative bg-gradient-to-br from-[#0a1628]/90 to-[#0d1e35]/90 rounded-3xl p-5 md:p-8 border border-white/5 hover:border-blue-400/20 transition-all duration-300">
-                {/* Coming Soon Badge */}
+                {/* Beta Badge */}
                 <div className="absolute top-4 right-4 md:top-6 md:right-6">
                   <span className="shimmer inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-blue-500/25">
-                    <svg className="w-3 h-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
-                    COMING SOON
+                    BETA
                   </span>
                 </div>
 
@@ -742,11 +750,14 @@ export default function Page() {
                 </div>
 
                 {/* CTA Button */}
-                <a href="https://x.com/hexific" target="_blank" rel="noopener noreferrer" className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border border-blue-400/30 text-blue-400 font-semibold hover:from-blue-500 hover:to-indigo-500 hover:text-white hover:border-transparent transition-all duration-300 flex items-center justify-center gap-2">
+                <a href="/hexichat" className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border border-blue-400/30 text-blue-400 font-semibold hover:from-blue-500 hover:to-indigo-500 hover:text-white hover:border-transparent transition-all duration-300 flex items-center justify-center gap-2 group/btn">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
-                  Notify Me When Available
+                  Try HexiChat
+                  <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </a>
               </div>
             </div>
