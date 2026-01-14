@@ -393,6 +393,10 @@ export default function Page() {
                 <a href="#process" className="hover:text-lime-400 transition-colors">Process</a>
                 <a href="#roadmap" className="hover:text-lime-400 transition-colors">Roadmap</a>
                 {/* <a href="#pricing" className="hover:text-lime-400 transition-colors">Pricing</a> */}
+                <Link href="/learn" className="hover:text-lime-400 transition-colors flex items-center gap-1">
+                  <span>Learn</span>
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold bg-lime-400 text-black rounded">NEW</span>
+                </Link>
                 <Link href="/docs" className="hover:text-lime-400 transition-colors">
                   Docs
                 </Link>
