@@ -439,15 +439,15 @@ ${result.detailed_audit}
   }, [rateLimitError?.show]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="glass-effect rounded-2xl shadow-lg p-8 border border-lime-400/20">
-        <h2 className="text-3xl font-bold mb-2 gradient-text">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className="glass-effect rounded-2xl shadow-lg p-4 sm:p-6 md:p-8 border border-lime-400/20">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2 gradient-text text-center">
           {isHexificAIEnabled
             ? 'Hexific AI Premium Audit'
             : 'Free Smart Contract Audit'
           }
         </h2>
-        <p className="text-gray-300 mb-6">
+        <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 text-center">
           {isHexificAIEnabled
             ? 'Advanced security analysis with deep learning and automated fix suggestions'
             : (auditMode === 'upload'
@@ -496,7 +496,7 @@ ${result.detailed_audit}
 
           {/* Mode Switcher */}
           {auditMode === 'upload' ? (
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end">
               <button
                 type="button"
                 onClick={() => {
@@ -505,13 +505,13 @@ ${result.detailed_audit}
                   setResult(null);
                   setFile(null);
                 }}
-                className="text-sm text-lime-400 hover:text-lime-300 hover:cursor-pointer underline transition-colors"
+                className="text-xs sm:text-sm text-lime-400 hover:text-lime-300 hover:cursor-pointer underline transition-colors"
               >
                 Or audit by contract address →
               </button>
             </div>
           ) : (
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end">
               <button
                 type="button"
                 onClick={() => {
@@ -519,7 +519,7 @@ ${result.detailed_audit}
                   setStatusMessages([]);
                   setResult(null);
                 }}
-                className="text-sm text-lime-400 hover:text-lime-300 hover:cursor-pointer nderline transition-colors"
+                className="text-xs sm:text-sm text-lime-400 hover:text-lime-300 hover:cursor-pointer underline transition-colors"
               >
                 ← Back to ZIP upload
               </button>
@@ -527,9 +527,9 @@ ${result.detailed_audit}
           )}
 
           {/* Hexific AI Toggle */}
-          <div className="glass-effect border border-lime-400/20 rounded-lg p-4 flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isHexificAIEnabled ? 'bg-lime-400 text-black' : 'bg-gray-800 text-gray-400'}`}>
+          <div className="glass-effect border border-lime-400/20 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${isHexificAIEnabled ? 'bg-lime-400 text-black' : 'bg-gray-800 text-gray-400'}`}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -539,7 +539,7 @@ ${result.detailed_audit}
                   Hexific AI
                   <span className="text-[10px] bg-lime-400/20 text-lime-400 px-2 py-0.5 rounded-full border border-lime-400/30">BETA</span>
                 </h3>
-                <p className="text-xs text-gray-400">Enable advanced AI analysis (Requires Wallet)</p>
+                <p className="text-xs text-gray-400 hidden sm:block">Enable advanced AI analysis (Requires Wallet)</p>
               </div>
             </div>
 
@@ -557,7 +557,7 @@ ${result.detailed_audit}
             <>
               {/* File Upload Area */}
               <div
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 ${dragActive
+                className={`border-2 border-dashed rounded-lg p-4 sm:p-6 md:p-8 text-center transition-all duration-300 ${dragActive
                   ? 'border-lime-400 bg-lime-400/10 scale-[1.02]'
                   : 'border-lime-400/30 hover:border-lime-400/50 hover:bg-lime-400/5'
                   }`}
@@ -576,9 +576,9 @@ ${result.detailed_audit}
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
                   <div className="space-y-2">
-                    <div className="mx-auto w-16 h-16 bg-lime-400/20 rounded-xl flex items-center justify-center mb-4">
+                    <div className="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-lime-400/20 rounded-xl flex items-center justify-center mb-3 sm:mb-4">
                       <svg
-                        className="h-8 w-8 text-lime-400"
+                        className="h-6 w-6 sm:h-8 sm:w-8 text-lime-400"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 48 48"
@@ -591,13 +591,13 @@ ${result.detailed_audit}
                         />
                       </svg>
                     </div>
-                    <div className="text-gray-300">
+                    <div className="text-sm sm:text-base text-gray-300">
                       <span className="text-lime-400 hover:text-lime-300 font-semibold transition-colors">
                         Click to upload
                       </span>{' '}
                       or drag and drop
                     </div>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-400">
                       .sol or .zip file (max 100MB)
                     </p>
                   </div>

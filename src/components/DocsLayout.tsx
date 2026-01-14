@@ -23,7 +23,7 @@ export function DocsLayout({
                             <span className="text-2xl font-bold text-lime-400">HEXIFIC</span>
                             <span className="text-xs text-gray-500">DOCS</span>
                         </Link>
-                        <nav className="hidden lg:flex items-center space-x-6">
+                        <nav className="hidden lg:flex items-center space-x-8">
                             <Link
                                 href="/"
                                 className="bg-lime-400 text-black px-4 py-2 rounded-lg font-semibold hover:bg-lime-300 transition-all text-sm"

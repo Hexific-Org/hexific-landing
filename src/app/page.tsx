@@ -15,6 +15,7 @@ export default function Page() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [currentTranslateX, setCurrentTranslateX] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 
   const carouselAnimNameRef = useRef<string>('');
@@ -323,23 +324,7 @@ export default function Page() {
       b.addEventListener('click', onClick);
     });
 
-    // mobile menu toggle
-    const mobileBtn = document.querySelector<HTMLElement>('.md\\:hidden');
-    if (mobileBtn) {
-      const mobileMenu = document.createElement('div');
-      mobileMenu.className = 'md:hidden absolute top-full left-0 w-full bg-[#000E1B]/85 border-t border-lime-400/20 p-6 space-y-4 hidden';
-      mobileMenu.innerHTML = `
-        <a href="#services" class="block hover:text-lime-400 transition-colors">Services</a>
-        <a href="#process" class="block hover:text-lime-400 transition-colors">Process</a>
-        <a href="/docs" class="block hover:text-lime-400 transition-colors">Docs</a>
-        <a href="#roadmap" class="block hover:text-lime-400 transition-colors">Roadmap</a>
-      `;
-      mobileBtn.parentElement?.appendChild(mobileMenu);
-      mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-      mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-      });
-    }
+    // mobile menu toggle is now handled via React state
 
     return () => {
       cards.forEach(c => {
@@ -393,9 +378,9 @@ export default function Page() {
                 <a href="#process" className="hover:text-lime-400 transition-colors">Process</a>
                 <a href="#roadmap" className="hover:text-lime-400 transition-colors">Roadmap</a>
                 {/* <a href="#pricing" className="hover:text-lime-400 transition-colors">Pricing</a> */}
-                <Link href="/learn" className="hover:text-lime-400 transition-colors flex items-center gap-1">
+                <Link href="/learn" className="hover:text-lime-400 transition-colors flex items-center gap-1.5">
                   <span>Learn</span>
-                  <span className="px-1.5 py-0.5 text-[10px] font-bold bg-lime-400 text-black rounded">NEW</span>
+                  <span className="relative -top-1 px-1.5 py-px text-[9px] font-semibold bg-lime-400 text-black rounded-sm uppercase tracking-wide">New</span>
                 </Link>
                 <Link href="/docs" className="hover:text-lime-400 transition-colors">
                   Docs
@@ -409,38 +394,128 @@ export default function Page() {
             </div>
             <div className="flex items-center space-x-3 md:hidden">
               <WalletConnectButton onMobile={true} />
-              <button className="text-lime-400">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+              <button
+                className="text-lime-400"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
         </div>
+
       </nav>
+
+      {/* Full Screen Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] bg-[#000E1B] md:hidden overflow-hidden">
+          {/* Decorative background elements */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/4 -left-20 w-64 h-64 bg-lime-400/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-lime-400/5 rounded-full blur-3xl" />
+          </div>
+
+          {/* Header */}
+          <div className="relative flex items-center justify-between px-6 py-5 border-b border-gray-800/50">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 bg-lime-400 rounded-lg flex items-center justify-center shadow-lg shadow-lime-400/20">
+                <Image src="./logo.svg" alt="Hexific Logo" width={22} height={22} />
+              </div>
+              <span className="text-xl font-bold gradient-text">Hexific</span>
+            </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800/50 text-gray-400 hover:text-lime-400 hover:bg-gray-800 transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Navigation Links - Centered */}
+          <div className="relative flex flex-col items-center justify-center h-[calc(100vh-160px)] space-y-8 px-6">
+            <a
+              href="#services"
+              className="text-2xl font-medium text-white hover:text-lime-400 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Services
+            </a>
+            <a
+              href="#process"
+              className="text-2xl font-medium text-white hover:text-lime-400 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Process
+            </a>
+            <a
+              href="#roadmap"
+              className="text-2xl font-medium text-white hover:text-lime-400 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Roadmap
+            </a>
+            <Link
+              href="/learn"
+              className="text-2xl font-medium text-white hover:text-lime-400 transition-colors flex items-center gap-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Learn
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-lime-400 text-black rounded">NEW</span>
+            </Link>
+            <Link
+              href="/docs"
+              className="text-2xl font-medium text-white hover:text-lime-400 transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Docs
+            </Link>
+
+            {/* CTA Button */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="mt-10 bg-lime-400 text-black px-10 py-4 rounded-xl font-bold text-lg hover:bg-lime-300 transition-all shadow-lg shadow-lime-400/20 hover:shadow-lime-400/40"
+            >
+              Start Free Audit
+            </button>
+          </div>
+        </div>
+      )}
       {/* HEXI Price Tag */}
       <a
         href="https://dexscreener.com/solana/3ghjaogpDVt7QZ6eNauoggmj4WYw23TkpyVN2yZjpump"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 glass-effect border border-lime-400/30 rounded-2xl p-4 hover:border-lime-400 transition-all hover:scale-105 pulse-glow group"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 glass-effect border border-lime-400/30 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 hover:border-lime-400 transition-all hover:scale-105 pulse-glow group"
       >
         {hexiPrice !== null ? (
           <div className="flex flex-col items-center">
-            <span className="text-sm font-semibold">HEXI Price</span>
-            <span className="text-lg font-bold gradient-text">
+            <span className="text-xs sm:text-sm font-semibold">HEXI Price</span>
+            <span className="text-sm sm:text-lg font-bold gradient-text">
               ${hexiPrice < 0.0001
                 ? `0.0₄${hexiPrice.toFixed(8).replace(/^0\.0+/, '')}`
                 : hexiPrice.toFixed(4)}
             </span>
             {priceChange24h !== null && (
-              <span className={`text-sm font-medium ${priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <span className={`text-xs sm:text-sm font-medium ${priceChange24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {priceChange24h >= 0 ? '+' : ''}{priceChange24h.toFixed(2)}% (24h)
               </span>
             )}
           </div>
         ) : (
-          <span className="text-sm font-medium">Loading...</span>
+          <span className="text-xs sm:text-sm font-medium">Loading...</span>
         )}
       </a>
 
@@ -448,31 +523,31 @@ export default function Page() {
       <div>
         {/* Mobile hero (disabled animated backgrounds) */}
         <section className="md:hidden min-h-screen flex items-center justify-center">
-          <div className="max-w-7xl mx-auto px-6 py-20 text-center">
-            <h1 className="text-4xl font-black mb-6">
+          <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+            <h1 className="text-3xl sm:text-4xl font-black mb-4">
               <span className="gradient-text">Bulletproof</span>
               <br />
               Smart Contract Audits
             </h1>
-            <p className="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-base text-gray-300 mb-6 max-w-3xl mx-auto">
               Advanced AI-powered security analysis combined with expert manual review. Protect your DeFi protocol from exploits before they happen.
             </p>
-            <div className="flex flex-col gap-4 justify-center mb-12">
-              <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="bg-lime-400 text-black px-8 py-4 rounded-lg text-lg font-bold hover:bg-lime-300 transition-all cursor-pointer">
+            <div className="flex flex-col gap-3 justify-center mb-8">
+              <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="bg-lime-400 text-black px-6 py-3 rounded-lg text-base font-bold hover:bg-lime-300 transition-all cursor-pointer">
                 Start Free Audit
               </button>
-              <button onClick={() => window.open('https://github.com/Hexific/audit-reports', '_blank')} className="glass-effect px-8 py-4 rounded-lg text-lg font-semibold hover:bg-lime-400/20 transition-all cursor-pointer">
+              <button onClick={() => window.open('https://github.com/Hexific/audit-reports', '_blank')} className="glass-effect px-6 py-3 rounded-lg text-base font-semibold hover:bg-lime-400/20 transition-all cursor-pointer">
                 View Sample Report
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
-              <div className="glass-effect rounded-xl p-6">
-                <div className="text-3xl font-bold gradient-text mb-2" id="vulnerabilities">700+</div>
-                <div className="text-gray-400">Vulnerabilities Found</div>
+            <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+              <div className="glass-effect rounded-xl p-4">
+                <div className="text-2xl font-bold gradient-text mb-1" id="vulnerabilities">700+</div>
+                <div className="text-sm text-gray-400">Vulnerabilities Found</div>
               </div>
-              <div className="glass-effect rounded-xl p-6">
-                <div className="text-3xl font-bold gradient-text mb-2" id="response-time">24h</div>
-                <div className="text-gray-400">Avg Response</div>
+              <div className="glass-effect rounded-xl p-4">
+                <div className="text-2xl font-bold gradient-text mb-1" id="response-time">24h</div>
+                <div className="text-sm text-gray-400">Avg Response</div>
               </div>
             </div>
           </div>
@@ -524,18 +599,18 @@ export default function Page() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Section Header with Trust Indicators */}
-          <div className="text-center mb-12 md:mb-20">
-            <div className="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/20 rounded-full px-4 py-2 mb-6">
+          <div className="text-center mb-10 md:mb-20">
+            <div className="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/20 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 md:mb-6">
               <svg className="w-4 h-4 text-lime-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <span className="text-sm font-medium text-lime-400">Trusted by 50+ Web3 Projects</span>
+              <span className="text-xs sm:text-sm font-medium text-lime-400">Trusted by 50+ Web3 Projects</span>
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6">
               <span className="gradient-text">Enterprise-Grade</span>{' '}
               <span className="text-white">Security Services</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               From instant AI-powered scans to comprehensive manual audits by industry veterans.
               Your smart contracts deserve military-grade protection.
             </p>
@@ -860,9 +935,9 @@ export default function Page() {
       {/* Audit Process Section */}
       <section id="process" className="py-12 md:py-20 code-pattern overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-6">Audit Process</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <div className="text-center mb-10 md:mb-16 px-4">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold gradient-text mb-4 md:mb-6">Audit Process</h2>
+            <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto">
               Our streamlined process delivers comprehensive security analysis in record time.
             </p>
           </div>
@@ -1183,23 +1258,23 @@ export default function Page() {
       {/* CTA Section */}
       <section id="contact" className="py-12 md:py-20 floating-orbs">
         <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-6">Ready to Secure Your Protocol?</h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold gradient-text mb-4 md:mb-6">Ready to Secure Your Protocol?</h2>
+          <p className="text-base md:text-xl text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto">
             Join hundreds of projects that trust Hexific to protect their smart contracts and users&#39; funds.
           </p>
-          <div className="glass-effect rounded-2xl p-8 mb-8">
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Start Free Audit</h3>
-                <p className="text-gray-300 mb-4">Get started with our AI-powered vulnerability detection for free.</p>
-                <button onClick={scrollDown} className="bg-lime-400 text-black px-8 py-3 rounded-lg font-bold hover:bg-lime-300 transition-all pulse-glow cursor-pointer">
+          <div className="glass-effect rounded-2xl p-4 sm:p-6 md:p-8 mb-6 md:mb-8">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              <div className="text-center">
+                <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Start Free Audit</h3>
+                <p className="text-sm md:text-base text-gray-300 mb-4">Get started with our AI-powered vulnerability detection for free.</p>
+                <button onClick={scrollDown} className="bg-lime-400 text-black px-6 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base font-bold hover:bg-lime-300 transition-all pulse-glow cursor-pointer">
                   Upload Contract
                 </button>
               </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Book Consultation</h3>
-                <p className="text-gray-300 mb-4">Speak with our security experts about your specific needs.</p>
-                <button onClick={handleClick} className="border border-lime-400 text-lime-400 px-8 py-3 rounded-lg hover:bg-lime-400 hover:text-black transition-all cursor-pointer">
+              <div className="text-center">
+                <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Book Consultation</h3>
+                <p className="text-sm md:text-base text-gray-300 mb-4">Speak with our security experts about your specific needs.</p>
+                <button onClick={handleClick} className="border border-lime-400 text-lime-400 px-6 md:px-8 py-2.5 md:py-3 rounded-lg text-sm md:text-base hover:bg-lime-400 hover:text-black transition-all cursor-pointer">
                   Schedule Call
                 </button>
               </div>
@@ -1241,11 +1316,11 @@ export default function Page() {
         </div>
       </section>
       {/* Roadmap Section */}
-      <section id="roadmap" className="py-20 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-6">Roadmap</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+      <section id="roadmap" className="py-12 md:py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold gradient-text mb-4 md:mb-6">Roadmap</h2>
+            <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto">
               Our journey to make smart contract security accessible and comprehensive for everyone
             </p>
           </div>
