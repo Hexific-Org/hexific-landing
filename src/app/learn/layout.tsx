@@ -41,8 +41,8 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
       
       {/* Sidebar */}
       <aside className={`
-        fixed left-0 top-0 h-screen w-72 bg-[#000E1B]/95 backdrop-blur-xl
-        border-r border-lime-400/20 overflow-y-auto pt-20 z-50
+        fixed left-0 top-20 h-[calc(100vh-5rem)] w-72 bg-[#000E1B]/95 backdrop-blur-xl
+        border-r border-lime-400/20 overflow-y-auto z-40
         transform transition-transform duration-300 ease-in-out
         lg:translate-x-0
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -151,7 +151,7 @@ function LearnNavbar({ onMenuClick }: { onMenuClick: () => void }) {
 
   return (
     <nav className={`
-      fixed top-0 w-full z-50 transition-all duration-300
+      fixed top-0 w-full z-[60] transition-all duration-300
       ${scrolled 
         ? 'bg-[#000E1B]/90 backdrop-blur-xl border-b border-lime-400/20' 
         : 'bg-transparent'
