@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useSSEStream } from '@/hooks/useSSEStream';
 
 interface ToolCall {
     id: string;
@@ -20,11 +24,45 @@ interface Message {
 }
 
 const suggestedPrompts = [
-    { icon: '🔍', text: 'Common reentrancy vulnerabilities' },
-    { icon: '⚡', text: 'Flash loan attack prevention' },
-    { icon: '🛡️', text: 'Access control best practices' },
-    { icon: '📝', text: 'Review my smart contract' },
+    { icon: 'search', text: 'Analyze this contract for vulnerabilities' },
+    { icon: 'bolt', text: 'Explain flash loan attack vectors' },
+    { icon: 'shield', text: 'Best practices for access control' },
+    { icon: 'code', text: 'How to prevent reentrancy attacks' },
 ];
+
+// Icon component for suggested prompts
+function PromptIcon({ name }: { name: string }) {
+    const iconClass = "w-4 h-4 text-gray-500";
+
+    switch (name) {
+        case 'search':
+            return (
+                <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            );
+        case 'bolt':
+            return (
+                <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            );
+        case 'shield':
+            return (
+                <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+            );
+        case 'code':
+            return (
+                <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+            );
+        default:
+            return null;
+    }
+}
 
 // Tool call display component
 function ToolCallsDisplay({ toolCalls, isExpanded, onToggle }: {
@@ -45,12 +83,12 @@ function ToolCallsDisplay({ toolCalls, isExpanded, onToggle }: {
             >
                 {hasRunning ? (
                     <span className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 bg-lime-400 rounded-full animate-pulse"></span>
+                        <span className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></span>
                         Processing...
                     </span>
                 ) : (
                     <span className="flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         {completedCount} tool{completedCount !== 1 ? 's' : ''} used
@@ -72,9 +110,9 @@ function ToolCallsDisplay({ toolCalls, isExpanded, onToggle }: {
                             className="flex items-center gap-2 text-xs py-1.5 px-2 bg-white/[0.02] rounded-lg"
                         >
                             {tool.status === 'running' ? (
-                                <span className="w-3 h-3 border border-lime-400 border-t-transparent rounded-full animate-spin"></span>
+                                <span className="w-3 h-3 border border-gray-400 border-t-transparent rounded-full animate-spin"></span>
                             ) : tool.status === 'completed' ? (
-                                <svg className="w-3 h-3 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                 </svg>
                             ) : (
@@ -98,7 +136,7 @@ function ToolCallsDisplay({ toolCalls, isExpanded, onToggle }: {
 function ChatInputBox({
     input,
     setInput,
-    isLoading,
+    isStreaming,
     onSubmit,
     textareaRef,
     agentsRef,
@@ -108,11 +146,15 @@ function ChatInputBox({
     toggleAgent,
     selectAgent,
     availableAgents,
-    compact = false
+    compact = false,
+    selectedFile,
+    onFileSelect,
+    onFileRemove,
+    fileInputRef
 }: {
     input: string;
     setInput: (value: string) => void;
-    isLoading: boolean;
+    isStreaming: boolean;
     onSubmit: (e: React.FormEvent) => void;
     textareaRef: React.RefObject<HTMLTextAreaElement | null>;
     agentsRef: React.RefObject<HTMLDivElement | null>;
@@ -123,6 +165,10 @@ function ChatInputBox({
     selectAgent: (id: string) => void;
     availableAgents: { id: string; name: string; icon: string; description: string }[];
     compact?: boolean;
+    selectedFile?: File | null;
+    onFileSelect?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onFileRemove?: () => void;
+    fileInputRef?: React.RefObject<HTMLInputElement | null>;
 }) {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -134,7 +180,28 @@ function ChatInputBox({
     return (
         <div className={`w-full ${compact ? 'max-w-5xl 2xl:max-w-6xl' : 'max-w-3xl'} mx-auto`}>
             <form onSubmit={onSubmit}>
-                <div className="relative bg-white/[0.03] border border-white/10 rounded-2xl focus-within:border-lime-400/50 transition-colors">
+                <div className="relative bg-white/[0.03] border border-white/10 rounded-2xl focus-within:border-white/20 transition-all">
+                    {/* File Preview */}
+                    {selectedFile && (
+                        <div className="px-5 pt-3 pb-1">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm">
+                                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <span className="text-gray-300 truncate max-w-[200px]">{selectedFile.name}</span>
+                                <button
+                                    type="button"
+                                    onClick={onFileRemove}
+                                    className="text-gray-500 hover:text-white transition-colors"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     <textarea
                         ref={textareaRef}
                         value={input}
@@ -142,12 +209,34 @@ function ChatInputBox({
                         onKeyDown={handleKeyDown}
                         placeholder="Ask about smart contract security..."
                         rows={1}
-                        className="w-full bg-transparent text-white placeholder-gray-500 px-5 py-4 pr-14 resize-none focus:outline-none text-base"
-                        disabled={isLoading}
+                        className="w-full bg-transparent text-white placeholder-gray-500 px-5 py-4 pr-24 resize-none focus:outline-none text-base"
+                        disabled={isStreaming}
                     />
+
+                    {/* Hidden file input */}
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={onFileSelect}
+                        accept=".sol,.txt,.json,.md"
+                        className="hidden"
+                    />
+
+                    {/* File upload button */}
+                    <button
+                        type="button"
+                        onClick={() => fileInputRef?.current?.click()}
+                        className="absolute right-14 bottom-3 w-10 h-10 text-gray-500 hover:text-white rounded-xl flex items-center justify-center transition-all"
+                        title="Attach file"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                    </button>
+
                     <button
                         type="submit"
-                        disabled={!input.trim() || isLoading}
+                        disabled={!input.trim() || isStreaming}
                         className="absolute right-3 bottom-3 w-10 h-10 bg-lime-400 text-black rounded-xl flex items-center justify-center hover:bg-lime-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -163,8 +252,8 @@ function ChatInputBox({
                             type="button"
                             onClick={() => setAgentsDrawerOpen(!agentsDrawerOpen)}
                             className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg transition-all ${agentsDrawerOpen
-                                    ? 'bg-white/10 text-white'
-                                    : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-300'
+                                ? 'bg-white/10 text-white'
+                                : 'text-gray-400 hover:bg-white/[0.05] hover:text-gray-300'
                                 }`}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,8 +277,8 @@ function ChatInputBox({
                                             type="button"
                                             onClick={() => selectAgent(agent.id)}
                                             className={`w-full flex items-start gap-3 p-3 rounded-lg text-left transition-all ${activeAgents.includes(agent.id)
-                                                    ? 'bg-lime-400/10 border border-lime-400/30'
-                                                    : 'hover:bg-white/[0.05]'
+                                                ? 'bg-lime-400/10 border border-lime-400/30'
+                                                : 'hover:bg-white/[0.05]'
                                                 }`}
                                         >
                                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${activeAgents.includes(agent.id) ? 'bg-lime-400/20' : 'bg-white/5'
@@ -222,16 +311,16 @@ function ChatInputBox({
                         return (
                             <div
                                 key={agentId}
-                                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-lime-400/20 text-lime-400 border border-lime-400/50 rounded-full"
+                                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-white/10 text-white border border-white/20 rounded-full"
                             >
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                                 {agent.name}
                                 <button
                                     type="button"
                                     onClick={() => toggleAgent(agentId)}
-                                    className="hover:bg-lime-400/20 rounded-full p-0.5 transition-colors"
+                                    className="hover:bg-white/10 rounded-full p-0.5 transition-colors"
                                 >
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -252,17 +341,63 @@ function ChatInputBox({
 export default function HexiChatPage() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const [expandedToolCalls, setExpandedToolCalls] = useState<Record<string, boolean>>({});
     const [activeAgents, setActiveAgents] = useState<string[]>([]);
     const [agentsDrawerOpen, setAgentsDrawerOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [currentAssistantId, setCurrentAssistantId] = useState<string | null>(null);
+    const [toolStatus, setToolStatus] = useState<string | null>(null);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const agentsRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const API_URL = process.env.NEXT_PUBLIC_HEXICHAT_API_URL || 'http://localhost:8000';
 
     const availableAgents = [
-        { id: 'deep-audit', name: 'Deep Audit', icon: 'shield', description: 'Comprehensive smart contract security analysis' },
+        { id: 'deep_audit_agent', name: 'Deep Audit', icon: 'shield', description: 'Comprehensive smart contract security analysis' },
     ];
+
+    // SSE Stream hook
+    const { isStreaming, startStream } = useSSEStream({
+        apiUrl: `${API_URL}/stream_agent`,
+        onToken: useCallback((token: string) => {
+            setMessages((prev) => {
+                if (prev.length === 0) return prev;
+                const lastMsg = prev[prev.length - 1];
+                if (lastMsg && lastMsg.role === 'assistant') {
+                    // Create a new array with a new last message object
+                    return [
+                        ...prev.slice(0, -1),
+                        { ...lastMsg, content: lastMsg.content + token }
+                    ];
+                }
+                return prev;
+            });
+        }, []),
+        onStatus: useCallback((status: { message: string }) => {
+            setToolStatus(status.message);
+        }, []),
+        onError: useCallback((error: { error: string }) => {
+            console.error('Stream error:', error);
+            setMessages((prev) => {
+                if (prev.length === 0) return prev;
+                const lastMsg = prev[prev.length - 1];
+                if (lastMsg && lastMsg.role === 'assistant') {
+                    return [
+                        ...prev.slice(0, -1),
+                        { ...lastMsg, content: lastMsg.content + `\n\n⚠️ Error: ${error.error}` }
+                    ];
+                }
+                return prev;
+            });
+        }, []),
+        onEnd: useCallback(() => {
+            setCurrentAssistantId(null);
+            setToolStatus(null);
+        }, []),
+    });
 
     const toggleAgent = (agentId: string) => {
         setActiveAgents(prev =>
@@ -277,6 +412,20 @@ export default function HexiChatPage() {
             setActiveAgents(prev => [...prev, agentId]);
         }
         setAgentsDrawerOpen(false);
+    };
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+        }
+    };
+
+    const removeFile = () => {
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
     };
 
     useEffect(() => {
@@ -302,39 +451,159 @@ export default function HexiChatPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || isLoading) return;
+        if (!input.trim() || isStreaming) return;
 
         const userMessage: Message = {
             id: Date.now().toString(),
             role: 'user',
-            content: input.trim(),
+            content: selectedFile
+                ? `${input.trim()}\n\n📎 Attached: ${selectedFile.name}`
+                : input.trim(),
             timestamp: new Date(),
         };
 
-        setMessages((prev) => [...prev, userMessage]);
-        setInput('');
-        setIsLoading(true);
+        const assistantId = (Date.now() + 1).toString();
+        const assistantMessage: Message = {
+            id: assistantId,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date(),
+        };
 
-        setTimeout(() => {
-            const assistantMessage: Message = {
-                id: (Date.now() + 1).toString(),
-                role: 'assistant',
-                content: "Thanks for your question! HexiChat is currently in beta and will be fully operational soon. 🚀\n\nIn the meantime, try our **Free Audit Tool** on the homepage for instant smart contract security analysis.",
-                timestamp: new Date(),
-                toolCalls: [
-                    { id: '1', name: 'search_vulnerabilities', status: 'completed', description: 'Searched CVE database' },
-                    { id: '2', name: 'analyze_context', status: 'completed', description: 'Analyzed query context' },
-                ],
-            };
-            setMessages((prev) => [...prev, assistantMessage]);
-            setIsLoading(false);
-        }, 1200);
+        setMessages((prev) => [...prev, userMessage, assistantMessage]);
+        setCurrentAssistantId(assistantId);
+
+        const queryText = input.trim();
+        const fileToSend = selectedFile;
+
+        setInput('');
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+
+        // Determine which agent to use
+        const activeAgent = activeAgents.length > 0 ? activeAgents[0] : 'general_agent';
+
+        // Start streaming
+        await startStream({
+            query: queryText,
+            activeAgent,
+            file: fileToSend,
+        });
     };
 
-    const renderContent = (content: string) => {
-        let processed = content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
-        processed = processed.replace(/\n/g, '<br />');
-        return <span dangerouslySetInnerHTML={{ __html: processed }} />;
+    const renderContent = (content: string, isStreamingMessage: boolean = false) => {
+        return (
+            <div className="markdown-content">
+                <ReactMarkdown
+                    components={{
+                        // Headers
+                        h1: ({ children }) => (
+                            <h1 className="text-xl font-bold text-white mt-6 mb-3 first:mt-0 pb-2 border-b border-white/10">
+                                {children}
+                            </h1>
+                        ),
+                        h2: ({ children }) => (
+                            <h2 className="text-lg font-semibold text-white mt-5 mb-2 first:mt-0">
+                                {children}
+                            </h2>
+                        ),
+                        h3: ({ children }) => (
+                            <h3 className="text-base font-semibold text-white mt-4 mb-2 first:mt-0">
+                                {children}
+                            </h3>
+                        ),
+                        // Paragraphs
+                        p: ({ children }) => <p className="mb-3 last:mb-0 leading-relaxed">{children}</p>,
+                        // Bold & Italic
+                        strong: ({ children }) => <strong className="text-white font-semibold">{children}</strong>,
+                        em: ({ children }) => <em className="text-gray-300">{children}</em>,
+                        // Lists
+                        ul: ({ children }) => (
+                            <ul className="mb-4 space-y-2 list-none">
+                                {children}
+                            </ul>
+                        ),
+                        ol: ({ children }) => (
+                            <ol className="mb-4 space-y-2 list-decimal list-outside ml-5 marker:text-lime-400 marker:font-medium">
+                                {children}
+                            </ol>
+                        ),
+                        li: ({ children }) => (
+                            <li className="flex items-start gap-2">
+                                <span className="text-gray-500 mt-[7px] text-[6px]">●</span>
+                                <span className="flex-1">{children}</span>
+                            </li>
+                        ),
+                        // Code
+                        code: ({ className, children, ...props }) => {
+                            const match = className?.match(/language-(\w+)/);
+                            const language = match ? match[1] : null;
+
+                            if (language) {
+                                const codeString = String(children).replace(/\n$/, '');
+                                return (
+                                    <SyntaxHighlighter
+                                        style={oneDark}
+                                        language={language}
+                                        PreTag="div"
+                                        customStyle={{
+                                            margin: 0,
+                                            padding: '1rem',
+                                            background: '#0d1117',
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        {codeString}
+                                    </SyntaxHighlighter>
+                                );
+                            }
+                            return (
+                                <code className="bg-white/10 text-gray-300 px-1.5 py-0.5 rounded text-[13px] font-mono">
+                                    {children}
+                                </code>
+                            );
+                        },
+                        pre: ({ children, node }) => {
+                            // Try to extract language from the code child
+                            const codeElement = node?.children?.[0] as { properties?: { className?: string[] } };
+                            const className = codeElement?.properties?.className?.[0] || '';
+                            const match = className.match(/language-(\w+)/);
+                            const language = match ? match[1] : 'code';
+
+                            return (
+                                <div className="my-4 rounded-lg overflow-hidden border border-white/10">
+                                    <div className="bg-white/5 px-4 py-2 border-b border-white/10 flex items-center justify-between">
+                                        <span className="text-xs text-gray-400 font-mono">{language}</span>
+                                    </div>
+                                    {children}
+                                </div>
+                            );
+                        },
+                        // Links
+                        a: ({ href, children }) => (
+                            <a href={href} className="text-blue-400 hover:text-blue-300 underline underline-offset-2" target="_blank" rel="noopener noreferrer">
+                                {children}
+                            </a>
+                        ),
+                        // Blockquote
+                        blockquote: ({ children }) => (
+                            <blockquote className="border-l-2 border-gray-600 pl-4 my-4 text-gray-400 italic">
+                                {children}
+                            </blockquote>
+                        ),
+                        // Horizontal rule
+                        hr: () => <hr className="border-white/10 my-6" />,
+                    }}
+                >
+                    {content}
+                </ReactMarkdown>
+                {isStreamingMessage && (
+                    <span className="inline-block w-1.5 h-4 bg-gray-400 ml-0.5 animate-pulse rounded-sm" />
+                )}
+            </div>
+        );
     };
 
     const isNewChat = messages.length === 0;
@@ -344,42 +613,46 @@ export default function HexiChatPage() {
             <style dangerouslySetInnerHTML={{
                 __html: `
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(8px); }
+          from { opacity: 0; transform: translateY(12px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideDown {
-          from { opacity: 1; transform: translateY(0); }
-          to { opacity: 1; transform: translateY(100%); }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .message-enter { animation: fadeIn 0.25s ease-out; }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); }
+          50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); }
+        }
+        .message-enter { animation: fadeIn 0.3s ease-out; }
         .typing span {
           display: inline-block;
           width: 6px;
           height: 6px;
-          background: #a3e635;
+          background: #6b7280;
           border-radius: 50%;
-          animation: typing 1.2s infinite ease-in-out;
+          animation: typing 1.4s infinite ease-in-out;
         }
         .typing span:nth-child(1) { animation-delay: 0s; }
-        .typing span:nth-child(2) { animation-delay: 0.2s; }
-        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        .typing span:nth-child(2) { animation-delay: 0.15s; }
+        .typing span:nth-child(3) { animation-delay: 0.3s; }
         @keyframes typing {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-          30% { transform: translateY(-4px); opacity: 1; }
+          0%, 60%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+          30% { transform: translateY(-4px) scale(1.05); opacity: 1; }
         }
       `}} />
 
             {/* Header */}
-            <header className="flex-shrink-0 border-b border-white/5 bg-[#0a0f1a]/80 backdrop-blur-xl z-10">
-                <div className="px-6 lg:px-10 xl:px-16 h-16 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-lime-400 rounded-lg flex items-center justify-center">
-                            <Image src="/logo.svg" alt="Logo" width={18} height={18} />
+            <header className="flex-shrink-0 border-b border-white/5 bg-[#0a0f1a]/95 backdrop-blur-xl z-10">
+                <div className="px-6 lg:px-10 xl:px-16 h-14 flex items-center justify-between">
+                    <Link href="/" className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 bg-lime-400 rounded-lg flex items-center justify-center">
+                            <Image src="/logo.svg" alt="Logo" width={14} height={14} />
                         </div>
-                        <span className="text-lg font-semibold text-white">HexiChat</span>
-                        <span className="text-xs bg-lime-400/20 text-lime-400 px-2 py-0.5 rounded font-medium">BETA</span>
+                        <span className="text-base font-medium text-white">HexiChat</span>
+                        <span className="text-[10px] bg-white/10 text-gray-400 px-1.5 py-0.5 rounded font-medium">BETA</span>
                     </Link>
-                    <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1">
+                    <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1.5">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
@@ -392,14 +665,12 @@ export default function HexiChatPage() {
             {isNewChat ? (
                 /* New Chat: Input in center */
                 <main className="flex-1 flex flex-col items-center justify-center px-6 lg:px-8">
-                    <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl flex items-center justify-center mb-6">
-                        <svg className="w-8 h-8 lg:w-10 lg:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                        </svg>
+                    <div className="w-12 h-12 lg:w-14 lg:h-14 bg-lime-400 rounded-xl flex items-center justify-center mb-6">
+                        <Image src="/logo.svg" alt="HexiChat" width={24} height={24} className="lg:w-7 lg:h-7" />
                     </div>
                     <h1 className="text-2xl lg:text-3xl font-semibold text-white mb-2">How can I help you today?</h1>
                     <p className="text-gray-400 text-center max-w-md mb-8">
-                        Ask about smart contract security, vulnerabilities, or get code reviewed.
+                        Smart contract security, vulnerability analysis, and code review
                     </p>
 
                     {/* Input Box - Centered */}
@@ -407,7 +678,7 @@ export default function HexiChatPage() {
                         <ChatInputBox
                             input={input}
                             setInput={setInput}
-                            isLoading={isLoading}
+                            isStreaming={isStreaming}
                             onSubmit={handleSubmit}
                             textareaRef={textareaRef}
                             agentsRef={agentsRef}
@@ -417,6 +688,10 @@ export default function HexiChatPage() {
                             toggleAgent={toggleAgent}
                             selectAgent={selectAgent}
                             availableAgents={availableAgents}
+                            selectedFile={selectedFile}
+                            onFileSelect={handleFileSelect}
+                            onFileRemove={removeFile}
+                            fileInputRef={fileInputRef}
                         />
                     </div>
 
@@ -426,10 +701,12 @@ export default function HexiChatPage() {
                             <button
                                 key={i}
                                 onClick={() => setInput(prompt.text)}
-                                className="text-left p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] hover:border-lime-400/30 transition-all group"
+                                className="text-left p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-lime-400/30 transition-all group"
                             >
-                                <span className="text-xl mb-1 block">{prompt.icon}</span>
-                                <span className="text-xs lg:text-sm text-gray-400 group-hover:text-gray-300 leading-snug">{prompt.text}</span>
+                                <div className="mb-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <PromptIcon name={prompt.icon} />
+                                </div>
+                                <span className="text-sm text-gray-400 group-hover:text-gray-300 leading-snug">{prompt.text}</span>
                             </button>
                         ))}
                     </div>
@@ -440,23 +717,32 @@ export default function HexiChatPage() {
                     <main className="flex-1 overflow-y-auto">
                         <div className="max-w-5xl 2xl:max-w-6xl mx-auto px-6 lg:px-8 py-8">
                             <div className="space-y-6">
-                                {messages.map((message) => (
-                                    <div key={message.id} className="message-enter">
-                                        {message.role === 'user' ? (
-                                            <div className="flex justify-end">
-                                                <div className="max-w-[75%] lg:max-w-[60%] bg-white/10 border border-white/10 text-white rounded-2xl rounded-br-md px-5 py-4">
-                                                    <p className="text-sm lg:text-base leading-relaxed">{message.content}</p>
+                                {messages.map((message) => {
+                                    // Skip rendering empty assistant messages (still streaming)
+                                    if (message.role === 'assistant' && !message.content) {
+                                        return null;
+                                    }
+
+                                    return (
+                                        <div key={message.id} className="message-enter">
+                                            {message.role === 'user' ? (
+                                                <div className="flex justify-end">
+                                                    <div className="max-w-[80%] lg:max-w-[65%] bg-white/10 text-white rounded-2xl rounded-br-sm px-4 py-3">
+                                                        <p className="text-[15px] leading-relaxed">{message.content}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ) : (
-                                            <div className="flex gap-4">
-                                                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-lime-400 to-lime-500 rounded-xl flex items-center justify-center">
-                                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                                    </svg>
-                                                </div>
-                                                <div className="flex-1 max-w-[85%] lg:max-w-[70%] bg-white/[0.03] border border-white/5 rounded-2xl rounded-tl-md px-5 py-4">
-                                                    <p className="text-sm lg:text-base text-gray-300 leading-relaxed">{renderContent(message.content)}</p>
+                                            ) : (
+                                                <div className="max-w-[85%]">
+                                                    {/* Tool Status - Always on top of content */}
+                                                    {isStreaming && message.id === currentAssistantId && toolStatus && (
+                                                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
+                                                            <span className="w-3 h-3 border border-gray-500 border-t-transparent rounded-full animate-spin"></span>
+                                                            <span className="italic">{toolStatus}</span>
+                                                        </div>
+                                                    )}
+                                                    <div className="text-[15px] text-gray-200 leading-relaxed">
+                                                        {renderContent(message.content, isStreaming && message.id === currentAssistantId)}
+                                                    </div>
                                                     {message.toolCalls && message.toolCalls.length > 0 && (
                                                         <ToolCallsDisplay
                                                             toolCalls={message.toolCalls}
@@ -465,22 +751,16 @@ export default function HexiChatPage() {
                                                         />
                                                     )}
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-
-                                {isLoading && (
-                                    <div className="flex gap-4 message-enter">
-                                        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-lime-400 to-lime-500 rounded-xl flex items-center justify-center">
-                                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                            </svg>
+                                            )}
                                         </div>
-                                        <div className="bg-white/[0.03] border border-white/5 rounded-2xl rounded-tl-md px-5 py-5">
-                                            <div className="typing flex gap-2">
-                                                <span></span><span></span><span></span>
-                                            </div>
+                                    );
+                                })}
+
+                                {/* Typing indicator - only when no content yet */}
+                                {isStreaming && messages.length > 0 && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content && !toolStatus && (
+                                    <div className="message-enter">
+                                        <div className="typing flex gap-1.5">
+                                            <span></span><span></span><span></span>
                                         </div>
                                     </div>
                                 )}
@@ -494,7 +774,7 @@ export default function HexiChatPage() {
                         <ChatInputBox
                             input={input}
                             setInput={setInput}
-                            isLoading={isLoading}
+                            isStreaming={isStreaming}
                             onSubmit={handleSubmit}
                             textareaRef={textareaRef}
                             agentsRef={agentsRef}
@@ -504,6 +784,10 @@ export default function HexiChatPage() {
                             toggleAgent={toggleAgent}
                             selectAgent={selectAgent}
                             availableAgents={availableAgents}
+                            selectedFile={selectedFile}
+                            onFileSelect={handleFileSelect}
+                            onFileRemove={removeFile}
+                            fileInputRef={fileInputRef}
                             compact
                         />
                     </div>
