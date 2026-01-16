@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import { BookOpen, Search, Inbox } from 'lucide-react';
 
 // Glossary terms organized alphabetically
 const glossaryTerms = [
@@ -196,11 +197,12 @@ export default function GlossaryPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          📖 Web3 Security Glossary
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <BookOpen className="w-8 h-8 text-lime-400" />
+          Web3 Security Glossary
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Essential terms and concepts in blockchain security and DeFi. 
+          Essential terms and concepts in blockchain security and DeFi.
           Perfect for beginners and as a quick reference for experts.
         </p>
       </div>
@@ -227,11 +229,10 @@ export default function GlossaryPage() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-                selectedCategory === category
-                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${selectedCategory === category
+                ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                }`}
             >
               {category}
             </button>
@@ -251,11 +252,10 @@ export default function GlossaryPage() {
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
               disabled={!hasTerms}
-              className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
-                hasTerms
-                  ? 'bg-lime-400/10 text-lime-400 hover:bg-lime-400/20'
-                  : 'bg-gray-800/50 text-gray-600 cursor-not-allowed'
-              }`}
+              className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${hasTerms
+                ? 'bg-lime-400/10 text-lime-400 hover:bg-lime-400/20'
+                : 'bg-gray-800/50 text-gray-600 cursor-not-allowed'
+                }`}
             >
               {letter}
             </button>
@@ -286,13 +286,12 @@ export default function GlossaryPage() {
                       <h3 className="text-lg font-semibold text-white">{item.term}</h3>
                       <p className="text-gray-400 mt-1">{item.definition}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs rounded-full whitespace-nowrap ${
-                      item.category === 'Security' ? 'bg-red-500/20 text-red-400' :
+                    <span className={`px-2 py-1 text-xs rounded-full whitespace-nowrap ${item.category === 'Security' ? 'bg-red-500/20 text-red-400' :
                       item.category === 'DeFi' ? 'bg-blue-500/20 text-blue-400' :
-                      item.category === 'Technical' ? 'bg-purple-500/20 text-purple-400' :
-                      item.category === 'Blockchain' ? 'bg-orange-500/20 text-orange-400' :
-                      'bg-gray-500/20 text-gray-400'
-                    }`}>
+                        item.category === 'Technical' ? 'bg-purple-500/20 text-purple-400' :
+                          item.category === 'Blockchain' ? 'bg-orange-500/20 text-orange-400' :
+                            'bg-gray-500/20 text-gray-400'
+                      }`}>
                       {item.category}
                     </span>
                   </div>
@@ -306,7 +305,9 @@ export default function GlossaryPage() {
       {/* Empty State */}
       {filteredTerms.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <span className="text-6xl mb-4">📭</span>
+          <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 mb-4">
+            <Inbox className="w-8 h-8" />
+          </div>
           <h3 className="text-xl font-semibold text-white mb-2">No terms found</h3>
           <p className="text-gray-400 max-w-md">
             Try adjusting your search or category filter.

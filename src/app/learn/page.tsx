@@ -3,6 +3,15 @@
 import Link from 'next/link';
 import { FeatureCard, SectionHeader, ArticleCard, CaseStudyCard, StatsCard, Article, CaseStudy } from '@/components/learn/LearnComponents';
 import './styles.css';
+import {
+  GraduationCap,
+  BookOpen,
+  Search,
+  Lock,
+  CheckCircle,
+  ClipboardList,
+  Wrench
+} from 'lucide-react';
 
 // Sample data - Featured Articles
 const featuredArticles: Article[] = [
@@ -74,31 +83,25 @@ export default function LearnPage() {
     <div>
       {/* Hero Section */}
       <section className="mb-16">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-lime-400/10 via-transparent to-transparent border border-lime-400/20 p-8 md:p-12">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-lime-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-lime-400/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-          
+        <div className="relative overflow-hidden rounded-3xl bg-white/[0.02] border border-gray-800 p-8 md:p-12">
           <div className="relative">
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1 text-xs font-semibold text-lime-400 bg-lime-400/20 rounded-full">
-                🎓 Learning Center
-              </span>
-              <span className="px-3 py-1 text-xs font-medium text-gray-400 bg-white/5 rounded-full">
-                by Hexific
+              <span className="px-3 py-1 text-xs font-semibold text-gray-300 bg-white/5 rounded-full flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5" />
+                Learning Center
               </span>
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl font-black mb-4">
               <span className="bg-gradient-to-r from-lime-400 via-lime-300 to-white bg-clip-text text-transparent">
                 HexiLearn
               </span>
             </h1>
-            
+
             <p className="text-xl text-gray-300 mb-6 max-w-2xl">
               Master smart contract security with comprehensive guides, real-world case studies, and expert best practices.
             </p>
-            
+
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/learn/vulnerabilities"
@@ -117,61 +120,53 @@ export default function LearnPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatsCard icon="📚" label="Articles" value="20+" />
-          <StatsCard icon="🔍" label="Case Studies" value="15+" />
-          <StatsCard icon="🔓" label="Vulnerabilities Covered" value="12" />
-          <StatsCard icon="💰" label="Hacks Analyzed" value="$2B+" />
-        </div>
-      </section>
+
 
       {/* Categories */}
       <section className="mb-16">
-        <SectionHeader 
-          title="Explore Topics" 
+        <SectionHeader
+          title="Explore Topics"
           description="Choose a category to start your learning journey"
         />
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <FeatureCard
-            icon="🔓"
+            icon={<Lock className="w-6 h-6" />}
             title="Vulnerabilities"
-            description="Learn about common smart contract vulnerabilities, how they work, and how to prevent them."
+            description="Common smart contract vulnerabilities and prevention techniques."
             href="/learn/vulnerabilities"
             count={12}
           />
           <FeatureCard
-            icon="🔍"
+            icon={<Search className="w-6 h-6" />}
             title="Case Studies"
-            description="Analyze real-world hacks and exploits with detailed breakdowns of what went wrong."
+            description="Real-world hack breakdowns and post-mortems."
             href="/learn/case-studies"
             count={8}
           />
           <FeatureCard
-            icon="✅"
+            icon={<CheckCircle className="w-6 h-6" />}
             title="Best Practices"
-            description="Secure coding patterns, audit preparation, and proven security strategies."
+            description="Secure coding patterns and audit preparation."
             href="/learn/best-practices"
             count={10}
           />
           <FeatureCard
-            icon="📖"
+            icon={<BookOpen className="w-6 h-6" />}
             title="Glossary"
-            description="Comprehensive dictionary of Web3 security terms and concepts."
+            description="Web3 security terms and concepts."
             href="/learn/glossary"
           />
           <FeatureCard
-            icon="📋"
+            icon={<ClipboardList className="w-6 h-6" />}
             title="Security Checklist"
-            description="Pre-deployment checklist to ensure your smart contracts are audit-ready."
+            description="Pre-deployment security checklist."
             href="/learn/checklist"
           />
           <FeatureCard
-            icon="🛠️"
+            icon={<Wrench className="w-6 h-6" />}
             title="Tools & Resources"
-            description="Recommended security tools, frameworks, and external resources."
+            description="Security tools, frameworks, and resources."
             href="/learn/resources"
           />
         </div>
@@ -179,12 +174,12 @@ export default function LearnPage() {
 
       {/* Featured Articles */}
       <section className="mb-16">
-        <SectionHeader 
-          title="Featured Articles" 
+        <SectionHeader
+          title="Featured Articles"
           description="Hand-picked articles to get you started"
           action={{ label: 'View all articles', href: '/learn/vulnerabilities' }}
         />
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredArticles.map((article) => (
             <ArticleCard key={article.slug} article={article} basePath="/learn/vulnerabilities" />
@@ -194,12 +189,12 @@ export default function LearnPage() {
 
       {/* Recent Case Studies */}
       <section className="mb-16">
-        <SectionHeader 
-          title="Latest Hack Analysis" 
+        <SectionHeader
+          title="Latest Hack Analysis"
           description="Understanding what went wrong in major protocol exploits"
           action={{ label: 'View all case studies', href: '/learn/case-studies' }}
         />
-        
+
         <div className="grid md:grid-cols-2 gap-6">
           {recentCaseStudies.map((study) => (
             <CaseStudyCard key={study.slug} study={study} />
@@ -209,16 +204,13 @@ export default function LearnPage() {
 
       {/* CTA Section */}
       <section>
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-lime-400/20 to-lime-500/10 border border-lime-400/30 p-8 md:p-12 text-center">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-          
+        <div className="relative overflow-hidden rounded-3xl bg-white/[0.02] border border-gray-800 p-8 md:p-12 text-center">
           <div className="relative">
             <h2 className="text-3xl font-bold text-white mb-4">
               Ready to Secure Your Protocol?
             </h2>
-            <p className="text-gray-300 mb-8 max-w-xl mx-auto">
-              Learning is great, but professional audits provide an extra layer of security. 
-              Let Hexific's experts review your smart contracts.
+            <p className="text-gray-400 mb-8 max-w-xl mx-auto">
+              Get your smart contracts professionally audited by Hexific's experts.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
@@ -229,7 +221,7 @@ export default function LearnPage() {
               </Link>
               <Link
                 href="/manual-audit"
-                className="px-8 py-3 bg-white/5 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
+                className="px-8 py-3 bg-white/5 border border-gray-700 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
               >
                 Request Manual Audit
               </Link>

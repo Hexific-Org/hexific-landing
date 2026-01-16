@@ -3,6 +3,18 @@
 import { useState } from 'react';
 import { ArticleCard, SectionHeader, Breadcrumb, Article } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import {
+  CheckCircle,
+  Lightbulb,
+  Check,
+  Inbox,
+  ClipboardList,
+  BookOpen,
+  TestTube,
+  Rocket,
+  Wrench,
+  Star
+} from 'lucide-react';
 
 // Best practices articles data
 const bestPracticesArticles: Article[] = [
@@ -113,11 +125,11 @@ const bestPracticesArticles: Article[] = [
 
 // Category filters
 const categoryOptions = [
-  { value: 'all', label: 'All Topics', icon: '📚' },
-  { value: 'patterns', label: 'Design Patterns', icon: '🏗️' },
-  { value: 'testing', label: 'Testing', icon: '🧪' },
-  { value: 'deployment', label: 'Deployment', icon: '🚀' },
-  { value: 'maintenance', label: 'Maintenance', icon: '🔧' },
+  { value: 'all', label: 'All Topics', icon: <BookOpen className="w-4 h-4" /> },
+  { value: 'patterns', label: 'Design Patterns', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg> },
+  { value: 'testing', label: 'Testing', icon: <TestTube className="w-4 h-4" /> },
+  { value: 'deployment', label: 'Deployment', icon: <Rocket className="w-4 h-4" /> },
+  { value: 'maintenance', label: 'Maintenance', icon: <Wrench className="w-4 h-4" /> },
 ];
 
 export default function BestPracticesPage() {
@@ -151,41 +163,45 @@ export default function BestPracticesPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          ✅ Best Practices
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <CheckCircle className="w-8 h-8 text-lime-400" />
+          Best Practices
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Proven patterns and strategies for building secure smart contracts. 
+          Proven patterns and strategies for building secure smart contracts.
           From basic patterns to advanced deployment strategies.
         </p>
       </div>
 
       {/* Quick Tips Banner */}
       <div className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-lime-400/10 to-green-500/10 border border-lime-400/20">
-        <h3 className="text-lg font-semibold text-lime-400 mb-4">💡 Quick Security Tips</h3>
+        <h3 className="text-lg font-semibold text-lime-400 mb-4 flex items-center gap-2">
+          <Lightbulb className="w-5 h-5" />
+          Quick Security Tips
+        </h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Always follow the CEI pattern</p>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Use ReentrancyGuard for sensitive functions</p>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Check return values from external calls</p>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Implement access control on admin functions</p>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Use TWAP for price oracle data</p>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-green-400">✓</span>
+            <Check className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
             <p className="text-sm text-gray-300">Write comprehensive tests before deploy</p>
           </div>
         </div>
@@ -215,11 +231,10 @@ export default function BestPracticesPage() {
               <button
                 key={option.value}
                 onClick={() => setCategoryFilter(option.value)}
-                className={`px-3 py-1.5 text-sm rounded-lg border transition-all flex items-center gap-2 ${
-                  categoryFilter === option.value
-                    ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                    : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-                }`}
+                className={`px-3 py-1.5 text-sm rounded-lg border transition-all flex items-center gap-2 ${categoryFilter === option.value
+                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                  }`}
               >
                 <span>{option.icon}</span>
                 <span>{option.label}</span>
@@ -233,11 +248,10 @@ export default function BestPracticesPage() {
           <span className="text-xs text-gray-500 uppercase tracking-wider mr-2 self-center">Difficulty:</span>
           <button
             onClick={() => setDifficultyFilter(null)}
-            className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-              difficultyFilter === null
-                ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-            }`}
+            className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${difficultyFilter === null
+              ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+              : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+              }`}
           >
             All
           </button>
@@ -245,11 +259,10 @@ export default function BestPracticesPage() {
             <button
               key={level}
               onClick={() => setDifficultyFilter(level)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-all capitalize ${
-                difficultyFilter === level
-                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`px-3 py-1.5 text-sm rounded-lg border transition-all capitalize ${difficultyFilter === level
+                ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                }`}
             >
               {level}
             </button>
@@ -265,7 +278,7 @@ export default function BestPracticesPage() {
       {/* Featured Articles */}
       {featuredArticles.length > 0 && (
         <section className="mb-12">
-          <SectionHeader title="🌟 Essential Guides" description="Start with these foundational best practices" />
+          <SectionHeader title="Essential Guides" description="Start with these foundational best practices" />
           <div className="grid md:grid-cols-3 gap-6">
             {featuredArticles.map((article) => (
               <ArticleCard key={article.slug} article={article} basePath="/learn/best-practices" />
@@ -287,7 +300,9 @@ export default function BestPracticesPage() {
       {/* Empty State */}
       {filteredArticles.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <span className="text-6xl mb-4">📭</span>
+          <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 mb-4">
+            <Inbox className="w-8 h-8" />
+          </div>
           <h3 className="text-xl font-semibold text-white mb-2">No guides found</h3>
           <p className="text-gray-400 max-w-md">
             Try adjusting your filters or search query.
@@ -309,7 +324,9 @@ export default function BestPracticesPage() {
       <section className="mt-16">
         <div className="p-8 rounded-2xl bg-gradient-to-br from-lime-400/10 via-transparent to-green-500/5 border border-lime-400/20">
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="text-6xl">📋</div>
+            <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400">
+              <ClipboardList className="w-8 h-8" />
+            </div>
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-xl font-bold text-white mb-2">Security Checklist</h3>
               <p className="text-gray-400">

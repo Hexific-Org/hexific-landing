@@ -10,14 +10,14 @@
 
 /* Glass effect for cards */
 .learn-glass {
-  background: rgba(214, 237, 23, 0.05);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(214, 237, 23, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .learn-glass:hover {
-  background: rgba(214, 237, 23, 0.08);
-  border-color: rgba(214, 237, 23, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Code block styling */
@@ -39,12 +39,11 @@
 
 /* Article card hover effect */
 .article-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
 .article-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(214, 237, 23, 0.1);
+  transform: translateY(-2px);
 }
 
 /* Severity badges */
@@ -80,9 +79,9 @@
 
 /* Tag styling */
 .learn-tag {
-  background: rgba(214, 237, 23, 0.1);
-  color: #D6ED17;
-  border: 1px solid rgba(214, 237, 23, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 4px 12px;
   border-radius: 9999px;
   font-size: 12px;
@@ -91,7 +90,8 @@
 }
 
 .learn-tag:hover {
-  background: rgba(214, 237, 23, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #d1d5db;
 }
 
 /* Reading progress bar */
@@ -134,7 +134,6 @@
 .toc-link:hover::before,
 .toc-link.active::before {
   background: #D6ED17;
-  box-shadow: 0 0 8px #D6ED17;
 }
 
 /* Markdown content styling */

@@ -2,160 +2,186 @@
 
 import { Breadcrumb } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import {
+  Wrench,
+  Search,
+  Sparkles,
+  Hammer,
+  HardHat,
+  Shield,
+  Zap,
+  BarChart3,
+  Gamepad2,
+  Target,
+  Flag,
+  GraduationCap,
+  Tv,
+  FileCode,
+  FileText,
+  Building,
+  Telescope,
+  Wine,
+  MessageCircle,
+  Bot,
+  Send,
+  BookOpen,
+  Users
+} from 'lucide-react';
+import { ReactNode } from 'react';
 
 // Resources data
-const tools = [
+const tools: { name: string; description: string; url: string; category: string; icon: ReactNode }[] = [
   {
     name: 'Slither',
     description: 'Static analysis framework for Solidity. Detects vulnerabilities, code optimization opportunities, and code quality issues.',
     url: 'https://github.com/crytic/slither',
     category: 'Static Analysis',
-    icon: '🔍',
+    icon: <Search className="w-6 h-6" />,
   },
   {
     name: 'Mythril',
     description: 'Security analysis tool for EVM bytecode using symbolic execution, SMT solving, and taint analysis.',
     url: 'https://github.com/ConsenSys/mythril',
     category: 'Static Analysis',
-    icon: '🔮',
+    icon: <Sparkles className="w-6 h-6" />,
   },
   {
     name: 'Echidna',
     description: 'Ethereum smart contract fuzzer for property-based testing.',
     url: 'https://github.com/crytic/echidna',
     category: 'Fuzzing',
-    icon: '🦔',
+    icon: <Zap className="w-6 h-6" />,
   },
   {
     name: 'Foundry',
     description: 'Blazing fast, portable, and modular toolkit for Ethereum application development.',
     url: 'https://github.com/foundry-rs/foundry',
     category: 'Development',
-    icon: '🔨',
+    icon: <Hammer className="w-6 h-6" />,
   },
   {
     name: 'Hardhat',
     description: 'Ethereum development environment for professionals with debugging and testing features.',
     url: 'https://hardhat.org/',
     category: 'Development',
-    icon: '👷',
+    icon: <HardHat className="w-6 h-6" />,
   },
   {
     name: 'OpenZeppelin Contracts',
     description: 'Library of secure, reusable, and community-audited smart contracts.',
     url: 'https://github.com/OpenZeppelin/openzeppelin-contracts',
     category: 'Libraries',
-    icon: '🛡️',
+    icon: <Shield className="w-6 h-6" />,
   },
   {
     name: 'Solmate',
     description: 'Gas-optimized building blocks for smart contract development.',
     url: 'https://github.com/transmissions11/solmate',
     category: 'Libraries',
-    icon: '⚡',
+    icon: <Zap className="w-6 h-6" />,
   },
   {
     name: 'Tenderly',
     description: 'Web3 development platform with debugging, monitoring, and alerting.',
     url: 'https://tenderly.co/',
     category: 'Monitoring',
-    icon: '📊',
+    icon: <BarChart3 className="w-6 h-6" />,
   },
 ];
 
-const learningResources = [
+const learningResources: { name: string; description: string; url: string; category: string; icon: ReactNode }[] = [
   {
     name: 'Damn Vulnerable DeFi',
     description: 'Wargame to learn offensive security of DeFi smart contracts.',
     url: 'https://www.damnvulnerabledefi.xyz/',
     category: 'CTF',
-    icon: '🎮',
+    icon: <Gamepad2 className="w-5 h-5" />,
   },
   {
     name: 'Ethernaut',
     description: 'Web3/Solidity based wargame by OpenZeppelin.',
     url: 'https://ethernaut.openzeppelin.com/',
     category: 'CTF',
-    icon: '🎯',
+    icon: <Target className="w-5 h-5" />,
   },
   {
     name: 'Capture The Ether',
     description: 'Game that teaches Ethereum smart contract security.',
     url: 'https://capturetheether.com/',
     category: 'CTF',
-    icon: '🏴',
+    icon: <Flag className="w-5 h-5" />,
   },
   {
     name: 'Secureum',
     description: 'Free smart contract security bootcamp and resources.',
     url: 'https://secureum.xyz/',
     category: 'Course',
-    icon: '🎓',
+    icon: <GraduationCap className="w-5 h-5" />,
   },
   {
     name: 'Smart Contract Programmer',
     description: 'YouTube channel with Solidity tutorials and DeFi explanations.',
     url: 'https://www.youtube.com/@smartcontractprogrammer',
     category: 'Video',
-    icon: '📺',
+    icon: <Tv className="w-5 h-5" />,
   },
   {
     name: 'Solidity by Example',
     description: 'Learn Solidity by following examples.',
     url: 'https://solidity-by-example.org/',
     category: 'Tutorial',
-    icon: '📝',
+    icon: <FileCode className="w-5 h-5" />,
   },
 ];
 
-const auditReports = [
+const auditReports: { name: string; description: string; url: string; icon: ReactNode }[] = [
   {
     name: 'Solodit',
     description: 'Aggregated database of smart contract audit reports and findings.',
     url: 'https://solodit.xyz/',
-    icon: '📑',
+    icon: <FileText className="w-6 h-6" />,
   },
   {
     name: 'Code4rena',
     description: 'Competitive audit platform with public reports.',
     url: 'https://code4rena.com/',
-    icon: '🏟️',
+    icon: <Building className="w-6 h-6" />,
   },
   {
     name: 'Sherlock',
     description: 'DeFi security contests and audit reports.',
     url: 'https://www.sherlock.xyz/',
-    icon: '🔎',
+    icon: <Telescope className="w-6 h-6" />,
   },
   {
     name: 'Cantina',
     description: 'Security research marketplace with public findings.',
     url: 'https://cantina.xyz/',
-    icon: '🍷',
+    icon: <Wine className="w-6 h-6" />,
   },
 ];
 
-const communities = [
+const communities: { name: string; description: string; url: string; platform: string; icon: ReactNode }[] = [
   {
     name: 'Ethereum Security',
     description: 'Discord community focused on Ethereum security.',
     url: 'https://discord.gg/5v8v3X9Qhf',
     platform: 'Discord',
-    icon: '💬',
+    icon: <MessageCircle className="w-6 h-6" />,
   },
   {
     name: 'r/ethdev',
     description: 'Ethereum development subreddit.',
     url: 'https://reddit.com/r/ethdev',
     platform: 'Reddit',
-    icon: '🤖',
+    icon: <Bot className="w-6 h-6" />,
   },
   {
     name: 'DeFi Security 101',
     description: 'Telegram group for DeFi security discussions.',
     url: 'https://t.me/hexific',
     platform: 'Telegram',
-    icon: '✈️',
+    icon: <Send className="w-6 h-6" />,
   },
 ];
 
@@ -169,11 +195,12 @@ export default function ResourcesPage() {
 
       {/* Header */}
       <div className="mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          🛠️ Tools & Resources
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <Wrench className="w-8 h-8 text-lime-400" />
+          Tools & Resources
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Curated collection of security tools, learning platforms, and communities 
+          Curated collection of security tools, learning platforms, and communities
           to help you build and audit secure smart contracts.
         </p>
       </div>
@@ -181,7 +208,8 @@ export default function ResourcesPage() {
       {/* Security Tools */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-          <span>🔧</span> Security Tools
+          <Wrench className="w-6 h-6 text-lime-400" />
+          Security Tools
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
           {tools.map((tool) => (
@@ -193,7 +221,9 @@ export default function ResourcesPage() {
               className="group p-5 rounded-xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all"
             >
               <div className="flex items-start gap-4">
-                <span className="text-3xl">{tool.icon}</span>
+                <div className="w-12 h-12 rounded-lg bg-lime-400/10 flex items-center justify-center text-lime-400">
+                  {tool.icon}
+                </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-white group-hover:text-lime-400 transition-colors">
@@ -217,7 +247,8 @@ export default function ResourcesPage() {
       {/* Learning Platforms */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-          <span>📚</span> Learning Platforms
+          <BookOpen className="w-6 h-6 text-lime-400" />
+          Learning Platforms
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {learningResources.map((resource) => (
@@ -229,7 +260,9 @@ export default function ResourcesPage() {
               className="group p-5 rounded-xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all"
             >
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-2xl">{resource.icon}</span>
+                <div className="w-10 h-10 rounded-lg bg-lime-400/10 flex items-center justify-center text-lime-400">
+                  {resource.icon}
+                </div>
                 <span className="text-xs text-gray-500 bg-gray-800 px-2 py-0.5 rounded">
                   {resource.category}
                 </span>
@@ -246,7 +279,8 @@ export default function ResourcesPage() {
       {/* Audit Reports */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-          <span>📑</span> Audit Report Databases
+          <FileText className="w-6 h-6 text-lime-400" />
+          Audit Report Databases
         </h2>
         <div className="grid md:grid-cols-2 gap-4">
           {auditReports.map((report) => (
@@ -257,7 +291,9 @@ export default function ResourcesPage() {
               rel="noopener noreferrer"
               className="group flex items-center gap-4 p-5 rounded-xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all"
             >
-              <span className="text-3xl">{report.icon}</span>
+              <div className="w-12 h-12 rounded-lg bg-lime-400/10 flex items-center justify-center text-lime-400">
+                {report.icon}
+              </div>
               <div className="flex-1">
                 <h3 className="font-semibold text-white group-hover:text-lime-400 transition-colors">
                   {report.name}
@@ -275,7 +311,8 @@ export default function ResourcesPage() {
       {/* Communities */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-          <span>👥</span> Communities
+          <Users className="w-6 h-6 text-lime-400" />
+          Communities
         </h2>
         <div className="grid md:grid-cols-3 gap-4">
           {communities.map((community) => (
@@ -286,7 +323,9 @@ export default function ResourcesPage() {
               rel="noopener noreferrer"
               className="group p-5 rounded-xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all text-center"
             >
-              <span className="text-3xl block mb-3">{community.icon}</span>
+              <div className="w-12 h-12 rounded-lg bg-lime-400/10 flex items-center justify-center text-lime-400 mx-auto mb-3">
+                {community.icon}
+              </div>
               <h3 className="font-semibold text-white group-hover:text-lime-400 transition-colors mb-1">
                 {community.name}
               </h3>
@@ -304,7 +343,7 @@ export default function ResourcesPage() {
             Need Professional Security Review?
           </h3>
           <p className="text-gray-400 mb-6 max-w-xl mx-auto">
-            While tools are great for initial checks, professional audits catch vulnerabilities 
+            While tools are great for initial checks, professional audits catch vulnerabilities
             that automated tools miss. Get your smart contracts reviewed by Hexific experts.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
