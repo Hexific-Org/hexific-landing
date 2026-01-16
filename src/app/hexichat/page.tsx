@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useSSEStream } from '@/hooks/useSSEStream';
@@ -15,12 +16,18 @@ interface ToolCall {
     description?: string;
 }
 
+interface AttachedFile {
+    name: string;
+    size: number;
+}
+
 interface Message {
     id: string;
     role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
     toolCalls?: ToolCall[];
+    attachedFile?: AttachedFile;
 }
 
 const suggestedPrompts = [
@@ -177,10 +184,27 @@ function ChatInputBox({
         }
     };
 
+    const [attachMenuOpen, setAttachMenuOpen] = useState(false);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            const dropdown = document.getElementById('attach-dropdown');
+            if (dropdown && !dropdown.contains(target)) {
+                setAttachMenuOpen(false);
+            }
+        };
+        if (attachMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [attachMenuOpen]);
+
     return (
         <div className={`w-full ${compact ? 'max-w-5xl 2xl:max-w-6xl' : 'max-w-3xl'} mx-auto`}>
             <form onSubmit={onSubmit}>
-                <div className="relative bg-white/[0.03] border border-white/10 rounded-2xl focus-within:border-white/20 transition-all">
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl focus-within:border-white/20 transition-all">
                     {/* File Preview */}
                     {selectedFile && (
                         <div className="px-5 pt-3 pb-1">
@@ -202,47 +226,81 @@ function ChatInputBox({
                         </div>
                     )}
 
-                    <textarea
-                        ref={textareaRef}
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Ask about smart contract security..."
-                        rows={1}
-                        className="w-full bg-transparent text-white placeholder-gray-500 px-5 py-4 pr-24 resize-none focus:outline-none text-base"
-                        disabled={isStreaming}
-                    />
+                    {/* Input row with flexbox alignment */}
+                    <div className="flex items-center gap-2 px-3 py-2">
+                        {/* Hidden file input */}
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={(e) => {
+                                onFileSelect?.(e);
+                                setAttachMenuOpen(false);
+                            }}
+                            accept=".sol,.txt,.json,.md"
+                            className="hidden"
+                        />
 
-                    {/* Hidden file input */}
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={onFileSelect}
-                        accept=".sol,.txt,.json,.md"
-                        className="hidden"
-                    />
+                        {/* Plus button with dropdown */}
+                        <div className="relative flex-shrink-0" id="attach-dropdown">
+                            <button
+                                type="button"
+                                onClick={() => setAttachMenuOpen(!attachMenuOpen)}
+                                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${attachMenuOpen
+                                    ? 'bg-white/10 text-white'
+                                    : 'text-gray-500 hover:text-white hover:bg-white/5'
+                                    }`}
+                                title="Attach"
+                            >
+                                <svg
+                                    className={`w-5 h-5 transition-transform duration-200 ${attachMenuOpen ? 'rotate-45' : ''}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button>
 
-                    {/* File upload button */}
-                    <button
-                        type="button"
-                        onClick={() => fileInputRef?.current?.click()}
-                        className="absolute right-14 bottom-3 w-10 h-10 text-gray-500 hover:text-white rounded-xl flex items-center justify-center transition-all"
-                        title="Attach file"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                        </svg>
-                    </button>
+                            {/* Dropdown menu */}
+                            {attachMenuOpen && (
+                                <div className={`absolute left-0 ${compact ? 'bottom-full mb-2' : 'top-full mt-2'} w-48 bg-[#0d1320] border border-white/10 rounded-xl shadow-xl overflow-hidden z-50`}>
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef?.current?.click()}
+                                        className="w-full flex items-center gap-3 px-4 py-3 text-left text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors"
+                                    >
+                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Upload file
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
-                    <button
-                        type="submit"
-                        disabled={!input.trim() || isStreaming}
-                        className="absolute right-3 bottom-3 w-10 h-10 bg-lime-400 text-black rounded-xl flex items-center justify-center hover:bg-lime-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                    >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                            <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
+                        {/* Textarea */}
+                        <textarea
+                            ref={textareaRef}
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Ask about smart contract security..."
+                            rows={1}
+                            className="flex-1 bg-transparent text-white placeholder-gray-500 py-2 resize-none focus:outline-none text-base leading-6"
+                            disabled={isStreaming}
+                        />
+
+                        {/* Submit button */}
+                        <button
+                            type="submit"
+                            disabled={!input.trim() || isStreaming}
+                            className="flex-shrink-0 w-10 h-10 bg-lime-400 text-black rounded-xl flex items-center justify-center hover:bg-lime-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Agent Selection Bar */}
@@ -311,9 +369,9 @@ function ChatInputBox({
                         return (
                             <div
                                 key={agentId}
-                                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-white/10 text-white border border-white/20 rounded-full"
+                                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-lime-400/10 text-lime-400 border border-lime-400/30 rounded-full"
                             >
-                                <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                 </svg>
                                 {agent.name}
@@ -456,10 +514,9 @@ export default function HexiChatPage() {
         const userMessage: Message = {
             id: Date.now().toString(),
             role: 'user',
-            content: selectedFile
-                ? `${input.trim()}\n\n📎 Attached: ${selectedFile.name}`
-                : input.trim(),
+            content: input.trim(),
             timestamp: new Date(),
+            attachedFile: selectedFile ? { name: selectedFile.name, size: selectedFile.size } : undefined,
         };
 
         const assistantId = (Date.now() + 1).toString();
@@ -497,6 +554,7 @@ export default function HexiChatPage() {
         return (
             <div className="markdown-content">
                 <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
                     components={{
                         // Headers
                         h1: ({ children }) => (
@@ -535,6 +593,31 @@ export default function HexiChatPage() {
                                 <span className="text-gray-500 mt-[7px] text-[6px]">●</span>
                                 <span className="flex-1">{children}</span>
                             </li>
+                        ),
+                        // Tables (GFM)
+                        table: ({ children }) => (
+                            <div className="my-4 overflow-x-auto rounded-lg border border-white/10">
+                                <table className="w-full border-collapse text-sm">
+                                    {children}
+                                </table>
+                            </div>
+                        ),
+                        thead: ({ children }) => (
+                            <thead className="bg-white/5 border-b border-white/10">
+                                {children}
+                            </thead>
+                        ),
+                        tbody: ({ children }) => <tbody className="divide-y divide-white/5">{children}</tbody>,
+                        tr: ({ children }) => <tr className="hover:bg-white/[0.02] transition-colors">{children}</tr>,
+                        th: ({ children }) => (
+                            <th className="px-4 py-3 text-left font-semibold text-white text-xs uppercase tracking-wider">
+                                {children}
+                            </th>
+                        ),
+                        td: ({ children }) => (
+                            <td className="px-4 py-3 text-gray-300">
+                                {children}
+                            </td>
                         ),
                         // Code
                         code: ({ className, children, ...props }) => {
@@ -718,31 +801,63 @@ export default function HexiChatPage() {
                         <div className="max-w-5xl 2xl:max-w-6xl mx-auto px-6 lg:px-8 py-8">
                             <div className="space-y-6">
                                 {messages.map((message) => {
-                                    // Skip rendering empty assistant messages (still streaming)
-                                    if (message.role === 'assistant' && !message.content) {
+                                    const isCurrentStreamingAssistant = isStreaming && message.id === currentAssistantId;
+
+                                    // Skip rendering empty assistant messages, UNLESS it's the current streaming message
+                                    if (message.role === 'assistant' && !message.content && !isCurrentStreamingAssistant) {
                                         return null;
                                     }
 
                                     return (
                                         <div key={message.id} className="message-enter">
                                             {message.role === 'user' ? (
-                                                <div className="flex justify-end">
-                                                    <div className="max-w-[80%] lg:max-w-[65%] bg-white/10 text-white rounded-2xl rounded-br-sm px-4 py-3">
-                                                        <p className="text-[15px] leading-relaxed">{message.content}</p>
+                                                <div className="flex flex-col items-end gap-2">
+                                                    {message.attachedFile && (
+                                                        <div className="max-w-[80%] lg:max-w-[65%]">
+                                                            <div className="bg-white/[0.08] rounded-2xl px-4 py-3 min-w-[180px]">
+                                                                <p className="text-[15px] font-medium text-white mb-1.5 truncate max-w-[240px]">
+                                                                    {message.attachedFile.name.replace(/\.[^/.]+$/, '')}
+                                                                </p>
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-6 h-6 bg-lime-400 rounded flex items-center justify-center flex-shrink-0">
+                                                                        <svg className="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                                                        </svg>
+                                                                    </div>
+                                                                    <span className="text-sm text-gray-400 uppercase">
+                                                                        {message.attachedFile.name.split('.').pop()}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    <div className="max-w-[80%] lg:max-w-[65%]">
+                                                        <div className="bg-white/10 text-white rounded-2xl rounded-br-sm px-4 py-3">
+                                                            <p className="text-[15px] leading-relaxed">{message.content}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             ) : (
                                                 <div className="max-w-[85%]">
                                                     {/* Tool Status - Always on top of content */}
-                                                    {isStreaming && message.id === currentAssistantId && toolStatus && (
+                                                    {isCurrentStreamingAssistant && toolStatus && (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
                                                             <span className="w-3 h-3 border border-gray-500 border-t-transparent rounded-full animate-spin"></span>
                                                             <span className="italic">{toolStatus}</span>
                                                         </div>
                                                     )}
-                                                    <div className="text-[15px] text-gray-200 leading-relaxed">
-                                                        {renderContent(message.content, isStreaming && message.id === currentAssistantId)}
-                                                    </div>
+                                                    {/* Typing indicator - when no content and no toolStatus */}
+                                                    {isCurrentStreamingAssistant && !message.content && !toolStatus && (
+                                                        <div className="typing flex gap-1.5">
+                                                            <span></span><span></span><span></span>
+                                                        </div>
+                                                    )}
+                                                    {/* Content - only render if there's content */}
+                                                    {message.content && (
+                                                        <div className="text-[15px] text-gray-200 leading-relaxed">
+                                                            {renderContent(message.content, isCurrentStreamingAssistant)}
+                                                        </div>
+                                                    )}
                                                     {message.toolCalls && message.toolCalls.length > 0 && (
                                                         <ToolCallsDisplay
                                                             toolCalls={message.toolCalls}
@@ -756,14 +871,6 @@ export default function HexiChatPage() {
                                     );
                                 })}
 
-                                {/* Typing indicator - only when no content yet */}
-                                {isStreaming && messages.length > 0 && messages[messages.length - 1]?.role === 'assistant' && !messages[messages.length - 1]?.content && !toolStatus && (
-                                    <div className="message-enter">
-                                        <div className="typing flex gap-1.5">
-                                            <span></span><span></span><span></span>
-                                        </div>
-                                    </div>
-                                )}
                                 <div ref={messagesEndRef} />
                             </div>
                         </div>
