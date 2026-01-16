@@ -58,8 +58,8 @@ export function ArticleCard({ article, basePath }: { article: Article; basePath:
   };
 
   return (
-    <Link href={`${basePath}/${article.slug}`}>
-      <article className="article-card group p-6 rounded-2xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all duration-300">
+    <Link href={`${basePath}/${article.slug}`} className="block h-full">
+      <article className="article-card group p-6 rounded-2xl bg-white/[0.02] border border-gray-800 hover:border-gray-700 transition-all duration-200 h-full flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex flex-wrap gap-2">
@@ -90,16 +90,16 @@ export function ArticleCard({ article, basePath }: { article: Article; basePath:
         </p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4 flex-grow">
           {article.tags.slice(0, 3).map((tag) => (
-            <span key={tag} className="px-2 py-0.5 text-xs text-lime-400/70 bg-lime-400/10 rounded-md">
+            <span key={tag} className="px-2 py-0.5 text-xs text-gray-400 bg-white/5 rounded-md h-fit">
               {tag}
             </span>
           ))}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-gray-500 mt-auto pt-4 border-t border-gray-800/50">
           <span className="flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -116,8 +116,8 @@ export function ArticleCard({ article, basePath }: { article: Article; basePath:
 // Case Study Card Component
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <Link href={`/learn/case-studies/${study.slug}`}>
-      <article className="article-card group p-6 rounded-2xl bg-gradient-to-br from-red-500/5 to-orange-500/5 border border-red-500/20 hover:border-red-500/40 transition-all duration-300">
+    <Link href={`/learn/case-studies/${study.slug}`} className="block h-full">
+      <article className="article-card group p-6 rounded-2xl bg-white/[0.02] border border-gray-800 hover:border-red-500/40 transition-all duration-200 h-full flex flex-col">
         {/* Lost Amount Badge */}
         <div className="flex items-start justify-between mb-4">
           <span className="px-3 py-1 text-sm font-bold text-red-400 bg-red-500/20 rounded-full border border-red-500/30 flex items-center gap-1.5">
@@ -151,9 +151,9 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mt-auto">
           {study.tags.map((tag) => (
-            <span key={tag} className="px-2 py-0.5 text-xs text-orange-400/70 bg-orange-400/10 rounded-md">
+            <span key={tag} className="px-2 py-0.5 text-xs text-gray-400 bg-white/5 rounded-md">
               {tag}
             </span>
           ))}
@@ -178,14 +178,14 @@ export function FeatureCard({
   count?: number;
 }) {
   return (
-    <Link href={href}>
-      <div className="group p-6 rounded-2xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all duration-300 hover:-translate-y-1">
+    <Link href={href} className="block h-full">
+      <div className="group p-6 rounded-2xl bg-white/[0.02] border border-gray-800 hover:border-gray-700 transition-all duration-200 h-full flex flex-col">
         <div className="flex items-start justify-between mb-4">
-          <div className="w-12 h-12 rounded-xl bg-lime-400/10 flex items-center justify-center text-lime-400">
+          <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-lime-400">
             {icon}
           </div>
           {count !== undefined && (
-            <span className="px-2 py-1 text-xs font-semibold text-lime-400 bg-lime-400/20 rounded-full">
+            <span className="px-2 py-1 text-xs font-semibold text-gray-400 bg-white/5 rounded-full">
               {count} articles
             </span>
           )}
@@ -193,10 +193,10 @@ export function FeatureCard({
         <h3 className="text-xl font-semibold text-white group-hover:text-lime-400 transition-colors mb-2">
           {title}
         </h3>
-        <p className="text-gray-400 text-sm">{description}</p>
-        <div className="mt-4 flex items-center text-lime-400 text-sm font-medium">
+        <p className="text-gray-400 text-sm flex-grow">{description}</p>
+        <div className="mt-4 flex items-center text-gray-500 group-hover:text-lime-400 text-sm font-medium transition-colors">
           <span>Explore</span>
-          <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </div>

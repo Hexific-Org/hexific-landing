@@ -10,8 +10,7 @@ import {
   Lock,
   CheckCircle,
   ClipboardList,
-  Wrench,
-  DollarSign
+  Wrench
 } from 'lucide-react';
 
 // Sample data - Featured Articles
@@ -84,19 +83,12 @@ export default function LearnPage() {
     <div>
       {/* Hero Section */}
       <section className="mb-16">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-lime-400/10 via-transparent to-transparent border border-lime-400/20 p-8 md:p-12">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-lime-400/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-lime-400/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-
+        <div className="relative overflow-hidden rounded-3xl bg-white/[0.02] border border-gray-800 p-8 md:p-12">
           <div className="relative">
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1 text-xs font-semibold text-lime-400 bg-lime-400/20 rounded-full flex items-center gap-1.5">
+              <span className="px-3 py-1 text-xs font-semibold text-gray-300 bg-white/5 rounded-full flex items-center gap-1.5">
                 <GraduationCap className="w-3.5 h-3.5" />
                 Learning Center
-              </span>
-              <span className="px-3 py-1 text-xs font-medium text-gray-400 bg-white/5 rounded-full">
-                by Hexific
               </span>
             </div>
 
@@ -128,15 +120,7 @@ export default function LearnPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="mb-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatsCard icon={<BookOpen className="w-5 h-5" />} label="Articles" value="20+" />
-          <StatsCard icon={<Search className="w-5 h-5" />} label="Case Studies" value="15+" />
-          <StatsCard icon={<Lock className="w-5 h-5" />} label="Vulnerabilities Covered" value="12" />
-          <StatsCard icon={<DollarSign className="w-5 h-5" />} label="Hacks Analyzed" value="$2B+" />
-        </div>
-      </section>
+
 
       {/* Categories */}
       <section className="mb-16">
@@ -149,40 +133,40 @@ export default function LearnPage() {
           <FeatureCard
             icon={<Lock className="w-6 h-6" />}
             title="Vulnerabilities"
-            description="Learn about common smart contract vulnerabilities, how they work, and how to prevent them."
+            description="Common smart contract vulnerabilities and prevention techniques."
             href="/learn/vulnerabilities"
             count={12}
           />
           <FeatureCard
             icon={<Search className="w-6 h-6" />}
             title="Case Studies"
-            description="Analyze real-world hacks and exploits with detailed breakdowns of what went wrong."
+            description="Real-world hack breakdowns and post-mortems."
             href="/learn/case-studies"
             count={8}
           />
           <FeatureCard
             icon={<CheckCircle className="w-6 h-6" />}
             title="Best Practices"
-            description="Secure coding patterns, audit preparation, and proven security strategies."
+            description="Secure coding patterns and audit preparation."
             href="/learn/best-practices"
             count={10}
           />
           <FeatureCard
             icon={<BookOpen className="w-6 h-6" />}
             title="Glossary"
-            description="Comprehensive dictionary of Web3 security terms and concepts."
+            description="Web3 security terms and concepts."
             href="/learn/glossary"
           />
           <FeatureCard
             icon={<ClipboardList className="w-6 h-6" />}
             title="Security Checklist"
-            description="Pre-deployment checklist to ensure your smart contracts are audit-ready."
+            description="Pre-deployment security checklist."
             href="/learn/checklist"
           />
           <FeatureCard
             icon={<Wrench className="w-6 h-6" />}
             title="Tools & Resources"
-            description="Recommended security tools, frameworks, and external resources."
+            description="Security tools, frameworks, and resources."
             href="/learn/resources"
           />
         </div>
@@ -220,16 +204,13 @@ export default function LearnPage() {
 
       {/* CTA Section */}
       <section>
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-lime-400/20 to-lime-500/10 border border-lime-400/30 p-8 md:p-12 text-center">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-
+        <div className="relative overflow-hidden rounded-3xl bg-white/[0.02] border border-gray-800 p-8 md:p-12 text-center">
           <div className="relative">
             <h2 className="text-3xl font-bold text-white mb-4">
               Ready to Secure Your Protocol?
             </h2>
-            <p className="text-gray-300 mb-8 max-w-xl mx-auto">
-              Learning is great, but professional audits provide an extra layer of security.
-              Let Hexific's experts review your smart contracts.
+            <p className="text-gray-400 mb-8 max-w-xl mx-auto">
+              Get your smart contracts professionally audited by Hexific's experts.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
@@ -240,7 +221,7 @@ export default function LearnPage() {
               </Link>
               <Link
                 href="/manual-audit"
-                className="px-8 py-3 bg-white/5 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
+                className="px-8 py-3 bg-white/5 border border-gray-700 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"
               >
                 Request Manual Audit
               </Link>
