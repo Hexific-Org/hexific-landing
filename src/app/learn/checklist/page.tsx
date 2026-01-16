@@ -3,12 +3,26 @@
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import {
+  ClipboardList,
+  Lock,
+  RefreshCw,
+  CheckCircle,
+  Link2,
+  Coins,
+  Calculator,
+  Fuel,
+  ArrowUpCircle,
+  FileText,
+  Download,
+  PartyPopper
+} from 'lucide-react';
 
 // Checklist items organized by category
 const checklistData = [
   {
     category: 'Access Control',
-    icon: '🔐',
+    icon: <Lock className="w-6 h-6" />,
     items: [
       { id: 'ac-1', text: 'All admin functions have proper access modifiers', critical: true },
       { id: 'ac-2', text: 'onlyOwner functions are reviewed for centralization risks', critical: true },
@@ -19,7 +33,7 @@ const checklistData = [
   },
   {
     category: 'Reentrancy Protection',
-    icon: '🔄',
+    icon: <RefreshCw className="w-6 h-6" />,
     items: [
       { id: 're-1', text: 'All external calls follow Checks-Effects-Interactions pattern', critical: true },
       { id: 're-2', text: 'ReentrancyGuard is used on sensitive functions', critical: true },
@@ -29,7 +43,7 @@ const checklistData = [
   },
   {
     category: 'Input Validation',
-    icon: '✅',
+    icon: <CheckCircle className="w-6 h-6" />,
     items: [
       { id: 'iv-1', text: 'All external inputs are validated', critical: true },
       { id: 'iv-2', text: 'Array length limits are enforced', critical: false },
@@ -40,7 +54,7 @@ const checklistData = [
   },
   {
     category: 'External Interactions',
-    icon: '🔗',
+    icon: <Link2 className="w-6 h-6" />,
     items: [
       { id: 'ei-1', text: 'Return values from external calls are checked', critical: true },
       { id: 'ei-2', text: 'Low-level calls have proper error handling', critical: true },
@@ -51,7 +65,7 @@ const checklistData = [
   },
   {
     category: 'Token Handling',
-    icon: '🪙',
+    icon: <Coins className="w-6 h-6" />,
     items: [
       { id: 'th-1', text: 'ERC20 transfer/approve return values are handled', critical: true },
       { id: 'th-2', text: 'Fee-on-transfer tokens are considered', critical: false },
@@ -62,7 +76,7 @@ const checklistData = [
   },
   {
     category: 'Arithmetic & Logic',
-    icon: '🔢',
+    icon: <Calculator className="w-6 h-6" />,
     items: [
       { id: 'al-1', text: 'Division by zero is prevented', critical: true },
       { id: 'al-2', text: 'Rounding errors are minimized and documented', critical: false },
@@ -73,7 +87,7 @@ const checklistData = [
   },
   {
     category: 'Gas & DoS Prevention',
-    icon: '⛽',
+    icon: <Fuel className="w-6 h-6" />,
     items: [
       { id: 'gas-1', text: 'Loops have bounded iterations', critical: true },
       { id: 'gas-2', text: 'External calls in loops are minimized', critical: true },
@@ -84,7 +98,7 @@ const checklistData = [
   },
   {
     category: 'Upgradability (if applicable)',
-    icon: '⬆️',
+    icon: <ArrowUpCircle className="w-6 h-6" />,
     items: [
       { id: 'up-1', text: 'Storage layout is compatible between versions', critical: true },
       { id: 'up-2', text: 'Implementation contracts are initialized', critical: true },
@@ -95,7 +109,7 @@ const checklistData = [
   },
   {
     category: 'Testing & Documentation',
-    icon: '📝',
+    icon: <FileText className="w-6 h-6" />,
     items: [
       { id: 'td-1', text: 'Unit tests cover all functions', critical: true },
       { id: 'td-2', text: 'Integration tests are written', critical: true },
@@ -123,7 +137,7 @@ export default function ChecklistPage() {
 
   const totalItems = checklistData.reduce((acc, cat) => acc + cat.items.length, 0);
   const criticalItems = checklistData.reduce(
-    (acc, cat) => acc + cat.items.filter(i => i.critical).length, 
+    (acc, cat) => acc + cat.items.filter(i => i.critical).length,
     0
   );
   const checkedCount = checkedItems.size;
@@ -146,11 +160,12 @@ export default function ChecklistPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          📋 Pre-Audit Security Checklist
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <ClipboardList className="w-8 h-8 text-lime-400" />
+          Pre-Audit Security Checklist
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Use this comprehensive checklist to ensure your smart contracts are ready for audit. 
+          Use this comprehensive checklist to ensure your smart contracts are ready for audit.
           Critical items are marked with a red indicator.
         </p>
       </div>
@@ -167,13 +182,12 @@ export default function ChecklistPage() {
           <div className="flex gap-4">
             <button
               onClick={() => setShowOnlyCritical(!showOnlyCritical)}
-              className={`px-4 py-2 text-sm rounded-lg border transition-all ${
-                showOnlyCritical
-                  ? 'bg-red-500/20 border-red-500/50 text-red-400'
-                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`px-4 py-2 text-sm rounded-lg border transition-all ${showOnlyCritical
+                ? 'bg-red-500/20 border-red-500/50 text-red-400'
+                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                }`}
             >
-              {showOnlyCritical ? '🔴 Critical Only' : 'Show All'}
+              {showOnlyCritical ? 'Critical Only' : 'Show All'}
             </button>
             <button
               onClick={resetChecklist}
@@ -192,7 +206,7 @@ export default function ChecklistPage() {
               <span className="text-lime-400">{progress}%</span>
             </div>
             <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-lime-400 to-green-500 rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
@@ -204,7 +218,7 @@ export default function ChecklistPage() {
               <span className="text-red-400">{checkedCritical}/{criticalItems}</span>
             </div>
             <div className="h-3 bg-gray-800 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-red-500 to-orange-500 rounded-full transition-all duration-500"
                 style={{ width: `${criticalProgress}%` }}
               />
@@ -216,10 +230,10 @@ export default function ChecklistPage() {
       {/* Checklist */}
       <div className="space-y-6">
         {checklistData.map((category) => {
-          const filteredItems = showOnlyCritical 
+          const filteredItems = showOnlyCritical
             ? category.items.filter(i => i.critical)
             : category.items;
-          
+
           if (filteredItems.length === 0) return null;
 
           const categoryChecked = category.items.filter(i => checkedItems.has(i.id)).length;
@@ -230,7 +244,7 @@ export default function ChecklistPage() {
               {/* Category Header */}
               <div className="p-4 bg-lime-400/5 border-b border-lime-400/10 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{category.icon}</span>
+                  <div className="text-lime-400">{category.icon}</div>
                   <h3 className="text-lg font-semibold text-white">{category.category}</h3>
                 </div>
                 <span className="text-sm text-gray-400">
@@ -270,10 +284,12 @@ export default function ChecklistPage() {
       {/* Completion Message */}
       {progress === 100 && (
         <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-lime-400/20 to-green-500/20 border border-lime-400/40 text-center">
-          <span className="text-4xl mb-4 block">🎉</span>
+          <div className="w-16 h-16 rounded-2xl bg-lime-400/20 flex items-center justify-center text-lime-400 mx-auto mb-4">
+            <PartyPopper className="w-8 h-8" />
+          </div>
           <h3 className="text-xl font-bold text-lime-400 mb-2">Checklist Complete!</h3>
           <p className="text-gray-300 mb-4">
-            Great job! Your contracts appear to follow security best practices. 
+            Great job! Your contracts appear to follow security best practices.
             Consider getting a professional audit for additional assurance.
           </p>
           <a
@@ -290,7 +306,10 @@ export default function ChecklistPage() {
 
       {/* Download/Export */}
       <div className="mt-8 p-6 rounded-2xl bg-white/[0.02] border border-lime-400/10">
-        <h3 className="text-lg font-semibold text-white mb-4">📥 Export Checklist</h3>
+        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <Download className="w-5 h-5 text-lime-400" />
+          Export Checklist
+        </h3>
         <p className="text-gray-400 text-sm mb-4">
           Download this checklist as a markdown file to include in your project documentation.
         </p>

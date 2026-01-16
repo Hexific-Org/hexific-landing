@@ -2,6 +2,17 @@
 
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import {
+  DollarSign,
+  Lock,
+  AlertTriangle,
+  AlertOctagon,
+  Lightbulb,
+  CheckCircle,
+  X,
+  Check,
+  Link2
+} from 'lucide-react';
 
 // Types
 export interface Article {
@@ -109,15 +120,18 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
       <article className="article-card group p-6 rounded-2xl bg-gradient-to-br from-red-500/5 to-orange-500/5 border border-red-500/20 hover:border-red-500/40 transition-all duration-300">
         {/* Lost Amount Badge */}
         <div className="flex items-start justify-between mb-4">
-          <span className="px-3 py-1 text-sm font-bold text-red-400 bg-red-500/20 rounded-full border border-red-500/30">
-            💰 {study.lostAmount} Lost
+          <span className="px-3 py-1 text-sm font-bold text-red-400 bg-red-500/20 rounded-full border border-red-500/30 flex items-center gap-1.5">
+            <DollarSign className="w-4 h-4" />
+            {study.lostAmount} Lost
           </span>
           <span className="text-xs text-gray-500">{study.date}</span>
         </div>
 
         {/* Protocol & Chain */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-2xl">{getChainEmoji(study.chain)}</span>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+            {getChainIcon(study.chain)}
+          </div>
           <div>
             <h3 className="text-lg font-semibold text-white group-hover:text-red-400 transition-colors">
               {study.protocol}
@@ -132,7 +146,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 
         {/* Vulnerability Type */}
         <div className="flex items-center gap-2 p-3 bg-black/30 rounded-lg mb-4">
-          <span className="text-red-400">🔓</span>
+          <Lock className="w-4 h-4 text-red-400" />
           <span className="text-sm text-gray-300">{study.vulnerability}</span>
         </div>
 
@@ -150,16 +164,16 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 }
 
 // Feature Card for homepage
-export function FeatureCard({ 
-  icon, 
-  title, 
-  description, 
+export function FeatureCard({
+  icon,
+  title,
+  description,
   href,
-  count 
-}: { 
-  icon: string; 
-  title: string; 
-  description: string; 
+  count
+}: {
+  icon: ReactNode;
+  title: string;
+  description: string;
   href: string;
   count?: number;
 }) {
@@ -167,7 +181,9 @@ export function FeatureCard({
     <Link href={href}>
       <div className="group p-6 rounded-2xl bg-white/[0.02] border border-lime-400/10 hover:border-lime-400/30 transition-all duration-300 hover:-translate-y-1">
         <div className="flex items-start justify-between mb-4">
-          <span className="text-4xl">{icon}</span>
+          <div className="w-12 h-12 rounded-xl bg-lime-400/10 flex items-center justify-center text-lime-400">
+            {icon}
+          </div>
           {count !== undefined && (
             <span className="px-2 py-1 text-xs font-semibold text-lime-400 bg-lime-400/20 rounded-full">
               {count} articles
@@ -190,12 +206,12 @@ export function FeatureCard({
 }
 
 // Section Header
-export function SectionHeader({ 
-  title, 
-  description, 
-  action 
-}: { 
-  title: string; 
+export function SectionHeader({
+  title,
+  description,
+  action
+}: {
+  title: string;
   description?: string;
   action?: { label: string; href: string };
 }) {
@@ -208,7 +224,7 @@ export function SectionHeader({
         )}
       </div>
       {action && (
-        <Link 
+        <Link
           href={action.href}
           className="flex items-center gap-2 text-lime-400 hover:text-lime-300 font-medium transition-colors"
         >
@@ -247,11 +263,11 @@ export function Breadcrumb({ items }: { items: { label: string; href?: string }[
 }
 
 // Alert/Callout Box
-export function AlertBox({ 
-  type, 
-  title, 
-  children 
-}: { 
+export function AlertBox({
+  type,
+  title,
+  children
+}: {
   type: 'warning' | 'danger' | 'info' | 'success';
   title?: string;
   children: ReactNode;
@@ -260,25 +276,25 @@ export function AlertBox({
     warning: {
       bg: 'bg-yellow-500/10',
       border: 'border-yellow-500/30',
-      icon: '⚠️',
+      icon: <AlertTriangle className="w-5 h-5 text-yellow-400" />,
       titleColor: 'text-yellow-400',
     },
     danger: {
       bg: 'bg-red-500/10',
       border: 'border-red-500/30',
-      icon: '🚨',
+      icon: <AlertOctagon className="w-5 h-5 text-red-400" />,
       titleColor: 'text-red-400',
     },
     info: {
       bg: 'bg-blue-500/10',
       border: 'border-blue-500/30',
-      icon: '💡',
+      icon: <Lightbulb className="w-5 h-5 text-blue-400" />,
       titleColor: 'text-blue-400',
     },
     success: {
       bg: 'bg-green-500/10',
       border: 'border-green-500/30',
-      icon: '✅',
+      icon: <CheckCircle className="w-5 h-5 text-green-400" />,
       titleColor: 'text-green-400',
     },
   };
@@ -288,7 +304,7 @@ export function AlertBox({
   return (
     <div className={`${style.bg} ${style.border} border rounded-xl p-4 my-6`}>
       <div className="flex gap-3">
-        <span className="text-xl flex-shrink-0">{style.icon}</span>
+        <div className="flex-shrink-0">{style.icon}</div>
         <div>
           {title && (
             <h4 className={`font-semibold ${style.titleColor} mb-1`}>{title}</h4>
@@ -312,17 +328,17 @@ export function CodeComparison({
     <div className="grid md:grid-cols-2 gap-4 my-6">
       <div className="learn-code-block code-vulnerable rounded-xl overflow-hidden border border-red-500/30">
         <div className="learn-code-header bg-red-500/10 px-4 py-2 flex items-center gap-2">
-          <span className="text-red-400">❌</span>
+          <X className="w-4 h-4 text-red-400" />
           <span className="text-sm font-medium text-red-400">{vulnerable.title}</span>
         </div>
         <pre className="p-4 overflow-x-auto">
           <code className="text-sm text-gray-300 font-mono">{vulnerable.code}</code>
         </pre>
       </div>
-      
+
       <div className="learn-code-block code-secure rounded-xl overflow-hidden border border-green-500/30">
         <div className="learn-code-header bg-green-500/10 px-4 py-2 flex items-center gap-2">
-          <span className="text-green-400">✅</span>
+          <Check className="w-4 h-4 text-green-400" />
           <span className="text-sm font-medium text-green-400">{secure.title}</span>
         </div>
         <pre className="p-4 overflow-x-auto">
@@ -334,21 +350,23 @@ export function CodeComparison({
 }
 
 // Stats Card
-export function StatsCard({ 
-  label, 
-  value, 
+export function StatsCard({
+  label,
+  value,
   trend,
-  icon 
-}: { 
-  label: string; 
+  icon
+}: {
+  label: string;
   value: string;
   trend?: { value: string; positive: boolean };
-  icon: string;
+  icon: ReactNode;
 }) {
   return (
     <div className="p-4 rounded-xl bg-white/[0.02] border border-lime-400/10">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-2xl">{icon}</span>
+        <div className="w-10 h-10 rounded-lg bg-lime-400/10 flex items-center justify-center text-lime-400">
+          {icon}
+        </div>
         {trend && (
           <span className={`text-xs font-medium ${trend.positive ? 'text-green-400' : 'text-red-400'}`}>
             {trend.positive ? '↑' : '↓'} {trend.value}
@@ -362,10 +380,10 @@ export function StatsCard({
 }
 
 // Difficulty Filter
-export function DifficultyFilter({ 
-  selected, 
-  onChange 
-}: { 
+export function DifficultyFilter({
+  selected,
+  onChange
+}: {
   selected: string | null;
   onChange: (value: string | null) => void;
 }) {
@@ -379,11 +397,10 @@ export function DifficultyFilter({
     <div className="flex flex-wrap gap-2">
       <button
         onClick={() => onChange(null)}
-        className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-          selected === null
-            ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-            : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-        }`}
+        className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${selected === null
+          ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+          : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+          }`}
       >
         All Levels
       </button>
@@ -391,11 +408,10 @@ export function DifficultyFilter({
         <button
           key={diff.value}
           onClick={() => onChange(diff.value)}
-          className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-            selected === diff.value
-              ? `bg-${diff.color}-500/20 border-${diff.color}-500/50 text-${diff.color}-400`
-              : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-          }`}
+          className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${selected === diff.value
+            ? `bg-${diff.color}-500/20 border-${diff.color}-500/50 text-${diff.color}-400`
+            : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+            }`}
         >
           {diff.label}
         </button>
@@ -404,34 +420,45 @@ export function DifficultyFilter({
   );
 }
 
-// Helper function for chain emoji
-function getChainEmoji(chain: string): string {
-  const chains: Record<string, string> = {
-    'Ethereum': '⟠',
-    'BSC': '🔶',
-    'Polygon': '🟣',
-    'Avalanche': '🔺',
-    'Arbitrum': '🔵',
-    'Optimism': '🔴',
-    'Solana': '◎',
-    'Fantom': '👻',
-  };
-  return chains[chain] || '🔗';
+// Helper function for chain icon
+function getChainIcon(chain: string): ReactNode {
+  // Using simple SVG icons for different chains
+  const iconClass = "w-5 h-5";
+
+  switch (chain) {
+    case 'Ethereum':
+      return (
+        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 1.5L4.5 12.75L12 16.5L19.5 12.75L12 1.5Z" className="text-blue-400" />
+          <path d="M12 17.25L4.5 13.5L12 22.5L19.5 13.5L12 17.25Z" className="text-blue-300" />
+        </svg>
+      );
+    case 'Solana':
+      return (
+        <svg className={iconClass} viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 17.5h13l3-3H7l-3 3zm0-5.5h13l3-3H7l-3 3zm0-5.5h13l3-3H7l-3 3z" className="text-purple-400" />
+        </svg>
+      );
+    default:
+      return <Link2 className={`${iconClass} text-gray-400`} />;
+  }
 }
 
 // Empty State Component
-export function EmptyState({ 
-  icon, 
-  title, 
-  description 
-}: { 
-  icon: string;
+export function EmptyState({
+  icon,
+  title,
+  description
+}: {
+  icon: ReactNode;
   title: string;
   description: string;
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-center">
-      <span className="text-6xl mb-4">{icon}</span>
+      <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 mb-4">
+        {icon}
+      </div>
       <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
       <p className="text-gray-400 max-w-md">{description}</p>
     </div>

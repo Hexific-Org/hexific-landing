@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ArticleCard, SectionHeader, Breadcrumb, DifficultyFilter, Article } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import { Lock, Star, Search } from 'lucide-react';
 
 // Vulnerability articles data
 const vulnerabilityArticles: Article[] = [
@@ -182,11 +183,12 @@ export default function VulnerabilitiesPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          🔓 Smart Contract Vulnerabilities
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <Lock className="w-8 h-8 text-lime-400" />
+          Smart Contract Vulnerabilities
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Comprehensive guides on common vulnerabilities found in smart contracts. 
+          Comprehensive guides on common vulnerabilities found in smart contracts.
           Learn how attacks work and how to protect your protocols.
         </p>
       </div>
@@ -221,11 +223,10 @@ export default function VulnerabilitiesPage() {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setSeverityFilter(null)}
-                className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-                  severityFilter === null
-                    ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                    : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-                }`}
+                className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${severityFilter === null
+                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                  }`}
               >
                 All
               </button>
@@ -233,11 +234,10 @@ export default function VulnerabilitiesPage() {
                 <button
                   key={option.value}
                   onClick={() => setSeverityFilter(option.value)}
-                  className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-                    severityFilter === option.value
-                      ? `bg-${option.color}-500/20 border-${option.color}-500/50 text-${option.color}-400`
-                      : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${severityFilter === option.value
+                    ? `bg-${option.color}-500/20 border-${option.color}-500/50 text-${option.color}-400`
+                    : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                    }`}
                 >
                   {option.label}
                 </button>
@@ -255,7 +255,7 @@ export default function VulnerabilitiesPage() {
       {/* Featured Articles */}
       {featuredArticles.length > 0 && (
         <section className="mb-12">
-          <SectionHeader title="⭐ Featured" description="Must-read vulnerability guides" />
+          <SectionHeader title="Featured" description="Must-read vulnerability guides" />
           <div className="grid md:grid-cols-2 gap-6">
             {featuredArticles.map((article) => (
               <ArticleCard key={article.slug} article={article} basePath="/learn/vulnerabilities" />
@@ -277,7 +277,9 @@ export default function VulnerabilitiesPage() {
       {/* Empty State */}
       {filteredArticles.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <span className="text-6xl mb-4">🔍</span>
+          <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 mb-4">
+            <Search className="w-8 h-8" />
+          </div>
           <h3 className="text-xl font-semibold text-white mb-2">No articles found</h3>
           <p className="text-gray-400 max-w-md">
             Try adjusting your filters or search query to find what you're looking for.

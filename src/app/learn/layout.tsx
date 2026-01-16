@@ -1,27 +1,36 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import {
+  Home,
+  Lock,
+  Search,
+  CheckCircle,
+  BookOpen,
+  ClipboardList,
+  Wrench
+} from 'lucide-react';
 
 // Navigation items for HexiLearn
 const navItems = [
   {
     category: 'Learn',
     items: [
-      { href: '/learn', label: 'Overview', icon: '🏠' },
-      { href: '/learn/vulnerabilities', label: 'Vulnerabilities', icon: '🔓' },
-      { href: '/learn/case-studies', label: 'Case Studies', icon: '🔍' },
-      { href: '/learn/best-practices', label: 'Best Practices', icon: '✅' },
+      { href: '/learn', label: 'Overview', icon: <Home className="w-5 h-5" /> },
+      { href: '/learn/vulnerabilities', label: 'Vulnerabilities', icon: <Lock className="w-5 h-5" /> },
+      { href: '/learn/case-studies', label: 'Case Studies', icon: <Search className="w-5 h-5" /> },
+      { href: '/learn/best-practices', label: 'Best Practices', icon: <CheckCircle className="w-5 h-5" /> },
     ]
   },
   {
     category: 'Resources',
     items: [
-      { href: '/learn/glossary', label: 'Glossary', icon: '📖' },
-      { href: '/learn/checklist', label: 'Security Checklist', icon: '📋' },
-      { href: '/learn/resources', label: 'Tools & Resources', icon: '🛠️' },
+      { href: '/learn/glossary', label: 'Glossary', icon: <BookOpen className="w-5 h-5" /> },
+      { href: '/learn/checklist', label: 'Security Checklist', icon: <ClipboardList className="w-5 h-5" /> },
+      { href: '/learn/resources', label: 'Tools & Resources', icon: <Wrench className="w-5 h-5" /> },
     ]
   }
 ];
@@ -33,12 +42,12 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
     <>
       {/* Mobile overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
-      
+
       {/* Sidebar */}
       <aside className={`
         fixed left-0 top-20 h-[calc(100vh-5rem)] w-72 bg-[#000E1B]/95 backdrop-blur-xl
@@ -51,7 +60,7 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           {/* HexiLearn Logo */}
           <Link href="/learn" className="flex items-center gap-3 mb-8 px-3">
             <div className="w-10 h-10 bg-gradient-to-br from-lime-400 to-lime-500 rounded-xl flex items-center justify-center shadow-lg shadow-lime-400/20">
-              <span className="text-xl">📚</span>
+              <BookOpen className="w-5 h-5 text-black" />
             </div>
             <div>
               <span className="text-xl font-bold bg-gradient-to-r from-lime-400 to-white bg-clip-text text-transparent">
@@ -69,9 +78,9 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
               </h3>
               <nav className="space-y-1">
                 {group.items.map((item) => {
-                  const isActive = pathname === item.href || 
+                  const isActive = pathname === item.href ||
                     (item.href !== '/learn' && pathname?.startsWith(item.href));
-                  
+
                   return (
                     <Link
                       key={item.href}
@@ -85,7 +94,7 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                         }
                       `}
                     >
-                      <span className="text-lg">{item.icon}</span>
+                      <span className="flex-shrink-0">{item.icon}</span>
                       <span>{item.label}</span>
                       {isActive && (
                         <div className="ml-auto w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
@@ -152,8 +161,8 @@ function LearnNavbar({ onMenuClick }: { onMenuClick: () => void }) {
   return (
     <nav className={`
       fixed top-0 w-full z-[60] transition-all duration-300
-      ${scrolled 
-        ? 'bg-[#000E1B]/90 backdrop-blur-xl border-b border-lime-400/20' 
+      ${scrolled
+        ? 'bg-[#000E1B]/90 backdrop-blur-xl border-b border-lime-400/20'
         : 'bg-transparent'
       }
     `}>
@@ -169,7 +178,7 @@ function LearnNavbar({ onMenuClick }: { onMenuClick: () => void }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            
+
             <Link href="/" className="flex items-center gap-3">
               <div className="w-10 h-10 bg-lime-400 rounded-lg flex items-center justify-center">
                 <Image src="/logo.svg" alt="Hexific Logo" width={24} height={24} className="w-6 h-6" />
@@ -178,7 +187,7 @@ function LearnNavbar({ onMenuClick }: { onMenuClick: () => void }) {
                 Hexific
               </span>
             </Link>
-            
+
             <div className="hidden sm:flex items-center gap-1 ml-2">
               <Link href="/learn" className="text-lime-400 font-medium">
                 HexiLearn
@@ -194,7 +203,7 @@ function LearnNavbar({ onMenuClick }: { onMenuClick: () => void }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            
+
             {/* Get Audit CTA */}
             <Link
               href="/"
@@ -223,7 +232,7 @@ export default function LearnLayout({
     <div className="min-h-screen bg-[#000E1B] text-white">
       <LearnNavbar onMenuClick={() => setSidebarOpen(true)} />
       <LearnSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
+
       {/* Main content */}
       <main className="lg:pl-72 pt-20 min-h-screen">
         <div className="max-w-5xl mx-auto px-6 py-8">

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { CaseStudyCard, SectionHeader, Breadcrumb, CaseStudy } from '@/components/learn/LearnComponents';
 import '../styles.css';
+import { Search, Calendar, DollarSign } from 'lucide-react';
 
 // Case studies data
 const caseStudies: CaseStudy[] = [
@@ -103,7 +104,7 @@ const chainOptions = ['All Chains', 'Ethereum', 'Solana', 'BSC', 'Polygon'];
 const vulnerabilityOptions = [
   'All Types',
   'Flash Loan',
-  'Reentrancy', 
+  'Reentrancy',
   'Oracle Manipulation',
   'Bridge',
   'Governance',
@@ -146,11 +147,12 @@ export default function CaseStudiesPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          🔍 Protocol Hack Analysis
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center gap-3">
+          <Search className="w-8 h-8 text-lime-400" />
+          Protocol Hack Analysis
         </h1>
         <p className="text-gray-400 text-lg max-w-3xl">
-          Learn from the past. Detailed breakdowns of major DeFi hacks and exploits, 
+          Learn from the past. Detailed breakdowns of major DeFi hacks and exploits,
           what went wrong, and how to prevent similar attacks.
         </p>
       </div>
@@ -217,23 +219,23 @@ export default function CaseStudiesPage() {
           <div className="flex gap-2">
             <button
               onClick={() => setSortBy('date')}
-              className={`px-3 py-2 text-sm rounded-lg border transition-all ${
-                sortBy === 'date'
-                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`px-3 py-2 text-sm rounded-lg border transition-all flex items-center gap-1.5 ${sortBy === 'date'
+                ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                }`}
             >
-              📅 Date
+              <Calendar className="w-4 h-4" />
+              Date
             </button>
             <button
               onClick={() => setSortBy('amount')}
-              className={`px-3 py-2 text-sm rounded-lg border transition-all ${
-                sortBy === 'amount'
-                  ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
-                  : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
-              }`}
+              className={`px-3 py-2 text-sm rounded-lg border transition-all flex items-center gap-1.5 ${sortBy === 'amount'
+                ? 'bg-lime-400/20 border-lime-400/50 text-lime-400'
+                : 'bg-white/5 border-gray-700 text-gray-400 hover:border-gray-500'
+                }`}
             >
-              💰 Amount Lost
+              <DollarSign className="w-4 h-4" />
+              Amount Lost
             </button>
           </div>
         </div>
@@ -256,7 +258,9 @@ export default function CaseStudiesPage() {
       {/* Empty State */}
       {filteredStudies.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <span className="text-6xl mb-4">🔍</span>
+          <div className="w-16 h-16 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 mb-4">
+            <Search className="w-8 h-8" />
+          </div>
           <h3 className="text-xl font-semibold text-white mb-2">No case studies found</h3>
           <p className="text-gray-400 max-w-md">
             Try adjusting your filters to find what you're looking for.
@@ -275,15 +279,15 @@ export default function CaseStudiesPage() {
 
       {/* Timeline Section */}
       <section className="mt-16">
-        <SectionHeader 
-          title="2023 Attack Timeline" 
+        <SectionHeader
+          title="2023 Attack Timeline"
           description="Major DeFi exploits of the year"
         />
-        
+
         <div className="relative">
           {/* Timeline line */}
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-lime-400/20" />
-          
+
           <div className="space-y-8">
             {caseStudies
               .filter(s => s.date.includes('2023'))
@@ -291,7 +295,7 @@ export default function CaseStudiesPage() {
                 <div key={study.slug} className={`relative flex items-center gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   {/* Timeline dot */}
                   <div className="absolute left-4 md:left-1/2 w-3 h-3 bg-lime-400 rounded-full transform -translate-x-1/2 z-10" />
-                  
+
                   {/* Content */}
                   <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
                     <div className="p-4 bg-white/[0.02] border border-lime-400/10 rounded-xl">
