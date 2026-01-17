@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from 'next/script'
 import '@rainbow-me/rainbowkit/styles.css';
-import { Providers } from './providers';
+// import { Providers } from './providers';
 import { SolanaProvider } from "../components/solana-provider";
 import "./globals.css";
 
@@ -68,9 +68,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Providers>
+        {/* <Providers> */}
           <SolanaProvider>{children}</SolanaProvider>
-        </Providers>
+        {/* </Providers> */}
       </body>
     </html>
   );
