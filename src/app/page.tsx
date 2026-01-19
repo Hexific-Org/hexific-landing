@@ -11,6 +11,7 @@ export default function Page() {
   const [countersStarted, setCountersStarted] = useState(false);
   const [hexiPrice, setHexiPrice] = useState<number | null>(null);
   const [priceChange24h, setPriceChange24h] = useState<number | null>(null);
+  const [platformStats, setPlatformStats] = useState<{ vulnerabilitiesFound: number; contractsAudited: number }>({ vulnerabilitiesFound: 700, contractsAudited: 50 });
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -285,6 +286,27 @@ export default function Page() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch platform stats (vulnerabilities found, contracts audited)
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/stats');
+        const data = await response.json();
+        setPlatformStats({
+          vulnerabilitiesFound: data.vulnerabilitiesFound,
+          contractsAudited: data.contractsAudited,
+        });
+      } catch (error) {
+        console.error('Failed to fetch platform stats:', error);
+      }
+    };
+
+    fetchStats();
+    // Refresh stats every 5 minutes
+    const interval = setInterval(fetchStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Hover & click effects (feature-card, all buttons, mobile menu)
   useEffect(() => {
     // feature-card hover
@@ -540,13 +562,17 @@ export default function Page() {
                 View Sample Report
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+            <div className="grid grid-cols-3 gap-4 max-w-4xl mx-auto">
               <div className="glass-effect rounded-xl p-4">
-                <div className="text-2xl font-bold gradient-text mb-1" id="vulnerabilities">700+</div>
+                <div className="text-2xl font-bold gradient-text mb-1">{platformStats.vulnerabilitiesFound}</div>
                 <div className="text-sm text-gray-400">Vulnerabilities Found</div>
               </div>
               <div className="glass-effect rounded-xl p-4">
-                <div className="text-2xl font-bold gradient-text mb-1" id="response-time">24h</div>
+                <div className="text-2xl font-bold gradient-text mb-1">{platformStats.contractsAudited}</div>
+                <div className="text-sm text-gray-400">Contracts Audited</div>
+              </div>
+              <div className="glass-effect rounded-xl p-4">
+                <div className="text-2xl font-bold gradient-text mb-1">24h</div>
                 <div className="text-sm text-gray-400">Avg Response</div>
               </div>
             </div>
@@ -574,13 +600,17 @@ export default function Page() {
                 </button>
               </div>
               {/* Live Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div className="glass-effect rounded-xl p-6 scan-line">
-                  <div className="text-3xl font-bold gradient-text mb-2" id="vulnerabilities">700+</div>
+                  <div className="text-3xl font-bold gradient-text mb-2">{platformStats.vulnerabilitiesFound}</div>
                   <div className="text-gray-400">Vulnerabilities Found</div>
                 </div>
                 <div className="glass-effect rounded-xl p-6 scan-line">
-                  <div className="text-3xl font-bold gradient-text mb-2" id="response-time">24h</div>
+                  <div className="text-3xl font-bold gradient-text mb-2">{platformStats.contractsAudited}</div>
+                  <div className="text-gray-400">Contracts Audited</div>
+                </div>
+                <div className="glass-effect rounded-xl p-6 scan-line">
+                  <div className="text-3xl font-bold gradient-text mb-2">24h</div>
                   <div className="text-gray-400">Avg Response</div>
                 </div>
               </div>

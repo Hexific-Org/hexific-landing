@@ -174,6 +174,27 @@ export default function FreeAuditUpload() {
 
             setResult(adaptedResult);
             addStatus("Audit completed successfully!", 'success');
+
+            // Update platform stats (non-blocking)
+            if (adaptedResult.success && adaptedResult.results) {
+              const summary = adaptedResult.results.summary;
+              // Count vulnerabilities (critical, major, medium, minor - excluding informational)
+              const vulnerabilitiesCount = 
+                (summary.critical || 0) + 
+                (summary.major || 0) + 
+                (summary.medium || 0) + 
+                (summary.minor || 0);
+
+              // Fire and forget - don't await to avoid blocking UI
+              fetch('/api/stats/increment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contractsAudited: 1,
+                  vulnerabilitiesFound: vulnerabilitiesCount
+                })
+              }).catch(err => console.error('Failed to update stats:', err));
+            }
           } else {
             setError("Analysis completed but no results returned.");
             addStatus("No results found.", 'error');
@@ -317,7 +338,7 @@ export default function FreeAuditUpload() {
 
       } catch (error: any) {
         console.error('Audit error:', error);
-        let errorMsg = error.message;
+        const errorMsg = error.message;
         if (errorMsg.includes('not verified')) {
           addStatus('❌ Contract not verified on Etherscan', 'error');
         } else {
@@ -469,7 +490,7 @@ ${result.detailed_audit}
                 <div>
                   <p className="text-red-400 font-semibold mb-1">Daily Limit Reached</p>
                   <p className="text-red-300 text-sm mb-2">
-                    You've used all 3 free {rateLimitError.service} requests for today.
+                    You&apos;ve used all 3 free {rateLimitError.service} requests for today.
                   </p>
                   <p className="text-red-300 text-sm">
                     Resets in: <span className="font-semibold">{getTimeUntilReset(rateLimitError.resetTime)}</span>
@@ -825,7 +846,6 @@ ${result.detailed_audit}
                                   const lines = finding.description.split('\n');
                                   const sections: Array<{ type: 'text' | 'code', content: string[] }> = [];
                                   let currentSection: { type: 'text' | 'code', content: string[] } = { type: 'text', content: [] };
-                                  let insideCode = false;
 
                                   lines.forEach((line) => {
                                     if (line === '[SOLIDITY]' || line === '[CODE]') {
