@@ -16,7 +16,12 @@ import {
   address,
   lamports,
 } from '@solana/kit';
+import { 
+    createSolanaClient,
+    getExplorerLink,
+} from "gill";
 import { getTransferSolInstruction } from '@solana-program/system';
+import { buildTransferTokensTransaction, TOKEN_2022_PROGRAM_ADDRESS, findAssociatedTokenPda, fetchToken } from "gill/programs/token";
 import { PAYMENT_CONFIG, type PaymentResult } from '../hooks/payment-config';
 
 interface ConnectedPaymentCardProps {
@@ -24,6 +29,11 @@ interface ConnectedPaymentCardProps {
   onPaymentSuccess: () => Promise<void>;
   isAuditing?: boolean;
   disabled?: boolean;
+}
+
+enum PaymentMethod {
+  SOL = 'SOL',
+  HEXI = 'HEXI',
 }
 
 async function calculateTokenAmount() {
@@ -66,6 +76,8 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
   const signer = useWalletAccountTransactionSendingSigner(account, chain);
   const [isPaying, setIsPaying] = useState(false);
   const [result, setResult] = useState<PaymentResult | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.HEXI);
+  // const payerAddress = address(account.address);
 
   // Clear result when form inputs change (file/address changes)
   useEffect(() => {
@@ -78,41 +90,14 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
     setIsPaying(true);
     setResult(null);
 
-    try {
-      const receiverAddress = address(PAYMENT_CONFIG.RECEIVER_ADDRESS);
-      const transferAmount = lamports(BigInt(PAYMENT_CONFIG.AMOUNT_LAMPORTS));
-
-      // Get latest blockhash
-      const { value: latestBlockhash } = await rpc
-        .getLatestBlockhash({ commitment: 'confirmed' })
-        .send();
-
-      // Create transfer instruction
-      const transferInstruction = getTransferSolInstruction({
-        source: signer,
-        destination: receiverAddress,
-        amount: transferAmount,
-      });
-
-      // Build transaction message
-      const message = pipe(
-        createTransactionMessage({ version: 0 }),
-        (m) => setTransactionMessageFeePayerSigner(signer, m),
-        (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
-        (m) => appendTransactionMessageInstruction(transferInstruction, m)
-      );
-
-      // Sign and send transaction
-      const signatureBytes = await signAndSendTransactionMessageWithSigners(message);
-      const signature = getBase58Decoder().decode(signatureBytes) as string;
-
-      // Confirm by polling for signature status
-      let confirmed = false;
+    // Helper function to confirm transaction
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const confirmTransaction = async (signature: string, rpcClient: any) => {
       for (let i = 0; i < PAYMENT_CONFIG.CONFIRMATION_TIMEOUT_SECONDS; i++) {
         await new Promise((resolve) => setTimeout(resolve, PAYMENT_CONFIG.POLL_INTERVAL_MS));
         
-        const statusResult = await rpc
-          .getSignatureStatuses([signature as Parameters<typeof rpc.getSignatureStatuses>[0][0]])
+        const statusResult = await rpcClient
+          .getSignatureStatuses([signature])
           .send();
 
         const status = statusResult.value[0];
@@ -120,29 +105,117 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
           if (status.err) {
             throw new Error('Transaction failed on-chain');
           }
-          confirmed = true;
-          break;
+          return true;
         }
       }
+      return false;
+    };
 
-      if (!confirmed) {
+    // Helper function to handle successful payment
+    const handlePaymentSuccess = async (signature: string) => {
+      setResult({ success: true, signature });
+      setIsPaying(false);
+      await onPaymentSuccess();
+    };
+
+    try {
+      const mintAddress = address(PAYMENT_CONFIG.HEXI_TOKEN_MINT_ADDRESS);
+      const receiverAddress = address(PAYMENT_CONFIG.RECEIVER_ADDRESS);
+      const transferAmount = PAYMENT_CONFIG.AMOUNT_HEXI_TOKENS;
+
+      if (paymentMethod === PaymentMethod.HEXI) {
+        const { rpc: heliusRpc } = createSolanaClient({
+          urlOrMoniker: `https://mainnet.helius-rpc.com?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`,
+        });
+
+        // Check user's HEXI token balance before proceeding
+        const userAddress = address(account.address);
+        const [userAtaAddress] = await findAssociatedTokenPda({
+          owner: userAddress,
+          mint: mintAddress,
+          tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
+        });
+
+        try {
+          const userTokenAccount = await fetchToken(heliusRpc, userAtaAddress);
+          const userBalance = userTokenAccount.data.amount;
+          
+          if (userBalance < BigInt(transferAmount)) {
+            const requiredTokens = Number(transferAmount) / 1_000_000; // Assuming 6 decimals
+            const currentBalance = Number(userBalance) / 1_000_000;
+            throw new Error(
+              `Insufficient HEXI balance. You have ${currentBalance.toLocaleString()} HEXI but need ${requiredTokens.toLocaleString()} HEXI.`
+            );
+          }
+        } catch (error: unknown) {
+          // If error is our custom insufficient balance error, rethrow it
+          if (error instanceof Error && error.message.includes('Insufficient HEXI balance')) {
+            throw error;
+          }
+          // Token account doesn't exist - user has no HEXI tokens
+          const requiredTokens = Number(transferAmount) / 1_000_000;
+          throw new Error(
+            `No HEXI tokens found in your wallet. You need ${requiredTokens.toLocaleString()} HEXI to proceed.`
+          );
+        }
+
+        const { value: latestBlockhash } = await heliusRpc.getLatestBlockhash().send();
+        const tx = await buildTransferTokensTransaction({
+            feePayer: signer,
+            version: "legacy",
+            latestBlockhash,
+            amount: transferAmount,
+            authority: signer,
+            destination: receiverAddress,
+            mint: mintAddress,
+            tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
+        });
+
+        const signatureBytes = await signAndSendTransactionMessageWithSigners(tx);
+        const signature = getBase58Decoder().decode(signatureBytes) as string;
+
+        console.log("Explorer URL:", getExplorerLink({ cluster: "mainnet-beta", transaction: signature }));
+
+        if (!await confirmTransaction(signature, heliusRpc)) {
+          throw new Error('Transaction confirmation timeout');
+        }
+
+        await handlePaymentSuccess(signature);
+        return;
+      }
+
+      // SOL payment path
+      const { value: latestBlockhash } = await rpc
+        .getLatestBlockhash({ commitment: 'confirmed' })
+        .send();
+
+      const transferInstruction = getTransferSolInstruction({
+        source: signer,
+        destination: receiverAddress,
+        amount: lamports(BigInt(PAYMENT_CONFIG.AMOUNT_LAMPORTS)),
+      });
+
+      const message = pipe(
+        createTransactionMessage({ version: 0 }),
+        (m) => setTransactionMessageFeePayerSigner(signer, m),
+        (m) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
+        (m) => appendTransactionMessageInstruction(transferInstruction, m)
+      );
+
+      const signatureBytes = await signAndSendTransactionMessageWithSigners(message);
+      const signature = getBase58Decoder().decode(signatureBytes) as string;
+
+      if (!await confirmTransaction(signature, rpc)) {
         throw new Error('Transaction confirmation timeout');
       }
 
-      setResult({
-        success: true,
-        signature,
-      });
+      await handlePaymentSuccess(signature);
       
-      // Trigger audit after successful payment
-      setIsPaying(false);
-      await onPaymentSuccess();
-      
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Payment error:', error);
       setResult({
         success: false,
-        error: error.message || 'Payment failed',
+        error: error instanceof Error ? error.message : 'Payment failed',
       });
       setIsPaying(false);
     }
@@ -150,6 +223,41 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
 
   return (
     <div className="space-y-4">
+      {/* Payment Method Selector */}
+      <div className="flex gap-2 p-1 bg-[rgba(0,0,0,0.3)] rounded-xl">
+        <button
+          type="button"
+          onClick={() => setPaymentMethod(PaymentMethod.HEXI)}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+            paymentMethod === PaymentMethod.HEXI
+              ? 'bg-lime-400 text-[#000E1B] shadow-[0_0_10px_rgba(214,237,23,0.3)]'
+              : 'text-gray-400 hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
+          }`}
+        >
+          Pay with $HEXI
+        </button>
+        <button
+          type="button"
+          onClick={() => setPaymentMethod(PaymentMethod.SOL)}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+            paymentMethod === PaymentMethod.SOL
+              ? 'bg-lime-400 text-[#000E1B] shadow-[0_0_10px_rgba(214,237,23,0.3)]'
+              : 'text-gray-400 hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
+          }`}
+        >
+          Pay with $SOL
+        </button>
+      </div>
+
+      {/* Payment Amount Info */}
+      <div className="text-center text-sm text-gray-400">
+        {paymentMethod === PaymentMethod.HEXI ? (
+          <span>Amount: <span className="text-lime-400 font-semibold">{(PAYMENT_CONFIG.AMOUNT_HEXI_TOKENS / 1_000_000).toLocaleString()} HEXI</span></span>
+        ) : (
+          <span>Amount: <span className="text-lime-400 font-semibold">{PAYMENT_CONFIG.AMOUNT_LAMPORTS / 1_000_000_000} SOL</span></span>
+        )}
+      </div>
+
       <Button
         onClick={sendPayment}
         disabled={isPaying || isAuditing || !signer || disabled}
@@ -171,8 +279,10 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
             </svg>
             Analyzing...
           </span>
+        ) : paymentMethod === PaymentMethod.HEXI ? (
+          `Pay ${(PAYMENT_CONFIG.AMOUNT_HEXI_TOKENS / 1_000_000).toLocaleString()} HEXI & Start Audit`
         ) : (
-          'Pay 0.005 SOL mainnet & Start Audit'
+          `Pay ${PAYMENT_CONFIG.AMOUNT_LAMPORTS / 1_000_000_000} SOL & Start Audit`
         )}
       </Button>
 
