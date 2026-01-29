@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Breadcrumb } from '@/components/learn/LearnComponents';
 import '../styles.css';
-import { BookOpen, Search, Inbox } from 'lucide-react';
+import { BookOpen, Inbox } from 'lucide-react';
 
 // Glossary terms organized alphabetically
 const glossaryTerms = [

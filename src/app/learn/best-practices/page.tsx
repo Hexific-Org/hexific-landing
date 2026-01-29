@@ -12,8 +12,7 @@ import {
   BookOpen,
   TestTube,
   Rocket,
-  Wrench,
-  Star
+  Wrench
 } from 'lucide-react';
 
 // Best practices articles data

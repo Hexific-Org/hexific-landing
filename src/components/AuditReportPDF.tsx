@@ -10,7 +10,6 @@ import {
     pdf,
     Svg,
     Path,
-    Circle,
 } from '@react-pdf/renderer';
 import type { AuditResult, DetailedFinding } from './adaptVPSResponse';
 

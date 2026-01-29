@@ -28,6 +28,7 @@ import {
   Users
 } from 'lucide-react';
 import { ReactNode } from 'react';
+import Link from 'next/link';
 
 // Resources data
 const tools: { name: string; description: string; url: string; category: string; icon: ReactNode }[] = [
@@ -347,12 +348,12 @@ export default function ResourcesPage() {
             that automated tools miss. Get your smart contracts reviewed by Hexific experts.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a
+            <Link
               href="/"
               className="px-6 py-3 bg-lime-400 text-black font-semibold rounded-xl hover:bg-lime-300 transition-colors"
             >
               Get Free AI Audit
-            </a>
+            </Link>
             <a
               href="/manual-audit"
               className="px-6 py-3 bg-white/5 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors"

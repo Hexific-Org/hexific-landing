@@ -263,7 +263,7 @@ export default function CaseStudiesPage() {
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">No case studies found</h3>
           <p className="text-gray-400 max-w-md">
-            Try adjusting your filters to find what you're looking for.
+            Try adjusting your filters to find what you&apos;re looking for.
           </p>
           <button
             onClick={() => {

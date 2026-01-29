@@ -82,17 +82,17 @@ async function createSenderTransactionFromSwapResponse(swapResponse: any) {
     'https://mainnet.helius-rpc.com/?api-key=' + HELIUS_API_KEY
   );
 
-  let altAccountResponses = await Promise.all(
+  const altAccountResponses = await Promise.all(
     jupiterTransaction.message.addressTableLookups.map(l => connection.getAddressLookupTable(l.accountKey))
   );
 
-  let altAccounts: AddressLookupTableAccount[] = altAccountResponses.map(item => {
+  const altAccounts: AddressLookupTableAccount[] = altAccountResponses.map(item => {
     if (item.value == null) throw new Error("ALT is null");
     return item.value;
   });
 
   // Use the Address Lookup Tables to decompile the transaction
-  let decompiledMessage = TransactionMessage.decompile(jupiterTransaction.message, {
+  const decompiledMessage = TransactionMessage.decompile(jupiterTransaction.message, {
     addressLookupTableAccounts: altAccounts,
   });
 
