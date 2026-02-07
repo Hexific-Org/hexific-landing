@@ -152,7 +152,7 @@ function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
             {results.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-500">
                 <FileText className="w-10 h-10 mx-auto mb-3 opacity-50" />
-                <p>No results found for "{query}"</p>
+                <p>No results found for &quot;{query}&quot;</p>
               </div>
             ) : (
               Object.entries(groupedResults).map(([category, items]) => (

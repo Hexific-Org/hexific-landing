@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Breadcrumb, AlertBox, CodeComparison } from '@/components/learn/LearnComponents';
+import { Breadcrumb, AlertBox } from '@/components/learn/LearnComponents';
 import { CodeBlock } from '@/components/CodeBlock';
 import '../../styles.css';
 
@@ -97,7 +97,7 @@ export default function EulerFinanceCaseStudy() {
         <section id="vulnerability">
           <h2>The Vulnerability</h2>
           <p>
-            The exploit combined two issues in Euler's codebase:
+            The exploit combined two issues in Euler&apos;s codebase:
           </p>
           
           <div className="space-y-4 my-6">
@@ -112,14 +112,14 @@ export default function EulerFinanceCaseStudy() {
             <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-xl">
               <h4 className="font-semibold text-orange-400 mb-2">🔓 Issue #2: Soft Liquidation</h4>
               <p className="text-sm text-gray-300">
-                When a user's health factor dropped below 1, anyone could liquidate them. However, 
-                the liquidation process didn't account for the artificially deflated eToken balance.
+                When a user&apos;s health factor dropped below 1, anyone could liquidate them. However, 
+                the liquidation process didn&apos;t account for the artificially deflated eToken balance.
               </p>
             </div>
           </div>
 
           <AlertBox type="danger" title="Root Cause">
-            The core issue was that <code>donateToReserves()</code> reduced the user's eToken balance
+            The core issue was that <code>donateToReserves()</code> reduced the user&apos;s eToken balance
             without a corresponding health check, allowing users to become artificially underwater.
           </AlertBox>
         </section>
@@ -181,7 +181,7 @@ export default function EulerFinanceCaseStudy() {
         <section id="code-analysis">
           <h2>Code Analysis</h2>
           <p>
-            Let's examine the vulnerable <code>donateToReserves()</code> function:
+            Let&apos;s examine the vulnerable <code>donateToReserves()</code> function:
           </p>
 
           <CodeBlock
@@ -214,10 +214,10 @@ function donateToReserves(uint subAccountId, uint amount) external nonReentrant 
 
           <AlertBox type="warning" title="What's Missing">
             The function should have included a <code>checkLiquidity(account)</code> call after 
-            reducing the user's balance to ensure they remain solvent.
+            reducing the user&apos;s balance to ensure they remain solvent.
           </AlertBox>
 
-          <p className="mt-6">Here's what the fixed version looks like:</p>
+          <p className="mt-6">Here&apos;s what the fixed version looks like:</p>
 
           <CodeBlock
             code={`// Fixed donateToReserves function
@@ -291,8 +291,8 @@ function donateToReserves(uint subAccountId, uint amount) external nonReentrant 
             <div className="p-4 bg-lime-400/5 border border-lime-400/20 rounded-xl">
               <h4 className="font-semibold text-lime-400 mb-2">✅ Audit Donation Functions</h4>
               <p className="text-sm text-gray-400">
-                Donation and reserve functions can be attack vectors if they don't properly 
-                validate the donor's resulting position.
+                Donation and reserve functions can be attack vectors if they don&apos;t properly 
+                validate the donor&apos;s resulting position.
               </p>
             </div>
             
@@ -328,7 +328,7 @@ function donateToReserves(uint subAccountId, uint amount) external nonReentrant 
         <div className="p-6 bg-lime-400/5 border border-lime-400/20 rounded-xl">
           <h3 className="font-semibold text-white mb-2">🛡️ Protect Your Protocol</h3>
           <p className="text-sm text-gray-400 mb-4">
-            Don't wait for an exploit. Get your smart contracts audited by Hexific's security experts.
+            Don&apos;t wait for an exploit. Get your smart contracts audited by Hexific&apos;s security experts.
           </p>
           <Link
             href="/"

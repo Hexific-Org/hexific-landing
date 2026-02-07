@@ -210,7 +210,7 @@ export default function LearnPage() {
               Ready to Secure Your Protocol?
             </h2>
             <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-              Get your smart contracts professionally audited by Hexific's experts.
+              Get your smart contracts professionally audited by Hexific&apos;s experts.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

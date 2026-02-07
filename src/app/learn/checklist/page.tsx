@@ -17,6 +17,7 @@ import {
   Download,
   PartyPopper
 } from 'lucide-react';
+import Link from 'next/link';
 
 // Checklist items organized by category
 const checklistData = [
@@ -292,7 +293,7 @@ export default function ChecklistPage() {
             Great job! Your contracts appear to follow security best practices.
             Consider getting a professional audit for additional assurance.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-lime-400 text-black font-semibold rounded-xl hover:bg-lime-300 transition-colors"
           >
@@ -300,7 +301,7 @@ export default function ChecklistPage() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </a>
+          </Link>
         </div>
       )}
 
