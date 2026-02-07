@@ -1367,15 +1367,15 @@ export default function Page() {
 
                       <ul className="space-y-3">
                         <li className="flex items-start">
-                          <div className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 rounded-full border-2 border-lime-400 bg-transparent flex items-center justify-center">
-                            <div className="w-1.5 h-0.5 bg-lime-400 rounded-full" />
-                          </div>
+                          <svg className="w-5 h-5 text-lime-400 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
                           <span className="text-gray-300">Utilize $HEXI token for enhanced AI audit capabilities</span>
                         </li>
                         <li className="flex items-start">
-                          <div className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 rounded-full border-2 border-lime-400 bg-transparent flex items-center justify-center">
-                            <div className="w-1.5 h-0.5 bg-lime-400 rounded-full" />
-                          </div>
+                          <svg className="w-5 h-5 text-lime-400 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
                           <span className="text-gray-300">$HEXI buy back & burn program from platform revenue</span>
                         </li>
                         <li className="flex items-start">
