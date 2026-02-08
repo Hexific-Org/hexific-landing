@@ -93,7 +93,7 @@ export default function WeakRandomnessPage() {
           <p>
             Blockchains are deterministic state machines — every node must produce the 
             exact same result for every transaction. This fundamental property makes true 
-            randomness impossible on-chain, because any "random" value that one node 
+            randomness impossible on-chain, because any &quot;random&quot; value that one node 
             can compute, every other node (and every attacker) can compute too.
           </p>
 
@@ -106,7 +106,7 @@ export default function WeakRandomnessPage() {
                   <span className="text-2xl">🖥️</span>
                   <div>
                     <h5 className="font-medium text-blue-400">Traditional App</h5>
-                    <p className="text-sm text-gray-400">Server generates random number privately → users can't predict</p>
+                    <p className="text-sm text-gray-400">Server generates random number privately → users can&apos;t predict</p>
                   </div>
                 </div>
               </div>
@@ -116,7 +116,7 @@ export default function WeakRandomnessPage() {
                   <span className="text-2xl">⛓️</span>
                   <div>
                     <h5 className="font-medium text-red-400">Blockchain</h5>
-                    <p className="text-sm text-gray-400">Everything is public → any on-chain "randomness" is predictable</p>
+                    <p className="text-sm text-gray-400">Everything is public → any on-chain &quot;randomness&quot; is predictable</p>
                   </div>
                 </div>
               </div>
@@ -134,7 +134,7 @@ export default function WeakRandomnessPage() {
           <AlertBox type="danger" title="Weak Randomness = Free Money for Attackers">
             Any lottery, game, NFT mint, or selection mechanism that uses predictable 
             on-chain data can be exploited. Attackers deploy contracts that pre-compute 
-            the "random" outcome and only participate when they know they'll win.
+            the &quot;random&quot; outcome and only participate when they know they&apos;ll win.
           </AlertBox>
         </section>
 
@@ -222,7 +222,7 @@ export default function WeakRandomnessPage() {
                 <div>
                   <h4 className="font-semibold text-white mb-1">block.coinbase</h4>
                   <p className="text-sm text-gray-400 mb-2">
-                    The address of the block's validator/miner. The validator themselves 
+                    The address of the block&apos;s validator/miner. The validator themselves 
                     chose this value.
                   </p>
                   <div className="flex gap-2">
@@ -312,9 +312,9 @@ function bid() external payable {
 
           <AlertBox type="info" title="When Is block.timestamp Acceptable?">
             Using <code>block.timestamp</code> for time-based logic is acceptable when:
-            (1) the time window is large enough that a ~15 second drift doesn't matter,
-            (2) it's not used as a source of randomness, and 
-            (3) the value at stake doesn't justify a validator's manipulation cost.
+            (1) the time window is large enough that a ~15 second drift doesn&apos;t matter,
+            (2) it&apos;s not used as a source of randomness, and 
+            (3) the value at stake doesn&apos;t justify a validator&apos;s manipulation cost.
           </AlertBox>
         </section>
 
@@ -358,7 +358,7 @@ function getRandomNumber() public view returns (uint256) {
             <p className="text-sm text-gray-400 mb-3">
               Some contracts use a commit-reveal scheme where users commit in one block 
               and the blockhash of a future block is used as randomness. If the reveal 
-              isn't forced within 256 blocks, <code>blockhash()</code> returns 0, and 
+              isn&apos;t forced within 256 blocks, <code>blockhash()</code> returns 0, and 
               the attacker knows the outcome.
             </p>
             <div className="space-y-2 text-sm text-gray-400">
@@ -560,7 +560,7 @@ contract CoinFlipAttacker {
               </div>
               <p className="text-sm text-gray-400 mb-3">
                 The classic CTF challenge demonstrating weak randomness. Players must win 
-                10 consecutive coin flips by pre-computing the "random" outcome using 
+                10 consecutive coin flips by pre-computing the &quot;random&quot; outcome using 
                 the same blockhash in an attacker contract.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -574,9 +574,9 @@ contract CoinFlipAttacker {
         <section id="prevrandao">
           <h2>PREVRANDAO (Post-Merge)</h2>
           <p>
-            After Ethereum's transition to Proof of Stake (The Merge), <code>block.difficulty</code> 
+            After Ethereum&apos;s transition to Proof of Stake (The Merge), <code>block.difficulty</code> 
             was replaced by <code>block.prevrandao</code>. While more random than previous sources, 
-            it's still not cryptographically secure for high-value applications.
+            it&apos;s still not cryptographically secure for high-value applications.
           </p>
 
           <div className="my-8 grid md:grid-cols-2 gap-4">
@@ -636,7 +636,7 @@ function usePrevrandao() external view returns (uint256) {
               </div>
               <p className="text-sm text-gray-400 mb-2">
                 Verifiable Random Function. Generates provably fair randomness off-chain 
-                and provides a cryptographic proof that the number wasn't tampered with.
+                and provides a cryptographic proof that the number wasn&apos;t tampered with.
               </p>
               <div className="flex gap-2">
                 <span className="text-xs px-2 py-0.5 bg-lime-500/20 text-lime-400 rounded">Gold Standard</span>
@@ -666,7 +666,7 @@ function usePrevrandao() external view returns (uint256) {
                 <h4 className="font-semibold text-lime-400">Pyth Entropy</h4>
               </div>
               <p className="text-sm text-gray-400 mb-2">
-                Pyth's on-chain randomness service using commit-reveal with their entropy 
+                Pyth&apos;s on-chain randomness service using commit-reveal with their entropy 
                 providers. Supports many chains including Solana.
               </p>
               <div className="flex gap-2">
@@ -696,7 +696,7 @@ function usePrevrandao() external view returns (uint256) {
           <h2>Chainlink VRF Implementation</h2>
           <p>
             Chainlink VRF (Verifiable Random Function) is the industry standard for 
-            secure on-chain randomness. Here's a complete implementation:
+            secure on-chain randomness. Here&apos;s a complete implementation:
           </p>
 
           <CodeBlock
@@ -978,7 +978,7 @@ contract WeakRandomnessTest is Test {
               </div>
               <div>
                 <h5 className="text-sm font-medium text-white mb-2">Manual Review</h5>
-                <code className="text-xs text-gray-400 block bg-black/30 p-2 rounded">grep -rn "block.timestamp\|blockhash\|prevrandao"</code>
+                <code className="text-xs text-gray-400 block bg-black/30 p-2 rounded">grep -rn &quot;block.timestamp\|blockhash\|prevrandao&quot;</code>
               </div>
             </div>
           </div>

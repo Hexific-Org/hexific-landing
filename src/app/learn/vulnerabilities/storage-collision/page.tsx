@@ -94,7 +94,7 @@ export default function StorageCollisionPage() {
             Proxy contracts enable upgradeability in Ethereum by separating storage (proxy) 
             from logic (implementation). The proxy delegates all calls to an implementation 
             contract using <code>delegatecall</code>, allowing the logic to be upgraded while 
-            preserving the contract's address and state.
+            preserving the contract&apos;s address and state.
           </p>
 
           <div className="my-8 p-6 bg-white/[0.02] border border-lime-400/10 rounded-xl">
@@ -121,7 +121,7 @@ export default function StorageCollisionPage() {
                   <span className="text-2xl">⚙️</span>
                   <div>
                     <h5 className="font-medium text-purple-400">Implementation Contract</h5>
-                    <p className="text-sm text-gray-400">Contains logic, executes in proxy's storage context</p>
+                    <p className="text-sm text-gray-400">Contains logic, executes in proxy&apos;s storage context</p>
                   </div>
                 </div>
               </div>
@@ -129,8 +129,8 @@ export default function StorageCollisionPage() {
             
             <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
               <span className="text-sm text-yellow-400">
-                ⚠️ <strong>Key insight:</strong> When using delegatecall, the implementation's 
-                code runs but reads/writes the proxy's storage!
+                ⚠️ <strong>Key insight:</strong> When using delegatecall, the implementation&apos;s 
+                code runs but reads/writes the proxy&apos;s storage!
               </span>
             </div>
           </div>
@@ -190,8 +190,8 @@ contract Example {
             <h4 className="font-semibold text-red-400 mb-3">💥 The Collision Problem</h4>
             <p className="text-sm text-gray-400">
               When a proxy and its implementation both declare variables at the same slot, 
-              they overwrite each other's data. This is because <code>delegatecall</code> 
-              uses the proxy's storage but the implementation's code.
+              they overwrite each other&apos;s data. This is because <code>delegatecall</code> 
+              uses the proxy&apos;s storage but the implementation&apos;s code.
             </p>
           </div>
         </section>
@@ -206,8 +206,8 @@ contract Example {
                 <div>
                   <h4 className="font-semibold text-white mb-2">1. Proxy-Implementation Collision</h4>
                   <p className="text-sm text-gray-400">
-                    The proxy's admin/implementation storage variables collide with the 
-                    implementation's state variables at the same slots.
+                    The proxy&apos;s admin/implementation storage variables collide with the 
+                    implementation&apos;s state variables at the same slots.
                   </p>
                   <div className="mt-2 flex gap-2">
                     <span className="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 rounded">Most Dangerous</span>
@@ -257,7 +257,7 @@ contract Example {
                 <div>
                   <h4 className="font-semibold text-white mb-2">4. Variable Type Change Collision</h4>
                   <p className="text-sm text-gray-400">
-                    Changing a variable's type (e.g., uint128 to uint256) can shift 
+                    Changing a variable&apos;s type (e.g., uint128 to uint256) can shift 
                     subsequent variables to different slots.
                   </p>
                   <div className="mt-2 flex gap-2">
@@ -312,8 +312,8 @@ contract Example {
             
             <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
               <span className="text-sm text-red-400 font-medium">
-                Result: Reading "owner" returns the implementation address! 
-                Writing to "owner" corrupts the proxy's implementation pointer!
+                Result: Reading &quot;owner&quot; returns the implementation address! 
+                Writing to &quot;owner&quot; corrupts the proxy&apos;s implementation pointer!
               </span>
             </div>
           </div>
@@ -382,7 +382,7 @@ contract Implementation {
                   Slot 0: <span className="text-red-400">paused (NEW!)</span> | Slot 1: owner | Slot 2: totalSupply
                 </code>
                 <p className="text-xs text-red-400 mt-2">
-                  Adding "paused" at the beginning shifted everything! Now "owner" reads "totalSupply" value!
+                  Adding &quot;paused&quot; at the beginning shifted everything! Now &quot;owner&quot; reads &quot;totalSupply&quot; value!
                 </p>
               </div>
             </div>
@@ -498,7 +498,7 @@ contract TokenV2 is Pausable, Ownable {
                 <span className="text-xs text-gray-500">2022</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                Security researchers discovered that Wormhole's proxy could have been 
+                Security researchers discovered that Wormhole&apos;s proxy could have been 
                 compromised via storage collision during an upgrade. The issue was found 
                 before exploitation.
               </p>
@@ -530,7 +530,7 @@ contract TokenV2 is Pausable, Ownable {
                 <span className="text-xs text-gray-500">September 2021</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                A critical vulnerability was discovered in OpenZeppelin's UUPS implementation 
+                A critical vulnerability was discovered in OpenZeppelin&apos;s UUPS implementation 
                 that could allow storage collision attacks on uninitialized proxies. 
                 Emergency patches were released.
               </p>
@@ -654,7 +654,7 @@ contract TokenV2 {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <code className="text-lime-400 text-sm">Implementation:</code>
                   <code className="text-xs text-gray-400 break-all">
-                    keccak256("eip1967.proxy.implementation") - 1
+                    keccak256(&quot;eip1967.proxy.implementation&quot;) - 1
                   </code>
                 </div>
                 <code className="text-xs text-gray-500 block mt-1">
@@ -666,7 +666,7 @@ contract TokenV2 {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <code className="text-purple-400 text-sm">Admin:</code>
                   <code className="text-xs text-gray-400 break-all">
-                    keccak256("eip1967.proxy.admin") - 1
+                    keccak256(&quot;eip1967.proxy.admin&quot;) - 1
                   </code>
                 </div>
                 <code className="text-xs text-gray-500 block mt-1">
@@ -678,7 +678,7 @@ contract TokenV2 {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                   <code className="text-blue-400 text-sm">Beacon:</code>
                   <code className="text-xs text-gray-400 break-all">
-                    keccak256("eip1967.proxy.beacon") - 1
+                    keccak256(&quot;eip1967.proxy.beacon&quot;) - 1
                   </code>
                 </div>
                 <code className="text-xs text-gray-500 block mt-1">
@@ -751,7 +751,7 @@ contract EIP1967Proxy {
                 <h4 className="font-semibold text-lime-400">Use OpenZeppelin</h4>
               </div>
               <p className="text-sm text-gray-400">
-                OpenZeppelin's proxy contracts (TransparentUpgradeableProxy, UUPSUpgradeable) 
+                OpenZeppelin&apos;s proxy contracts (TransparentUpgradeableProxy, UUPSUpgradeable) 
                 are battle-tested and EIP-1967 compliant.
               </p>
             </div>

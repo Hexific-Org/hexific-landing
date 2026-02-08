@@ -90,7 +90,7 @@ export default function UncheckedReturnValuesPage() {
           <p>
             In Solidity, many operations return a boolean value indicating success or failure. 
             When developers ignore these return values, the contract continues executing as 
-            if everything succeeded — even when it didn't. This creates a dangerous gap between 
+            if everything succeeded — even when it didn&apos;t. This creates a dangerous gap between 
             what the contract thinks happened and what actually happened.
           </p>
 
@@ -118,7 +118,7 @@ export default function UncheckedReturnValuesPage() {
                 <span className="flex-shrink-0 w-8 h-8 bg-yellow-500/30 rounded-full flex items-center justify-center text-yellow-400 font-bold text-sm">3</span>
                 <div>
                   <h5 className="font-medium text-yellow-400">Return value ignored</h5>
-                  <p className="text-xs text-gray-400">Developer didn't check the bool return</p>
+                  <p className="text-xs text-gray-400">Developer didn&apos;t check the bool return</p>
                 </div>
               </div>
 
@@ -133,8 +133,8 @@ export default function UncheckedReturnValuesPage() {
 
             <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
               <span className="text-sm text-red-400">
-                💥 <strong>Result:</strong> Contract's accounting says funds were sent, 
-                but they're still in the contract (or were never received). 
+                💥 <strong>Result:</strong> Contract&apos;s accounting says funds were sent, 
+                but they&apos;re still in the contract (or were never received). 
                 Exploitable state desync.
               </span>
             </div>
@@ -227,7 +227,7 @@ function lowLevelCalls() external {
                 <div>
                   <h4 className="font-semibold text-white mb-2">USDT (Tether)</h4>
                   <p className="text-sm text-gray-400">
-                    The most infamous non-compliant token. USDT's <code>transfer()</code> 
+                    The most infamous non-compliant token. USDT&apos;s <code>transfer()</code> 
                     and <code>approve()</code> return <strong>nothing</strong> (void). 
                     Standard <code>IERC20</code> interface calls will revert because 
                     the ABI decoder expects a bool return.
@@ -247,7 +247,7 @@ function lowLevelCalls() external {
                   <h4 className="font-semibold text-white mb-2">BNB (Original ERC-20)</h4>
                   <p className="text-sm text-gray-400">
                     The original BNB token on Ethereum returns <strong>false</strong> 
-                    on failure instead of reverting. If you don't check the return value, 
+                    on failure instead of reverting. If you don&apos;t check the return value, 
                     failed transfers go unnoticed.
                   </p>
                   <div className="mt-2 flex gap-2">
@@ -421,7 +421,7 @@ contract SafeAirdrop {
                 <span className="text-xs text-gray-500">2016</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                An early Ethereum game where users bid to become "king." The contract 
+                An early Ethereum game where users bid to become &quot;king.&quot; The contract 
                 used <code>.send()</code> to refund the dethroned king but never checked 
                 the return value. When refunds failed (e.g., sending to a contract 
                 without <code>receive()</code>), users lost their ETH permanently.
@@ -439,7 +439,7 @@ contract SafeAirdrop {
               </div>
               <p className="text-sm text-gray-400 mb-3">
                 Dozens of DeFi protocols have launched without USDT support because they 
-                used the standard <code>IERC20</code> interface. USDT's non-standard return 
+                used the standard <code>IERC20</code> interface. USDT&apos;s non-standard return 
                 value causes the ABI decoder to revert, effectively blacklisting USDT from 
                 interacting with these contracts.
               </p>
@@ -493,7 +493,7 @@ contract SafeAirdrop {
                 <h4 className="font-semibold text-lime-400">Use SafeERC20</h4>
               </div>
               <p className="text-sm text-gray-400">
-                OpenZeppelin's <code>SafeERC20</code> wraps all ERC-20 functions, 
+                OpenZeppelin&apos;s <code>SafeERC20</code> wraps all ERC-20 functions, 
                 checks return values, and handles non-standard tokens like USDT.
               </p>
             </div>
@@ -612,7 +612,7 @@ contract SafeVault {
           <h2>SafeERC20 Deep Dive</h2>
           <p>
             Understanding how SafeERC20 works under the hood helps you appreciate why 
-            it's essential:
+            it&apos;s essential:
           </p>
 
           <CodeBlock

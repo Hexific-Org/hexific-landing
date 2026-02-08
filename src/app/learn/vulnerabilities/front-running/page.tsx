@@ -123,7 +123,7 @@ export default function FrontRunningPage() {
           </div>
 
           <AlertBox type="info" title="The Dark Forest">
-            The Ethereum mempool is often called "the dark forest" - a hostile environment 
+            The Ethereum mempool is often called &quot;the dark forest&quot; - a hostile environment 
             where any profitable transaction can be detected and exploited by MEV bots 
             within milliseconds.
           </AlertBox>
@@ -134,7 +134,7 @@ export default function FrontRunningPage() {
           <p>
             Front-running occurs when an attacker observes a pending transaction in the 
             mempool and submits their own transaction with a higher gas price to get 
-            included before the victim's transaction.
+            included before the victim&apos;s transaction.
           </p>
 
           <div className="my-8 space-y-4">
@@ -166,7 +166,7 @@ export default function FrontRunningPage() {
               <span className="flex-shrink-0 w-8 h-8 bg-orange-500/30 rounded-full flex items-center justify-center text-orange-400 font-bold">4</span>
               <div>
                 <h4 className="font-semibold text-orange-400">Victim Gets Worse Price</h4>
-                <p className="text-sm text-gray-400">User's trade executes at a worse rate due to price impact</p>
+                <p className="text-sm text-gray-400">User&apos;s trade executes at a worse rate due to price impact</p>
               </div>
             </div>
 
@@ -190,7 +190,7 @@ export default function FrontRunningPage() {
                 <div>
                   <h4 className="font-semibold text-white mb-2">Sandwich Attacks</h4>
                   <p className="text-sm text-gray-400">
-                    The attacker places a buy order before and a sell order after a victim's 
+                    The attacker places a buy order before and a sell order after a victim&apos;s 
                     large trade, profiting from the price movement they cause.
                   </p>
                   <div className="mt-2 flex gap-2">
@@ -292,7 +292,7 @@ export default function FrontRunningPage() {
           <h2>Sandwich Attack Deep Dive</h2>
           <p>
             Sandwich attacks are the most common form of MEV extraction affecting regular 
-            users. Let's understand exactly how they work:
+            users. Let&apos;s understand exactly how they work:
           </p>
 
           <div className="my-8 p-6 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-red-500/10 border border-red-500/20 rounded-xl">
@@ -353,7 +353,7 @@ export default function FrontRunningPage() {
 
           <AlertBox type="danger" title="Who Gets Sandwiched?">
             Anyone swapping on DEXs with loose slippage settings or trading large amounts 
-            relative to pool liquidity. Even "safe" 1% slippage can be exploited on 
+            relative to pool liquidity. Even &quot;safe&quot; 1% slippage can be exploited on 
             low-liquidity pairs.
           </AlertBox>
         </section>
@@ -510,7 +510,7 @@ contract VulnerableLending {
               </div>
               <p className="text-sm text-gray-400">
                 Use Flashbots Protect, MEV Blocker, or other private mempools to hide 
-                transactions from searchers until they're included in a block.
+                transactions from searchers until they&apos;re included in a block.
               </p>
             </div>
 
@@ -631,7 +631,7 @@ console.log("Protected swap executed:", receipt.hash);`}
           />
 
           <AlertBox type="success" title="MEV Blocker Alternative">
-            CoW Protocol's MEV Blocker (<code>rpc.mevblocker.io</code>) offers similar 
+            CoW Protocol&apos;s MEV Blocker (<code>rpc.mevblocker.io</code>) offers similar 
             protection with additional refund mechanisms. Try both and see which works 
             better for your use case.
           </AlertBox>
@@ -999,7 +999,7 @@ contract FrontRunningTest is Test {
           <h3 className="font-semibold text-white mb-2">🛡️ Is Your Protocol MEV-Resistant?</h3>
           <p className="text-sm text-gray-400 mb-4">
             Our auditors analyze MEV attack surfaces and help you implement robust protections. 
-            We've helped protocols save millions in potential MEV extraction.
+            We&apos;ve helped protocols save millions in potential MEV extraction.
           </p>
           <Link
             href="/"

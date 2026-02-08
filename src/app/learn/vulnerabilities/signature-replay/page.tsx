@@ -98,7 +98,7 @@ export default function SignatureReplayPage() {
           </p>
 
           <AlertBox type="danger" title="The Core Problem">
-            Cryptographic signatures prove that someone authorized an action, but they don't 
+            Cryptographic signatures prove that someone authorized an action, but they don&apos;t 
             inherently limit how many times that authorization can be used. Without explicit 
             protections, one signature = unlimited uses.
           </AlertBox>
@@ -189,7 +189,7 @@ bytes32 prefixedHash = keccak256(
 
           <AlertBox type="info" title="Signature Malleability">
             ECDSA signatures have a malleability issue: for any valid (r, s), the pair 
-            (r, -s mod n) is also valid. Always use OpenZeppelin's ECDSA library which 
+            (r, -s mod n) is also valid. Always use OpenZeppelin&apos;s ECDSA library which 
             enforces s to be in the lower half of the curve order.
           </AlertBox>
         </section>
@@ -272,7 +272,7 @@ bytes32 prefixedHash = keccak256(
           <h2>Same-Contract Replay Deep Dive</h2>
           <p>
             The most common replay attack occurs when a signature can be reused on the 
-            same contract because there's no nonce or state change that invalidates it.
+            same contract because there&apos;s no nonce or state change that invalidates it.
           </p>
 
           <div className="my-8 space-y-4">
@@ -280,7 +280,7 @@ bytes32 prefixedHash = keccak256(
               <span className="flex-shrink-0 w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold">1</span>
               <div>
                 <h4 className="font-semibold text-white">User Signs Claim Message</h4>
-                <p className="text-sm text-gray-400">User signs: "Claim 100 tokens for address 0xABC"</p>
+                <p className="text-sm text-gray-400">User signs: &quot;Claim 100 tokens for address 0xABC&quot;</p>
               </div>
             </div>
 
@@ -318,7 +318,7 @@ bytes32 prefixedHash = keccak256(
         <section id="cross-contract">
           <h2>Cross-Contract Replay</h2>
           <p>
-            When signatures don't include the contract address, they can be replayed 
+            When signatures don&apos;t include the contract address, they can be replayed 
             on other contracts with similar verification logic.
           </p>
 
@@ -338,7 +338,7 @@ bytes32 prefixedHash = keccak256(
               </div>
               
               <div className="p-4 bg-black/30 rounded-lg">
-                <h5 className="text-sm font-medium text-red-400 mb-2">Contract B (Attacker's Fork)</h5>
+                <h5 className="text-sm font-medium text-red-400 mb-2">Contract B (Attacker&apos;s Fork)</h5>
                 <code className="text-xs text-gray-400 block">
                   address: 0x2222...
                 </code>
@@ -390,7 +390,7 @@ bytes32 prefixedHash = keccak256(
           <div className="my-4 p-5 bg-gradient-to-r from-purple-500/10 to-transparent border border-purple-500/20 rounded-xl">
             <h4 className="font-semibold text-white mb-3">Famous Example: Wintermute (2022)</h4>
             <p className="text-sm text-gray-400 mb-3">
-              After Optimism's OP token airdrop, Wintermute accidentally replayed their 
+              After Optimism&apos;s OP token airdrop, Wintermute accidentally replayed their 
               Ethereum transaction on Optimism. An attacker noticed and replayed 20M OP 
               tokens meant for Wintermute to their own address.
             </p>
@@ -411,7 +411,7 @@ bytes32 prefixedHash = keccak256(
                 <span className="text-xs text-gray-500">2021</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                A vulnerability in Sushiswap's Kashi lending platform allowed signatures 
+                A vulnerability in Sushiswap&apos;s Kashi lending platform allowed signatures 
                 to be replayed across different markets, enabling unauthorized borrows.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -441,7 +441,7 @@ bytes32 prefixedHash = keccak256(
                 <span className="text-xs text-gray-500">2022</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                Wintermute's multi-sig setup on Optimism was exploited through a 
+                Wintermute&apos;s multi-sig setup on Optimism was exploited through a 
                 cross-chain replay attack during the OP airdrop.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -608,7 +608,7 @@ contract VulnerableSwap {
               </div>
               <div className="p-3 bg-black/30 rounded-lg">
                 <code className="text-purple-400 text-sm">version</code>
-                <span className="text-gray-400 text-sm ml-3">Contract version (e.g., "1")</span>
+                <span className="text-gray-400 text-sm ml-3">Contract version (e.g., &quot;1&quot;)</span>
               </div>
               <div className="p-3 bg-black/30 rounded-lg">
                 <code className="text-blue-400 text-sm">chainId</code>
