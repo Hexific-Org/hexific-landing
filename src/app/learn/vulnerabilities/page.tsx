@@ -121,13 +121,13 @@ const vulnerabilityArticles: Article[] = [
   },
   {
     slug: 'timestamp-dependence',
-    title: 'Timestamp Manipulation',
-    description: 'The risks of using block.timestamp for critical logic and safer alternatives.',
+    title: 'Weak Randomness & Timestamp Dependence',
+    description: 'Why on-chain randomness is fundamentally broken, how block variables are exploitable, and secure alternatives like Chainlink VRF.',
     category: 'Vulnerabilities',
     difficulty: 'beginner',
-    severity: 'low',
-    tags: ['Timestamp', 'Block Variables', 'Randomness'],
-    readTime: '5 min read',
+    severity: 'medium',
+    tags: ['Randomness', 'Timestamp', 'Blockhash', 'Chainlink VRF', 'PREVRANDAO'],
+    readTime: '7 min read',
     date: 'Nov 20, 2024',
   },
   {

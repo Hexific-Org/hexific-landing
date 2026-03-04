@@ -1230,7 +1230,7 @@ export default function Page() {
             <FreeAuditUpload />
           </div>
           {/* Contact Info */}
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="grid md:grid-cols-3 gap-8 text-center mt-8">
             <div>
               <div className="w-12 h-12 bg-lime-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-6 h-6 text-lime-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1367,15 +1367,15 @@ export default function Page() {
 
                       <ul className="space-y-3">
                         <li className="flex items-start">
-                          <div className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 rounded-full border-2 border-lime-400 bg-transparent flex items-center justify-center">
-                            <div className="w-1.5 h-0.5 bg-lime-400 rounded-full" />
-                          </div>
+                          <svg className="w-5 h-5 text-lime-400 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
                           <span className="text-gray-300">Utilize $HEXI token for enhanced AI audit capabilities</span>
                         </li>
                         <li className="flex items-start">
-                          <div className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0 rounded-full border-2 border-lime-400 bg-transparent flex items-center justify-center">
-                            <div className="w-1.5 h-0.5 bg-lime-400 rounded-full" />
-                          </div>
+                          <svg className="w-5 h-5 text-lime-400 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
                           <span className="text-gray-300">$HEXI buy back & burn program from platform revenue</span>
                         </li>
                         <li className="flex items-start">
@@ -1557,26 +1557,26 @@ export default function Page() {
             <div>
               <h4 className="font-bold mb-4">Services</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Smart Contract Audits</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Continuous Monitoring</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Security Consulting</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Emergency Response</a></li>
+                <li onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}><a className="hover:text-lime-400 hover:cursor-pointer transition-colors">Smart Contract Audits</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); alert('This feature is under development. Stay tuned!'); }} className="hover:text-lime-400 transition-colors">Continuous Monitoring</a></li>
+                <li><a href="/manual-audit" className="hover:text-lime-400 transition-colors">Security Consulting</a></li>
+                <li><a href="#" onClick={(e) => { e.preventDefault(); alert('This feature is under development. Stay tuned!'); }} className="hover:text-lime-400 transition-colors cursor-pointer">Emergency Response</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Resources</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Security Blog</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Vulnerability Database</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Best Practices</a></li>
+                <li><a href="/docs" className="hover:text-lime-400 transition-colors">Documentation</a></li>
+                <li><a href="/learn/case-studies" className="hover:text-lime-400 transition-colors">Security Blog</a></li>
+                <li><a href="/learn/vulnerabilities" className="hover:text-lime-400 transition-colors">Vulnerability Database</a></li>
+                <li><a href="/learn/best-practices" className="hover:text-lime-400 transition-colors">Best Practices</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-lime-400 transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-lime-400 transition-colors">Careers</a></li>
+                {/* <li><a href="#" className="hover:text-lime-400 transition-colors">About Us</a></li> */}
+                {/* <li><a href="#" className="hover:text-lime-400 transition-colors">Careers</a></li> */}
                 <li>
                   <Link href="/privacy-policy" className="hover:text-lime-400 transition-colors">
                     Privacy Policy
