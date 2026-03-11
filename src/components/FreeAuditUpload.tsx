@@ -1,21 +1,20 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-// import AIAssistModal from './AIAssistModal';
+import Link from 'next/link';
 import { CodeBlock } from './CodeBlock';
 import {
   checkRateLimit,
-  // logUsage,
   getClientIP,
   getTimeUntilReset,
   type ServiceType
 } from '@/lib/rateLimiter';
-// import { trim } from 'viem';
 import { useSolana } from "@/components/solana-provider";
 import { PaymentCard } from "@/components/PaymentCard";
 import { adaptVPSResponse, DetailedFinding, AuditResult } from './adaptVPSResponse';
 import { WalletOption } from './WalletOption';
 import { generateAuditPDF } from './AuditReportPDF';
+import { createClient } from '@/lib/supabase/client';
 
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB in bytes
@@ -25,9 +24,11 @@ const SAVE_RESPONSE = true; // true = save API response ke file (jalankan sekali
 
 
 export default function FreeAuditUpload() {
-  const { isConnected, selectedAccount, wallets, selectedWallet } = useSolana();
+  const { isConnected, selectedAccount, wallets } = useSolana();
   const [isHexificAIEnabled, setIsHexificAIEnabled] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
+  const supabase = createClient();
 
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,10 +53,20 @@ export default function FreeAuditUpload() {
     service: string;
   } | null>(null);
 
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setIsSignedIn(!!user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setIsSignedIn(!!session?.user));
+    return () => subscription.unsubscribe();
+  }, []);
+
   const handleToggleHexificAI = () => {
     if (isHexificAIEnabled) {
       setIsHexificAIEnabled(false);
     } else {
+      if (!isSignedIn) {
+        window.location.href = `/sign-in?redirect=${encodeURIComponent(window.location.pathname + '#free-audit-upload')}`;
+        return;
+      }
       if (isConnected) {
         setIsHexificAIEnabled(true);
       } else {
@@ -498,6 +509,12 @@ ${result.detailed_audit}
                   <p className="text-gray-400 text-xs mt-2">
                     💡 Tip: You can still use the other audit type (ZIP upload or Address audit)
                   </p>
+                  <Link
+                    href={`/sign-in?redirect=${encodeURIComponent('/#free-audit-upload')}`}
+                    className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-lime-400 text-black font-semibold rounded-lg hover:bg-lime-300 transition-colors text-sm"
+                  >
+                    Sign in for 3 more free audits per month
+                  </Link>
                 </div>
               </div>
             </div>
@@ -560,7 +577,7 @@ ${result.detailed_audit}
                   Hexific AI
                   <span className="text-[10px] bg-lime-400/20 text-lime-400 px-2 py-0.5 rounded-full border border-lime-400/30">BETA</span>
                 </h3>
-                <p className="text-xs text-gray-400 hidden sm:block">Enable advanced AI analysis (Requires Wallet)</p>
+                <p className="text-xs text-gray-400 hidden sm:block">Enable advanced AI analysis (Sign in required, then pay with card or crypto)</p>
               </div>
             </div>
 

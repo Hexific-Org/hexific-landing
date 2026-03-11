@@ -70,7 +70,7 @@ async function calculateTokenAmount() {
     return amountTokenRequired;
 }
 
-// This component only be rendered when wallet is connected
+// This component only be rendered when wallet is connected (for crypto)
 function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, disabled = false }: ConnectedPaymentCardProps) {
   const { rpc, chain } = useSolana();
   const signer = useWalletAccountTransactionSendingSigner(account, chain);
@@ -319,27 +319,73 @@ function ConnectedPaymentCard({ account, onPaymentSuccess, isAuditing = false, d
   );
 }
 
-// Main component
+// Main component - Card (Stripe) or Crypto (SOL/HEXI)
 export function PaymentCard({ onPaymentSuccess, isAuditing = false, disabled = false }: { onPaymentSuccess: () => Promise<void>; isAuditing?: boolean; disabled?: boolean }) {
   const { selectedAccount, isConnected } = useSolana();
+  const [method, setMethod] = useState<'card' | 'crypto'>('card');
+  const [cardLoading, setCardLoading] = useState(false);
+
+  const handleCardPayment = async () => {
+    setCardLoading(true);
+    try {
+      const res = await fetch('/api/stripe/create-checkout', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Checkout failed');
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      setCardLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-4 p-6 rounded-2xl bg-[rgba(214,237,23,0.05)] backdrop-blur-xl border border-[rgba(214,237,23,0.2)] shadow-[0_0_30px_rgba(214,237,23,0.1)]">
       <h3 className="text-lg font-semibold text-white">
         Send <span className="text-lime-400">Payment</span>
       </h3>
-      {isConnected && selectedAccount ? (
+
+      {/* Card vs Crypto tabs */}
+      <div className="flex gap-2 p-1 bg-[rgba(0,0,0,0.3)] rounded-xl">
+        <button
+          type="button"
+          onClick={() => setMethod('card')}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            method === 'card' ? 'bg-lime-400 text-[#000E1B]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          Card
+        </button>
+        <button
+          type="button"
+          onClick={() => setMethod('crypto')}
+          className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            method === 'crypto' ? 'bg-lime-400 text-[#000E1B]' : 'text-gray-400 hover:text-white hover:bg-white/5'
+          }`}
+        >
+          Crypto
+        </button>
+      </div>
+
+      {method === 'card' ? (
+        <div className="space-y-4">
+          <p className="text-sm text-gray-400 text-center">Pay with credit/debit card via Stripe</p>
+          <Button
+            onClick={handleCardPayment}
+            disabled={cardLoading || isAuditing || disabled}
+            className="w-full bg-lime-400 hover:bg-lime-500 text-[#000E1B] font-semibold py-3 rounded-xl"
+          >
+            {cardLoading ? 'Redirecting...' : 'Pay $1.00 & Continue to Checkout'}
+          </Button>
+          <p className="text-xs text-gray-500 text-center">
+            You will complete your audit after payment. Add STRIPE_SECRET_KEY to enable.
+          </p>
+        </div>
+      ) : isConnected && selectedAccount ? (
         <ConnectedPaymentCard account={selectedAccount} onPaymentSuccess={onPaymentSuccess} isAuditing={isAuditing} disabled={disabled} />
       ) : (
-        <div className="py-8 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[rgba(214,237,23,0.1)] flex items-center justify-center">
-            <svg className="w-8 h-8 text-lime-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <p className="text-gray-400">
-            Connect your wallet to send payment
-          </p>
+        <div className="py-6 text-center">
+          <p className="text-gray-400 mb-4">Connect your wallet to pay with SOL or HEXI</p>
+          <p className="text-sm text-gray-500">Use the connect wallet button above</p>
         </div>
       )}
     </div>
