@@ -409,8 +409,10 @@ export default function Page() {
                 </Link>
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              {/* <a href="#contact" className="glass-effect text-white px-6 py-2 rounded-lg hover:bg-lime-300 transition-colors font-semibold">Get Audit</a> */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link href="/sign-in" className="text-gray-300 hover:text-lime-400 transition-colors font-medium">
+                Sign in
+              </Link>
               <WalletConnectButton onMobile={false} />
               {/* <WalletConnectButton /> */}
             </div>
@@ -977,70 +979,125 @@ export default function Page() {
           </div>
 
           {/* Logo Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
             {/* Ethereum */}
-            <div className="group flex items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/ethereum.png"
                 alt="Ethereum"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
 
             {/* Solana */}
-            <div className="group flex items-center justify-center p-7 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/solana.svg"
                 alt="Solana"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
 
             {/* Base */}
-            <div className="group flex items-center justify-center p-12 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/base.svg"
                 alt="Base"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
 
             {/* Etherscan */}
-            <div className="group flex items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/etherscan.svg"
                 alt="Etherscan"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
 
             {/* x402scan */}
-            <div className="group flex items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/x402scan.svg"
                 alt="x402scan"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
 
             {/* Claude AI */}
-            <div className="group flex items-center justify-center p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
               <Image
                 src="/integrations/claude-ai.svg"
                 alt="Claude AI"
                 width={120}
                 height={40}
-                className="opacity-60 transition-all duration-300 brightness-0 invert"
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Open AI */}
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+              <Image
+                src="/integrations/open-ai.svg"
+                alt="Open AI"
+                width={120}
+                height={40}
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Langchain */}
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+              <Image
+                src="/integrations/langchain.svg"
+                alt="Langchain"
+                width={120}
+                height={40}
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Resend */}
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+              <Image
+                src="/integrations/resend.svg"
+                alt="Resend"
+                width={120}
+                height={40}
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Helius */}
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+              <Image
+                src="/integrations/helius.svg"
+                alt="Helius"
+                width={120}
+                height={40}
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Slither */}
+            <div className="group flex items-center justify-center h-20 w-36 sm:h-24 sm:w-40 md:h-24 md:w-44 rounded-2xl bg-white/5 border border-white/10 hover:border-lime-400/50 hover:bg-white/10 transition-all duration-300">
+              <Image
+                src="/integrations/slither.svg"
+                alt="Slither"
+                width={120}
+                height={40}
+                className="opacity-60 transition-all duration-300 brightness-0 invert max-h-full max-w-full object-contain"
               />
             </div>
           </div>

@@ -85,9 +85,9 @@ export default function ReentrancyAttackPage() {
           <ol>
             <li>Attacker calls a vulnerable <code>withdraw()</code> function</li>
             <li>The contract sends ETH to the attacker before updating state</li>
-            <li>Attacker's <code>receive()</code> or <code>fallback()</code> function is triggered</li>
+            <li>Attacker&apos;s <code>receive()</code> or <code>fallback()</code> function is triggered</li>
             <li>Attacker re-enters the <code>withdraw()</code> function</li>
-            <li>Since state wasn't updated, the check passes again</li>
+            <li>Since state wasn&apos;t updated, the check passes again</li>
             <li>Process repeats until funds are drained</li>
           </ol>
 
@@ -154,7 +154,7 @@ export default function ReentrancyAttackPage() {
 
           <h3>2. Reentrancy Guards</h3>
           <p>
-            Use OpenZeppelin's <code>ReentrancyGuard</code> modifier or implement your own mutex lock:
+            Use OpenZeppelin&apos;s <code>ReentrancyGuard</code> modifier or implement your own mutex lock:
           </p>
 
           <CodeBlock
@@ -191,7 +191,7 @@ contract SecureVault is ReentrancyGuard {
         <section id="code-examples">
           <h2>Code Examples</h2>
           <p>
-            Let's compare vulnerable code with its secure counterpart:
+            Let&apos;s compare vulnerable code with its secure counterpart:
           </p>
 
           <CodeComparison

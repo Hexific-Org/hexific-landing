@@ -197,7 +197,7 @@ export default function OracleManipulationPage() {
         <section id="spot-price-attack">
           <h2>Spot Price Manipulation Deep Dive</h2>
           <p>
-            The most common oracle attack uses flash loans to manipulate spot prices. Here's 
+            The most common oracle attack uses flash loans to manipulate spot prices. Here&apos;s 
             exactly how it works:
           </p>
 
@@ -331,7 +331,7 @@ twap = (priceCumulative2 - priceCumulative1) / (time2 - time1);
                 <span className="text-xs text-gray-500">October 2021</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                Flash loan attack manipulated the price of yUSD through Yearn's price oracle, 
+                Flash loan attack manipulated the price of yUSD through Yearn&apos;s price oracle, 
                 allowing the attacker to borrow far more than their collateral was worth.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -347,8 +347,8 @@ twap = (priceCumulative2 - priceCumulative1) / (time2 - time1);
                 <span className="text-xs text-gray-500">October 2020</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                Attacker used flash loans to manipulate Curve's stablecoin pool prices, 
-                then arbitraged the difference in Harvest's vault share prices.
+                Attacker used flash loans to manipulate Curve&apos;s stablecoin pool prices, 
+                then arbitraged the difference in Harvest&apos;s vault share prices.
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded">Flash Loan</span>
@@ -363,7 +363,7 @@ twap = (priceCumulative2 - priceCumulative1) / (time2 - time1);
                 <span className="text-xs text-gray-500">February 2023</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                Attacker exploited Tellor oracle's update mechanism by submitting false price 
+                Attacker exploited Tellor oracle&apos;s update mechanism by submitting false price 
                 data for WALBT token, inflating collateral values to drain the protocol.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -378,7 +378,7 @@ twap = (priceCumulative2 - priceCumulative1) / (time2 - time1);
         <section id="vulnerable-code">
           <h2>Vulnerable Code Patterns</h2>
           <p>
-            Let's examine common vulnerable patterns and their secure alternatives:
+            Let&apos;s examine common vulnerable patterns and their secure alternatives:
           </p>
 
           <h3>❌ Pattern 1: Direct DEX Price Reading</h3>
@@ -501,7 +501,7 @@ contract SecureLending {
               </div>
               <p className="text-sm text-gray-400">
                 Chainlink aggregates data from multiple sources and has economic security 
-                through node staking. It's the gold standard for price feeds.
+                through node staking. It&apos;s the gold standard for price feeds.
               </p>
             </div>
 
@@ -570,7 +570,7 @@ contract SecureLending {
         <section id="chainlink-integration">
           <h2>Chainlink Best Practices</h2>
           <p>
-            Chainlink is the most widely used oracle solution. Here's how to integrate it 
+            Chainlink is the most widely used oracle solution. Here&apos;s how to integrate it 
             properly:
           </p>
 
@@ -856,8 +856,8 @@ contract OracleSecurityTest is Test {
         <div className="mt-12 p-6 bg-lime-400/5 border border-lime-400/20 rounded-xl">
           <h3 className="font-semibold text-white mb-2">🛡️ Worried About Oracle Security?</h3>
           <p className="text-sm text-gray-400 mb-4">
-            Get your oracle integrations reviewed by Hexific's security experts. 
-            We've audited dozens of protocols using Chainlink, Uniswap TWAP, and custom oracles.
+            Get your oracle integrations reviewed by Hexific&apos;s security experts. 
+            We&apos;ve audited dozens of protocols using Chainlink, Uniswap TWAP, and custom oracles.
           </p>
           <Link
             href="/"

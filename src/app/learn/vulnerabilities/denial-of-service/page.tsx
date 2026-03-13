@@ -199,7 +199,7 @@ export default function DenialOfServicePage() {
                   <h4 className="font-semibold text-white mb-2">4. Griefing Attacks</h4>
                   <p className="text-sm text-gray-400">
                     Attackers make operations more expensive or inconvenient for others, 
-                    even if they don't directly profit.
+                    even if they don&apos;t directly profit.
                   </p>
                   <div className="mt-2 flex gap-2">
                     <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded">No Direct Profit</span>
@@ -231,7 +231,7 @@ export default function DenialOfServicePage() {
         <section id="gas-limit-dos">
           <h2>Gas Limit DoS Deep Dive</h2>
           <p>
-            The most common DoS vulnerability occurs when a function's gas consumption 
+            The most common DoS vulnerability occurs when a function&apos;s gas consumption 
             grows unboundedly with user-controlled data. Once gas exceeds the block limit, 
             the function becomes impossible to execute.
           </p>
@@ -305,7 +305,7 @@ export default function DenialOfServicePage() {
           <h2>Unexpected Revert DoS</h2>
           <p>
             When your contract makes external calls and those calls can fail or be made 
-            to fail, attackers can use this to block your contract's functionality.
+            to fail, attackers can use this to block your contract&apos;s functionality.
           </p>
 
           <div className="my-8 space-y-4">
@@ -397,7 +397,7 @@ export default function DenialOfServicePage() {
           <h3>Famous Example: Fomo3D (2018)</h3>
           <div className="my-4 p-5 bg-gradient-to-r from-purple-500/10 to-transparent border border-purple-500/20 rounded-xl">
             <p className="text-sm text-gray-400 mb-3">
-              The winner of Fomo3D's jackpot used block stuffing to prevent anyone else from 
+              The winner of Fomo3D&apos;s jackpot used block stuffing to prevent anyone else from 
               buying keys in the final moments. By filling blocks with high-gas transactions, 
               they ensured no one could extend the timer, winning 10,469 ETH (~$3M at the time).
             </p>
@@ -411,7 +411,7 @@ export default function DenialOfServicePage() {
         <section id="griefing">
           <h2>Griefing Attacks</h2>
           <p>
-            Griefing attacks don't aim to profit — they aim to cause harm or inconvenience 
+            Griefing attacks don&apos;t aim to profit — they aim to cause harm or inconvenience 
             to other users, often at a cost to the attacker.
           </p>
 
@@ -492,7 +492,7 @@ export default function DenialOfServicePage() {
                 <span className="text-xs text-gray-500">2016</span>
               </div>
               <p className="text-sm text-gray-400 mb-3">
-                The game used push payments to refund the previous "king" when dethroned. 
+                The game used push payments to refund the previous &quot;king&quot; when dethroned. 
                 When the refund failed (malicious contract), the entire game broke as 
                 no new king could be crowned.
               </p>
@@ -659,7 +659,7 @@ contract VulnerableVault {
               </div>
               <p className="text-sm text-gray-400">
                 Instead of sending funds to users, let users withdraw their funds. 
-                One user's failed withdrawal doesn't affect others.
+                One user&apos;s failed withdrawal doesn&apos;t affect others.
               </p>
             </div>
 
@@ -681,7 +681,7 @@ contract VulnerableVault {
               </div>
               <p className="text-sm text-gray-400">
                 Limit gas forwarded to external calls so malicious contracts 
-                can't consume all available gas.
+                can&apos;t consume all available gas.
               </p>
             </div>
 
@@ -691,7 +691,7 @@ contract VulnerableVault {
                 <h4 className="font-semibold text-lime-400">Isolate External Calls</h4>
               </div>
               <p className="text-sm text-gray-400">
-                Don't let one failed external call revert the entire transaction. 
+                Don&apos;t let one failed external call revert the entire transaction. 
                 Use try/catch or low-level calls with error handling.
               </p>
             </div>
@@ -713,7 +713,7 @@ contract VulnerableVault {
                 <h4 className="font-semibold text-lime-400">Escape Hatches</h4>
               </div>
               <p className="text-sm text-gray-400">
-                Provide emergency withdrawal mechanisms that don't depend on 
+                Provide emergency withdrawal mechanisms that don&apos;t depend on 
                 complex state or external calls.
               </p>
             </div>

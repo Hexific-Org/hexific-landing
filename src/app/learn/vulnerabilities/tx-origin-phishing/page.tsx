@@ -88,7 +88,7 @@ export default function TxOriginPhishingPage() {
         <section id="understanding">
           <h2>Understanding tx.origin vs msg.sender</h2>
           <p>
-            Before diving into the attack, it's crucial to understand the difference between 
+            Before diving into the attack, it&apos;s crucial to understand the difference between 
             these two global variables that identify who is calling your contract.
           </p>
 
@@ -193,9 +193,9 @@ export default function TxOriginPhishingPage() {
         <section id="the-attack">
           <h2>How the Attack Works</h2>
           <p>
-            The tx.origin phishing attack exploits the fact that tx.origin doesn't change 
+            The tx.origin phishing attack exploits the fact that tx.origin doesn&apos;t change 
             when a contract makes a call. An attacker tricks a victim into interacting with 
-            a malicious contract, which then calls the victim's contract using the victim's identity.
+            a malicious contract, which then calls the victim&apos;s contract using the victim&apos;s identity.
           </p>
 
           <div className="my-8 p-6 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-red-500/10 border border-red-500/20 rounded-xl">
@@ -227,9 +227,9 @@ export default function TxOriginPhishingPage() {
               <div className="flex items-start gap-4">
                 <span className="flex-shrink-0 w-8 h-8 bg-yellow-500/30 rounded-full flex items-center justify-center text-yellow-400 font-bold text-sm">3</span>
                 <div>
-                  <h5 className="font-medium text-white">Malicious Contract Calls Victim's Wallet Contract</h5>
+                  <h5 className="font-medium text-white">Malicious Contract Calls Victim&apos;s Wallet Contract</h5>
                   <p className="text-sm text-gray-400">
-                    The malicious contract internally calls the victim's wallet (or any contract 
+                    The malicious contract internally calls the victim&apos;s wallet (or any contract 
                     that uses tx.origin for auth).
                   </p>
                 </div>
@@ -240,7 +240,7 @@ export default function TxOriginPhishingPage() {
                 <div>
                   <h5 className="font-medium text-white">tx.origin Check Passes!</h5>
                   <p className="text-sm text-gray-400">
-                    Since tx.origin is still the victim's address, the wallet contract thinks 
+                    Since tx.origin is still the victim&apos;s address, the wallet contract thinks 
                     the legitimate owner is making the call. Funds are stolen.
                   </p>
                 </div>
@@ -252,7 +252,7 @@ export default function TxOriginPhishingPage() {
         <section id="attack-scenario">
           <h2>Complete Attack Scenario</h2>
           <p>
-            Let's walk through a complete attack with code. Imagine a simple wallet contract 
+            Let&apos;s walk through a complete attack with code. Imagine a simple wallet contract 
             that uses tx.origin to verify the owner:
           </p>
 
@@ -321,8 +321,8 @@ contract PhishingContract {
           <AlertBox type="danger" title="Attack Execution">
             <ol className="mt-2 space-y-1 text-sm list-decimal list-inside">
               <li>Alice deploys VulnerableWallet and deposits 10 ETH</li>
-              <li>Attacker deploys PhishingContract pointing to Alice's wallet</li>
-              <li>Attacker sends Alice a fake "Free NFT" link</li>
+              <li>Attacker deploys PhishingContract pointing to Alice&apos;s wallet</li>
+              <li>Attacker sends Alice a fake &quot;Free NFT&quot; link</li>
               <li>Alice calls claimReward() on the phishing contract</li>
               <li>tx.origin = Alice, so the wallet thinks Alice is calling</li>
               <li>All 10 ETH transferred to attacker! 💸</li>
@@ -470,7 +470,7 @@ contract StillVulnerable {
               </div>
               <p className="text-sm text-gray-400">
                 tx.origin phishing is featured in Ethernaut (Level 4), Damn Vulnerable DeFi, 
-                and other CTFs because it's a fundamental concept every developer must understand.
+                and other CTFs because it&apos;s a fundamental concept every developer must understand.
               </p>
             </div>
 
@@ -480,14 +480,14 @@ contract StillVulnerable {
                 <span className="text-xs text-gray-500">Common in Audits</span>
               </div>
               <p className="text-sm text-gray-400">
-                Security auditors regularly flag tx.origin usage. It's considered a high-severity 
+                Security auditors regularly flag tx.origin usage. It&apos;s considered a high-severity 
                 finding by most audit firms and automated tools like Slither and Mythril.
               </p>
             </div>
           </div>
 
           <AlertBox type="warning" title="Why This Still Matters">
-            Even though tx.origin phishing is "well known," new developers make this 
+            Even though tx.origin phishing is &quot;well known,&quot; new developers make this 
             mistake regularly. According to audit statistics, approximately 2-3% of 
             audited contracts still contain tx.origin vulnerabilities.
           </AlertBox>
@@ -514,8 +514,8 @@ contract StillVulnerable {
                 <h4 className="font-semibold text-lime-400">Use OpenZeppelin</h4>
               </div>
               <p className="text-sm text-gray-400">
-                Use OpenZeppelin's <code>Ownable</code>, <code>AccessControl</code>, or 
-                other auth patterns. They're audited and never use tx.origin.
+                Use OpenZeppelin&apos;s <code>Ownable</code>, <code>AccessControl</code>, or 
+                other auth patterns. They&apos;re audited and never use tx.origin.
               </p>
             </div>
 
@@ -537,7 +537,7 @@ contract StillVulnerable {
               </div>
               <p className="text-sm text-gray-400">
                 Write tests that simulate phishing attacks. If your contract can be 
-                exploited via intermediary contracts, you'll catch it.
+                exploited via intermediary contracts, you&apos;ll catch it.
               </p>
             </div>
           </div>
@@ -691,7 +691,7 @@ contract Analytics {
 
           <AlertBox type="warning" title="⚠️ EOA Check Limitations">
             The <code>tx.origin == msg.sender</code> check to prevent contract calls 
-            can be bypassed by calling from a contract's constructor (during deployment, 
+            can be bypassed by calling from a contract&apos;s constructor (during deployment, 
             the contract has no code yet). This is not a reliable anti-bot mechanism.
           </AlertBox>
         </section>
@@ -826,7 +826,7 @@ contract TxOriginTest is Test {
               </div>
               <div>
                 <h5 className="text-sm font-medium text-white mb-2">Solhint</h5>
-                <code className="text-xs text-gray-400 block bg-black/30 p-2 rounded">solhint "**/*.sol"</code>
+                <code className="text-xs text-gray-400 block bg-black/30 p-2 rounded">solhint &quot;**/*.sol&quot;</code>
               </div>
               <div>
                 <h5 className="text-sm font-medium text-white mb-2">Aderyn</h5>
@@ -951,7 +951,7 @@ contract TxOriginTest is Test {
           <h3 className="font-semibold text-white mb-2">🎓 Practice This Vulnerability</h3>
           <p className="text-sm text-gray-400 mb-4">
             tx.origin phishing is Level 4 in Ethernaut. Try to solve it yourself, 
-            then get your contracts audited by our team to ensure you haven't made 
+            then get your contracts audited by our team to ensure you haven&apos;t made 
             similar mistakes.
           </p>
           <Link

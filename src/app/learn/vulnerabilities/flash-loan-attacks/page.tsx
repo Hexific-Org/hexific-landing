@@ -62,7 +62,7 @@ export default function FlashLoanAttacksPage() {
           <h2>What are Flash Loans?</h2>
           <p>
             Flash loans are uncollateralized loans that must be borrowed and repaid within a single 
-            transaction. If the loan isn't repaid by the end of the transaction, the entire 
+            transaction. If the loan isn&apos;t repaid by the end of the transaction, the entire 
             transaction reverts as if it never happened.
           </p>
           
@@ -137,7 +137,7 @@ contract FlashLoanExample is IFlashLoanReceiver {
         <section id="attack-vectors">
           <h2>Common Attack Vectors</h2>
           <p>
-            Flash loans themselves aren't vulnerabilities - they're a feature. However, they amplify
+            Flash loans themselves aren&apos;t vulnerabilities - they&apos;re a feature. However, they amplify
             other vulnerabilities by providing attackers with massive capital. Here are the main vectors:
           </p>
 
@@ -350,7 +350,7 @@ contract SecureGovernance {
                 <span className="text-red-400 font-bold">$45M</span>
               </div>
               <p className="text-sm text-gray-400 mb-2">
-                Flash loan used to manipulate BUNNY/BNB price, then exploit the protocol's 
+                Flash loan used to manipulate BUNNY/BNB price, then exploit the protocol&apos;s 
                 reward calculation mechanism.
               </p>
               <div className="flex gap-2">

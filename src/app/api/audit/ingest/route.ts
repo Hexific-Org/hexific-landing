@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
 import { inngest } from '@/lib/inngest';
-import { fetchContractSource } from '@/lib/etherscan'; // (Keep your existing helper)
+import { fetchContractSource } from '@/lib/etherscan';
 import JSZip from 'jszip';
 
 export const maxDuration = 240;
@@ -10,14 +11,20 @@ export async function POST(req: Request) {
     try {
         const formData = await req.formData();
 
-        // 1. Get the Toggle Switch Value
-        const isAiAudit = formData.get('ai_mode') === 'true'; // Frontend sends this
+        const isAiAudit = formData.get('ai_mode') === 'true';
         const jobMode = isAiAudit ? 'AI' : 'STATIC';
 
-        // 2. Create Job
+        if (isAiAudit) {
+            const supabaseAuth = await createClient();
+            const { data: { user } } = await supabaseAuth.auth.getUser();
+            if (!user) {
+                return NextResponse.json({ error: 'Sign in required for Hexific AI audit' }, { status: 401 });
+            }
+        }
+
         const { data: job, error: jobError } = await supabase
             .from('audit_jobs')
-            .insert({ status: 'PENDING', mode: jobMode }) // Store the mode!
+            .insert({ status: 'PENDING', mode: jobMode })
             .select()
             .single();
 

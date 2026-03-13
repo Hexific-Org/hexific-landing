@@ -16,6 +16,9 @@ import {
   FileText,
   AlertTriangle
 } from 'lucide-react';
+import { AuthUserNav } from '@/components/AuthUserNav';
+import { ProgressTracker } from '@/components/learn/ProgressTracker';
+import { LearnProgressWidget } from '@/components/learn/LearnProgressWidget';
 
 // Navigation items for HexiLearn
 const navItems = [
@@ -263,31 +266,7 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           ))}
 
           {/* Quick Stats */}
-          <div className="mt-8 p-4 bg-lime-400/5 border border-lime-400/20 rounded-xl">
-            <h4 className="text-xs font-semibold text-lime-400 uppercase tracking-wider mb-3">
-              Learning Progress
-            </h4>
-            <div className="space-y-3">
-              <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-400">Vulnerabilities</span>
-                  <span className="text-lime-400">12 articles</span>
-                </div>
-                <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                  <div className="h-full w-3/4 bg-gradient-to-r from-lime-400 to-lime-500 rounded-full" />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-gray-400">Case Studies</span>
-                  <span className="text-lime-400">8 analyses</span>
-                </div>
-                <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                  <div className="h-full w-1/2 bg-gradient-to-r from-lime-400 to-lime-500 rounded-full" />
-                </div>
-              </div>
-            </div>
-          </div>
+          <LearnProgressWidget />
 
           {/* Back to Hexific */}
           <Link
@@ -359,6 +338,8 @@ function LearnNavbar({ onMenuClick, onSearchClick }: { onMenuClick: () => void; 
               </svg>
             </button>
 
+            <AuthUserNav />
+
             {/* Get Audit CTA */}
             <Link
               href="/"
@@ -406,6 +387,7 @@ export default function LearnLayout({
       <main className="lg:pl-72 pt-20 min-h-screen">
         <div className="max-w-5xl mx-auto px-6 py-8">
           {children}
+          <ProgressTracker />
         </div>
       </main>
 

@@ -64,7 +64,7 @@ export default function IntegerOverflowPage() {
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3">
-              That's 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,935
+              That&apos;s 115,792,089,237,316,195,423,570,985,008,687,907,853,269,984,665,640,564,039,457,584,007,913,129,639,935
             </p>
           </div>
 
@@ -203,7 +203,7 @@ contract UncheckedMath {
         </section>
 
         <section id="still-vulnerable">
-          <h2>When You're Still Vulnerable</h2>
+          <h2>When You&apos;re Still Vulnerable</h2>
           
           <div className="grid md:grid-cols-2 gap-4 my-6">
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
@@ -280,14 +280,14 @@ contract WithSafeCast {
             <div className="p-4 bg-lime-400/5 border border-lime-400/20 rounded-xl">
               <h4 className="font-semibold text-lime-400 mb-2">✅ Use SafeCast for Downcasting</h4>
               <p className="text-sm text-gray-400">
-                OpenZeppelin's SafeCast library provides safe type conversions.
+                OpenZeppelin&apos;s SafeCast library provides safe type conversions.
               </p>
             </div>
             
             <div className="p-4 bg-lime-400/5 border border-lime-400/20 rounded-xl">
               <h4 className="font-semibold text-lime-400 mb-2">✅ Review unchecked Blocks Carefully</h4>
               <p className="text-sm text-gray-400">
-                Only use unchecked when you've mathematically proven overflow is impossible.
+                Only use unchecked when you&apos;ve mathematically proven overflow is impossible.
               </p>
             </div>
             
