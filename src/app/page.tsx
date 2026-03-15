@@ -409,10 +409,8 @@ export default function Page() {
                 </Link>
               </div>
             </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/sign-in" className="text-gray-300 hover:text-lime-400 transition-colors font-medium">
-                Sign in
-              </Link>
+            <div className="hidden md:flex items-center space-x-8">
+              {/* <a href="#contact" className="glass-effect text-white px-6 py-2 rounded-lg hover:bg-lime-300 transition-colors font-semibold">Get Audit</a> */}
               <WalletConnectButton onMobile={false} />
               {/* <WalletConnectButton /> */}
             </div>

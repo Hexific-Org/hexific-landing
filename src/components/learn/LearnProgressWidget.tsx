@@ -8,14 +8,26 @@ const TOTALS = {
   'best-practices': 3,
 } as const;
 
+function fetchProgress() {
+  return fetch('/api/learn/progress')
+    .then((res) => (res.ok ? res.json() : { progress: [] }))
+    .then((data) => data.progress ?? [])
+    .catch(() => []);
+}
+
 export function LearnProgressWidget() {
   const [progress, setProgress] = useState<{ article_slug: string }[]>([]);
 
   useEffect(() => {
-    fetch('/api/learn/progress')
-      .then((res) => (res.ok ? res.json() : { progress: [] }))
-      .then((data) => setProgress(data.progress ?? []))
-      .catch(() => setProgress([]));
+    fetchProgress().then(setProgress);
+  }, []);
+
+  useEffect(() => {
+    const onProgressUpdated = () => {
+      fetchProgress().then(setProgress);
+    };
+    window.addEventListener('learn-progress-updated', onProgressUpdated);
+    return () => window.removeEventListener('learn-progress-updated', onProgressUpdated);
   }, []);
 
   const completedByCategory = progress.reduce(

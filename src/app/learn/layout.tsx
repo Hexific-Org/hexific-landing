@@ -14,7 +14,8 @@ import {
   Wrench,
   X,
   FileText,
-  AlertTriangle
+  AlertTriangle,
+  User,
 } from 'lucide-react';
 import { AuthUserNav } from '@/components/AuthUserNav';
 import { ProgressTracker } from '@/components/learn/ProgressTracker';
@@ -37,6 +38,7 @@ const navItems = [
       { href: '/learn/glossary', label: 'Glossary', icon: <BookOpen className="w-5 h-5" /> },
       { href: '/learn/checklist', label: 'Security Checklist', icon: <ClipboardList className="w-5 h-5" /> },
       { href: '/learn/resources', label: 'Tools & Resources', icon: <Wrench className="w-5 h-5" /> },
+      { href: '/learn/profile', label: 'Profile & Certificate', icon: <User className="w-5 h-5" /> },
     ]
   }
 ];
