@@ -376,9 +376,6 @@ export function PaymentCard({ onPaymentSuccess, isAuditing = false, disabled = f
           >
             {cardLoading ? 'Redirecting...' : 'Pay $1.00 & Continue to Checkout'}
           </Button>
-          <p className="text-xs text-gray-500 text-center">
-            You will complete your audit after payment. Add STRIPE_SECRET_KEY to enable.
-          </p>
         </div>
       ) : isConnected && selectedAccount ? (
         <ConnectedPaymentCard account={selectedAccount} onPaymentSuccess={onPaymentSuccess} isAuditing={isAuditing} disabled={disabled} />

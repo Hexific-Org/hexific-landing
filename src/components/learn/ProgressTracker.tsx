@@ -40,6 +40,7 @@ export function ProgressTracker() {
       });
       if (res.ok) {
         trackedRef.current.add(slug);
+        window.dispatchEvent(new CustomEvent('learn-progress-updated'));
       }
     } catch {
       trackedRef.current.delete(slug);
