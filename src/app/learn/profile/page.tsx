@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { User, Award, Loader2, Download } from 'lucide-react';
+import { User, Award, Loader2, Download, Lock } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 import { LearnCertificatePDF } from '@/components/learn/LearnCertificatePDF';
 
 type CertificateData = {
@@ -14,11 +15,16 @@ type CertificateData = {
 };
 
 export default function ProfilePage() {
+  const supabase = createClient();
   const [profile, setProfile] = useState<{ display_name: string | null; email: string | null } | null>(null);
   const [cert, setCert] = useState<CertificateData | null>(null);
   const [saving, setSaving] = useState(false);
   const [displayNameInput, setDisplayNameInput] = useState('');
   const [loading, setLoading] = useState(true);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -48,6 +54,31 @@ export default function ProfilePage() {
       }
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordMessage(null);
+    if (newPassword.length < 6) {
+      setPasswordMessage({ type: 'error', text: 'Password must be at least 6 characters' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage({ type: 'error', text: 'Passwords do not match' });
+      return;
+    }
+    setPasswordSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+      setPasswordMessage({ type: 'success', text: 'Password updated successfully.' });
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setPasswordMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to update password' });
+    } finally {
+      setPasswordSaving(false);
     }
   };
 
@@ -93,6 +124,43 @@ export default function ProfilePage() {
         {profile?.email && (
           <p className="text-sm text-gray-500 mt-2">Signed in as {profile.email}</p>
         )}
+      </section>
+
+      <section className="rounded-2xl border border-lime-400/20 bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <Lock className="w-5 h-5 text-lime-400" />
+          Change password
+        </h2>
+        <form onSubmit={handleChangePassword} className="space-y-3">
+          {passwordMessage && (
+            <p className={`text-sm ${passwordMessage.type === 'success' ? 'text-lime-400' : 'text-red-400'}`}>
+              {passwordMessage.text}
+            </p>
+          )}
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="New password"
+            minLength={6}
+            className="w-full px-4 py-3 rounded-lg bg-black/30 border border-lime-400/20 text-white placeholder-gray-500 focus:border-lime-400 focus:outline-none"
+          />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm new password"
+            minLength={6}
+            className="w-full px-4 py-3 rounded-lg bg-black/30 border border-lime-400/20 text-white placeholder-gray-500 focus:border-lime-400 focus:outline-none"
+          />
+          <button
+            type="submit"
+            disabled={passwordSaving}
+            className="px-4 py-2 bg-lime-400 text-black font-semibold rounded-lg hover:bg-lime-300 disabled:opacity-50 transition-colors"
+          >
+            {passwordSaving ? 'Updating...' : 'Update password'}
+          </button>
+        </form>
       </section>
 
       <section className="rounded-2xl border border-lime-400/20 bg-white/[0.02] p-6">
