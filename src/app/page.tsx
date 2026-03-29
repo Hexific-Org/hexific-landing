@@ -17,6 +17,10 @@ export default function Page() {
   const [startX, setStartX] = useState(0);
   const [currentTranslateX, setCurrentTranslateX] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mintInput, setMintInput] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any | null>(null);
 
 
   const carouselAnimNameRef = useRef<string>('');
@@ -369,6 +373,45 @@ export default function Page() {
     const element = document.getElementById('free-audit-upload');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleRugRiskAnalyze = async () => {
+    if (!mintInput.trim()) {
+      setAnalysisError('Please enter a Solana token mint address.');
+      setAnalysisResult(null);
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setAnalysisError(null);
+    setAnalysisResult(null);
+
+    try {
+      const res = await fetch('/api/solana/rug-risk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mint: mintInput.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setAnalysisError(
+          data?.error ??
+            'Failed to analyze this token. Please try again or use a different mint address.',
+        );
+        return;
+      }
+
+      setAnalysisResult(data);
+    } catch (err) {
+      console.error('Failed to analyze rug risk:', err);
+      setAnalysisError(
+        'Unexpected error while analyzing this token. Please try again in a moment.',
+      );
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
