@@ -12,6 +12,10 @@ export default function Page() {
   const [hexiPrice, setHexiPrice] = useState<number | null>(null);
   const [priceChange24h, setPriceChange24h] = useState<number | null>(null);
   const [platformStats, setPlatformStats] = useState<{ vulnerabilitiesFound: number; contractsAudited: number }>({ vulnerabilitiesFound: 700, contractsAudited: 50 });
+  const [statsLoaded, setStatsLoaded] = useState(false);
+  const [displayVulns, setDisplayVulns] = useState(0);
+  const [displayContracts, setDisplayContracts] = useState(0);
+  const animationPlayedRef = useRef(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -192,41 +196,15 @@ export default function Page() {
     };
   }, []);
 
-  // Animate stats counters
+  // Observe when stats bar scrolls into view for slide-up and counter trigger
   useEffect(() => {
     if (countersStarted) return;
-
-    const animateCounters = () => {
-      setCountersStarted(true);
-      const counters = [
-        { id: 'contracts-audited', target: 500, suffix: '+' },
-        { id: 'vulnerabilities', target: 2847, suffix: '' },
-        { id: 'saved-funds', target: 50, suffix: 'M+' },
-        { id: 'response-time', target: 24, suffix: 'h' }
-      ];
-      counters.forEach(({ id, target, suffix }) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        let current = 0;
-        const increment = target / 50;
-        const timer = setInterval(() => {
-          current += increment;
-          if (current >= target) {
-            current = target;
-            clearInterval(timer);
-          }
-          el.textContent = id === 'saved-funds'
-            ? '$' + Math.floor(current) + suffix
-            : Math.floor(current) + suffix;
-        }, 50);
-      });
-    };
 
     const slideObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.target.id === 'contracts-audited') {
-          animateCounters();
-          observer.disconnect(); // stop after first trigger
+          setCountersStarted(true);
+          observer.disconnect();
         }
         if (entry.isIntersecting) {
           entry.target.classList.add('slide-up');
@@ -236,12 +214,40 @@ export default function Page() {
 
     document
       .querySelectorAll<HTMLElement>('.feature-card, #contracts-audited')
-      .forEach(el => {
-        slideObserver.observe(el);
-      });
+      .forEach(el => slideObserver.observe(el));
 
     return () => slideObserver.disconnect();
   }, [countersStarted]);
+
+  // Animate counters only when BOTH the element is visible AND real API data has loaded.
+  // This prevents the animation from running with fallback default values.
+  useEffect(() => {
+    if (!countersStarted || !statsLoaded) return;
+
+    if (animationPlayedRef.current) {
+      // Subsequent API refresh — update directly without re-animating
+      setDisplayVulns(platformStats.vulnerabilitiesFound);
+      setDisplayContracts(platformStats.contractsAudited);
+      return;
+    }
+
+    animationPlayedRef.current = true;
+
+    const animateTo = (target: number, setter: (v: number) => void) => {
+      const duration = 1800;
+      const startTime = performance.now();
+      const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+      const tick = (now: number) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        setter(Math.floor(easeOut(progress) * target));
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    animateTo(platformStats.vulnerabilitiesFound, setDisplayVulns);
+    animateTo(platformStats.contractsAudited, setDisplayContracts);
+  }, [countersStarted, statsLoaded, platformStats]);
 
   // Progress bars animation
   useEffect(() => {
@@ -310,6 +316,7 @@ export default function Page() {
           vulnerabilitiesFound: data.vulnerabilitiesFound,
           contractsAudited: data.contractsAudited,
         });
+        setStatsLoaded(true);
       } catch (error) {
         console.error('Failed to fetch platform stats:', error);
       }
@@ -645,11 +652,11 @@ export default function Page() {
           <div className="border-t border-white/[0.07] bg-[#0a0b10]/60">
             <div className="grid grid-cols-3">
               <div className="py-4 px-3 text-center border-r border-white/[0.07]">
-                <div className="text-xl font-bold text-white mb-0.5">{platformStats.vulnerabilitiesFound}</div>
+                <div className="text-xl font-bold text-white mb-0.5">{displayVulns}</div>
                 <div className="text-[11px] text-gray-500 uppercase tracking-wide">Vulns Found</div>
               </div>
               <div className="py-4 px-3 text-center border-r border-white/[0.07]">
-                <div className="text-xl font-bold text-white mb-0.5">{platformStats.contractsAudited}</div>
+                <div className="text-xl font-bold text-white mb-0.5">{displayContracts}</div>
                 <div className="text-[11px] text-gray-500 uppercase tracking-wide">Contracts</div>
               </div>
               <div className="py-4 px-3 text-center">
@@ -746,14 +753,14 @@ export default function Page() {
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex items-stretch divide-x divide-white/[0.07]">
                 <div className="flex-1 py-5 px-6">
-                  <div className="text-2xl font-bold text-white mb-1" id="vulnerabilities">{platformStats.vulnerabilitiesFound}</div>
+                  <div className="text-2xl font-bold text-white mb-1" id="vulnerabilities">{displayVulns}</div>
                   <div className="flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-medium">Vulnerabilities Found</span>
                   </div>
                 </div>
                 <div className="flex-1 py-5 px-6">
-                  <div className="text-2xl font-bold text-white mb-1" id="contracts-audited">{platformStats.contractsAudited}</div>
+                  <div className="text-2xl font-bold text-white mb-1" id="contracts-audited">{displayContracts}</div>
                   <div className="flex items-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span className="text-xs uppercase tracking-wider text-gray-500 font-medium">Contracts Audited</span>
@@ -940,7 +947,7 @@ export default function Page() {
                 </div>
 
                 <p className="text-sm text-gray-400 mb-5 leading-relaxed">
-                  Human experts who&apos;ve seen every rug, every exploit, every edge case. They audit like hackers think — because some of them were.
+                  Human experts who&apos;ve seen every rug, every exploit, every edge case. They audit like hackers think, because some of them were.
                 </p>
 
                 {/* Checklist — Web3 specific */}
