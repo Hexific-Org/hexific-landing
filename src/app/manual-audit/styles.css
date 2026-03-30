@@ -1,7 +1,7 @@
 /* Manual Audit Page Styles - Hexific Theme */
 
 .manual-audit-container {
-  background: #000E1B;
+  background: #08090d;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -60,7 +60,7 @@
 }
 
 .form-input option {
-  background: #000E1B;
+  background: #08090d;
   color: white;
 }
 

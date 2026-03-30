@@ -272,7 +272,7 @@ export default function GlossaryPage() {
       <div className="space-y-8">
         {letters.map((letter) => (
           <div key={letter} id={`letter-${letter}`}>
-            <div className="sticky top-20 z-10 bg-[#000E1B] py-2">
+            <div className="sticky top-20 z-10 bg-[#08090d] py-2">
               <h2 className="text-2xl font-bold text-lime-400">{letter}</h2>
             </div>
             <div className="space-y-4 mt-4">

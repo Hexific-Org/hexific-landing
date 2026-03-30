@@ -37,7 +37,7 @@ function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <div className="min-h-screen bg-[#000E1B] flex flex-col items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-[#08090d] flex flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <Link href="/" className="flex items-center gap-3 justify-center mb-8">
             <div className="w-10 h-10 bg-lime-400 rounded-lg flex items-center justify-center">
@@ -67,7 +67,7 @@ function ForgotPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#000E1B] flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[#08090d] flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <Link href="/" className="flex items-center gap-3 justify-center mb-8">
           <div className="w-10 h-10 bg-lime-400 rounded-lg flex items-center justify-center">
@@ -136,7 +136,7 @@ function ForgotPasswordForm() {
 
 export default function ForgotPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#000E1B] flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-lime-400 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#08090d] flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-lime-400 border-t-transparent rounded-full" /></div>}>
       <ForgotPasswordForm />
     </Suspense>
   );

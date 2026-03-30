@@ -211,7 +211,7 @@ function LearnSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
 
       {/* Sidebar */}
       <aside className={`
-        fixed left-0 top-20 h-[calc(100vh-5rem)] w-72 bg-[#000E1B]/95 backdrop-blur-xl
+        fixed left-0 top-20 h-[calc(100vh-5rem)] w-72 bg-[#08090d]/95 backdrop-blur-xl
         border-r border-lime-400/20 overflow-y-auto z-40
         transform transition-transform duration-300 ease-in-out
         lg:translate-x-0
@@ -299,7 +299,7 @@ function LearnNavbar({ onMenuClick, onSearchClick }: { onMenuClick: () => void; 
     <nav className={`
       fixed top-0 w-full z-[60] transition-all duration-300
       ${scrolled
-        ? 'bg-[#000E1B]/90 backdrop-blur-xl border-b border-lime-400/20'
+        ? 'bg-[#08090d]/90 backdrop-blur-xl border-b border-lime-400/20'
         : 'bg-transparent'
       }
     `}>
@@ -380,7 +380,7 @@ export default function LearnLayout({
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#000E1B] text-white">
+    <div className="min-h-screen bg-[#08090d] text-white">
       <LearnNavbar onMenuClick={() => setSidebarOpen(true)} onSearchClick={() => setSearchOpen(true)} />
       <LearnSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
@@ -394,7 +394,7 @@ export default function LearnLayout({
       </main>
 
       {/* Footer */}
-      <footer className="lg:pl-72 border-t border-lime-400/10 bg-[#000E1B]">
+      <footer className="lg:pl-72 border-t border-lime-400/10 bg-[#08090d]">
         <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-500">

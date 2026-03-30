@@ -8,7 +8,7 @@ export default function CurveFinance2023Page() {
   const [activeTab, setActiveTab] = useState<'timeline' | 'technical' | 'prevention'>('timeline');
 
   return (
-    <div className="min-h-screen bg-[#000E1B]">
+    <div className="min-h-screen bg-[#08090d]">
       {/* Breadcrumb */}
       <Breadcrumb items={[
         { label: 'HexiLearn', href: '/learn' },
@@ -163,7 +163,7 @@ export default function CurveFinance2023Page() {
               ].map((event, index) => (
                 <div key={index} className="relative">
                   {/* Timeline dot */}
-                  <div className="absolute -left-5 w-4 h-4 bg-lime-400 rounded-full border-2 border-[#000E1B]" />
+                  <div className="absolute -left-5 w-4 h-4 bg-lime-400 rounded-full border-2 border-[#08090d]" />
 
                   {/* Content card */}
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-lime-400/10 hover:bg-white/[0.04] transition-colors">

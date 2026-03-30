@@ -46,91 +46,386 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* === HEXIFIC DARK THEME — canvas #08090d, subtle neutral borders === */
+  --background: #08090d;
+  --foreground: #f5f5f7;
+  --card: #0c0e14;
+  --card-foreground: #f5f5f7;
+  --popover: #0c0e14;
+  --popover-foreground: #f5f5f7;
+  --primary: oklch(0.88 0.21 120);
+  --primary-foreground: oklch(0.10 0 0);
+  --secondary: #12151c;
+  --secondary-foreground: #f5f5f7;
+  --muted: #12151c;
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: #12151c;
+  --accent-foreground: #f5f5f7;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: rgb(255 255 255 / 6%);
+  --input: rgb(255 255 255 / 8%);
+  --ring: oklch(0.88 0.21 120 / 40%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #0a0c11;
+  --sidebar-foreground: #f5f5f7;
+  --sidebar-primary: oklch(0.88 0.21 120);
+  --sidebar-primary-foreground: oklch(0.10 0 0);
+  --sidebar-accent: #12151c;
+  --sidebar-accent-foreground: #f5f5f7;
+  --sidebar-border: rgb(255 255 255 / 6%);
+  --sidebar-ring: oklch(0.88 0.21 120 / 40%);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #08090d;
+  --foreground: #f5f5f7;
+  --card: #0c0e14;
+  --card-foreground: #f5f5f7;
+  --popover: #0c0e14;
+  --popover-foreground: #f5f5f7;
+  --primary: oklch(0.88 0.21 120);
+  --primary-foreground: oklch(0.10 0 0);
+  --secondary: #12151c;
+  --secondary-foreground: #f5f5f7;
+  --muted: #12151c;
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: #12151c;
+  --accent-foreground: #f5f5f7;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: rgb(255 255 255 / 6%);
+  --input: rgb(255 255 255 / 8%);
+  --ring: oklch(0.88 0.21 120 / 40%);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #0a0c11;
+  --sidebar-foreground: #f5f5f7;
+  --sidebar-primary: oklch(0.88 0.21 120);
+  --sidebar-primary-foreground: oklch(0.10 0 0);
+  --sidebar-accent: #12151c;
+  --sidebar-accent-foreground: #f5f5f7;
+  --sidebar-border: rgb(255 255 255 / 6%);
+  --sidebar-ring: oklch(0.88 0.21 120 / 40%);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html {
     @apply bg-background text-foreground;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: hidden;
   }
 }
 
+/* ============================================
+   GRADIENT TEXT — lime to white
+   ============================================ */
 .gradient-text {
-  background: linear-gradient(135deg, #d6ed17, #ffffff);
+  background: linear-gradient(135deg, #d6ed17 0%, #f0f8a0 50%, #ffffff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* ============================================
+   GLASS EFFECT — dark frosted card
+   ============================================ */
 .glass-effect {
-  background: rgba(214, 237, 23, 0.1);
+  background: rgba(16, 18, 26, 0.85);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(214, 237, 23, 0.2);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ============================================
+   DOT GRID BACKGROUND
+   ============================================ */
+.dot-grid-bg {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ============================================
+   MATRIX BACKGROUND — Darker overlay (canvas)
+   ============================================ */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+/* ============================================
+   NEON BORDER — Subtle lime glow
+   ============================================ */
+.neon-border {
+  border: 1.5px solid rgba(214, 237, 23, 0.4);
+  box-shadow: 0 0 10px rgba(214, 237, 23, 0.12), inset 0 0 8px rgba(214, 237, 23, 0.06);
+  color: #d6ed17;
+}
+
+/* ============================================
+   PULSE GLOW — Used on primary CTAs
+   ============================================ */
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(214, 237, 23, 0.25), 0 0 24px rgba(214, 237, 23, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(214, 237, 23, 0.45), 0 0 40px rgba(214, 237, 23, 0.2);
+  }
+}
+
+/* ============================================
+   SCAN LINE — subtle shimmer
+   ============================================ */
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214, 237, 23, 0.15), transparent);
+  animation: scanLine 4s linear infinite;
+}
+
+@keyframes scanLine {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+
+/* ============================================
+   SHIMMER BADGE
+   ============================================ */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  animation: shimmerAnim 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmerAnim {
+  0% { left: -100%; }
+  100% { left: 160%; }
+}
+
+/* ============================================
+   FLOATING ORBS
+   ============================================ */
+.floating-orbs::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(214, 237, 23, 0.04) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatOrb 8s ease-in-out infinite;
+}
+
+.floating-orbs::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(214, 237, 23, 0.03) 0%, transparent 70%);
+  bottom: -80px;
+  left: -80px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatOrb 10s ease-in-out infinite reverse;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ============================================
+   CYBER GRID
+   ============================================ */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(214, 237, 23, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(214, 237, 23, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ============================================
+   CODE PATTERN
+   ============================================ */
+.code-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ============================================
+   SLIDE UP ANIMATION
+   ============================================ */
+.slide-up {
+  animation: slideUpAnim 0.7s ease-out forwards;
+}
+
+@keyframes slideUpAnim {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   ICON FLOAT
+   ============================================ */
+.icon-float {
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ============================================
+   CAROUSEL TRACK
+   ============================================ */
+@keyframes carouselScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.carousel-track {
+  animation: carouselScroll 50s linear infinite;
+}
+
+.carousel-slide {
+  display: flex;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   AUDIT PROGRESS BAR
+   ============================================ */
+.audit-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #d6ed17, #a8c400);
+  width: var(--progress, 0%);
+  transition: width 1.5s ease-in-out;
+}
+
+/* ============================================
+   STAT DIVIDER
+   ============================================ */
+.stat-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  align-self: stretch;
+  margin: 0;
+}
+
+/* ============================================
+   PILL NAV
+   ============================================ */
+.nav-pill {
+  background: rgba(12, 14, 20, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+
+/* ============================================
+   DARK CARD
+   ============================================ */
+.dark-card {
+  background: rgba(13, 15, 22, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-card:hover {
+  border-color: rgba(214, 237, 23, 0.2);
+  box-shadow: 0 0 30px rgba(214, 237, 23, 0.05);
+}
+
+/* ============================================
+   HERO RIGHT VISUAL — Shield animation
+   ============================================ */
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotateRingReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.ring-rotate {
+  animation: rotateRing 18s linear infinite;
+  transform-origin: center;
+}
+
+.ring-rotate-reverse {
+  animation: rotateRingReverse 12s linear infinite;
+  transform-origin: center;
+}
+
+.pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+
+/* ============================================
+   FOOTER DIVIDER
+   ============================================ */
+.footer-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }

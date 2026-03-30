@@ -190,7 +190,7 @@ export default function CaseStudiesPage() {
             className="px-4 py-2 bg-white/5 border border-lime-400/20 rounded-lg text-white text-sm focus:outline-none focus:border-lime-400/50"
           >
             {chainOptions.map((chain) => (
-              <option key={chain} value={chain} className="bg-[#000E1B]">
+              <option key={chain} value={chain} className="bg-[#08090d]">
                 {chain}
               </option>
             ))}
@@ -206,7 +206,7 @@ export default function CaseStudiesPage() {
             className="px-4 py-2 bg-white/5 border border-lime-400/20 rounded-lg text-white text-sm focus:outline-none focus:border-lime-400/50"
           >
             {vulnerabilityOptions.map((vuln) => (
-              <option key={vuln} value={vuln} className="bg-[#000E1B]">
+              <option key={vuln} value={vuln} className="bg-[#08090d]">
                 {vuln}
               </option>
             ))}
