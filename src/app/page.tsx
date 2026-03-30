@@ -438,7 +438,6 @@ export default function Page() {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Smart Contract Audit | HEXIFIC</title>
-      <style dangerouslySetInnerHTML={{ __html: "\n        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');\n        \n        * {\n            font-family: 'Inter', sans-serif;\n        }\n        \n        html {\n            scroll-behavior: smooth;\n        }\n        \n        body {\n            background: #08090d;\n            color: white;\n            overflow-x: hidden;\n        }\n        \n        .gradient-text {\n            background: linear-gradient(135deg, #D6ED17 0%, #f0f8a0 50%, #ffffff 100%);\n            -webkit-background-clip: text;\n            -webkit-text-fill-color: transparent;\n            background-clip: text;\n        }\n        \n        .glass-effect {\n            background: rgba(13, 15, 22, 0.85);\n            backdrop-filter: blur(20px);\n            border: 1px solid rgba(255, 255, 255, 0.07);\n        }\n        \n        .feature-card:hover {\n            transform: translateY(-10px);\n            transition: all 0.3s ease;\n        }\n        \n        .cyber-grid {\n            background-image: \n                linear-gradient(rgba(214, 237, 23, 0.025) 1px, transparent 1px),\n                linear-gradient(90deg, rgba(214, 237, 23, 0.025) 1px, transparent 1px);\n            background-size: 60px 60px;\n        }\n        \n        .floating-orbs::after {\n            content: '';\n            position: absolute;\n            width: 500px;\n            height: 500px;\n            background: radial-gradient(circle, rgba(214, 237, 23, 0.04) 0%, transparent 70%);\n            border-radius: 50%;\n            top: -80px;\n            right: -80px;\n            animation: float 8s ease-in-out infinite;\n            z-index: -1;\n        }\n        \n        .floating-orbs::before {\n            content: '';\n            position: absolute;\n            width: 400px;\n            height: 400px;\n            background: radial-gradient(circle, rgba(214, 237, 23, 0.03) 0%, transparent 70%);\n            border-radius: 50%;\n            bottom: -60px;\n            left: -60px;\n            animation: float 10s ease-in-out infinite reverse;\n            z-index: -1;\n        }\n        \n        @keyframes float {\n            0%, 100% { transform: translateY(0px); }\n            50% { transform: translateY(-30px); }\n        }\n        \n        .pulse-glow {\n            animation: pulse-glow 3s ease-in-out infinite;\n        }\n        \n        @keyframes pulse-glow {\n            0%, 100% { box-shadow: 0 0 14px rgba(214, 237, 23, 0.25); }\n            50% { box-shadow: 0 0 28px rgba(214, 237, 23, 0.45); }\n        }\n        \n        .slide-up {\n            animation: slide-up 0.8s ease-out forwards;\n        }\n        \n        @keyframes slide-up {\n            from { opacity: 0; transform: translateY(50px); }\n            to { opacity: 1; transform: translateY(0); }\n        }\n        \n        .code-pattern {\n            background-image:\n                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),\n                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);\n            background-size: 40px 40px;\n        }\n        \n        .neon-border {\n            border: 1.5px solid rgba(214, 237, 23, 0.4);\n            box-shadow: 0 0 10px rgba(214, 237, 23, 0.12), inset 0 0 8px rgba(214, 237, 23, 0.06);\n            color: #d6ed17;\n        }\n        \n        .scan-line {\n            position: relative;\n            overflow: hidden;\n        }\n        \n        .scan-line::after {\n            content: '';\n            position: absolute;\n            top: -100%;\n            left: 0;\n            width: 100%;\n            height: 2px;\n            background: linear-gradient(90deg, transparent, rgba(214, 237, 23, 0.15), transparent);\n            animation: scan 4s linear infinite;\n        }\n        \n        @keyframes scan {\n            0% { top: -5%; }\n            100% { top: 105%; }\n        }\n        \n        .matrix-bg {\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            pointer-events: none;\n            z-index: 0;\n            opacity: 0.12;\n        }\n        \n        .audit-progress {\n            background: linear-gradient(90deg, #D6ED17 var(--progress, 0%), transparent var(--progress, 0%));\n            transition: all 0.3s ease;\n        }\n        \n        /* Infinite Carousel Animation */\n        .carousel-track {\n            animation: carousel-scroll 50s linear infinite;\n            width: fit-content;\n        }\n        \n        .carousel-track:hover {\n            animation-play-state: paused;\n        }\n        \n        .carousel-slide {\n            display: flex;\n            gap: 1.5rem;\n        }\n        \n        @keyframes carousel-scroll {\n            0% { transform: translateX(0); }\n            100% { transform: translateX(-50%); }\n        }\n        \n        /* Service Card Animations */\n        .service-card {\n            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);\n        }\n        \n        .service-card:hover {\n            transform: translateY(-8px);\n        }\n        \n        .service-card::before {\n            content: '';\n            position: absolute;\n            inset: 0;\n            border-radius: 1.5rem;\n            padding: 2px;\n            background: linear-gradient(135deg, transparent 40%, rgba(214, 237, 23, 0.2) 50%, transparent 60%);\n            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);\n            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);\n            -webkit-mask-composite: xor;\n            mask-composite: exclude;\n            opacity: 0;\n            transition: opacity 0.4s ease;\n        }\n        \n        .service-card:hover::before {\n            opacity: 1;\n        }\n        \n        /* Shimmer effect for badges */\n        .shimmer {\n            position: relative;\n            overflow: hidden;\n        }\n        \n        .shimmer::after {\n            content: '';\n            position: absolute;\n            top: 0;\n            left: -100%;\n            width: 50%;\n            height: 100%;\n            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);\n            animation: shimmer 2.5s infinite;\n        }\n        \n        @keyframes shimmer {\n            100% { left: 160%; }\n        }\n        \n        .icon-float {\n            animation: icon-float 3s ease-in-out infinite;\n        }\n        \n        @keyframes icon-float {\n            0%, 100% { transform: translateY(0); }\n            50% { transform: translateY(-5px); }\n        }" }} />
       {/* Matrix Background */}
       <div className="matrix-bg">
         <canvas ref={canvasRef} className="w-full h-full" />
@@ -619,88 +618,35 @@ export default function Page() {
       </a>
 
       {/* Hero Section */}
-      <div>
-        {/* Mobile hero */}
-        <section className="md:hidden min-h-screen flex flex-col pt-24">
-          <div className="flex-1 flex items-center">
-            <div className="max-w-7xl mx-auto px-4 py-8 w-full">
-              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 mb-5">
-                <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
-                <span className="text-xs font-medium text-gray-300">Trusted by 50+ Web3 Projects</span>
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-black mb-4 leading-tight">
-                <span className="gradient-text">Bulletproof</span>
-                <br />
-                <span className="text-white">Smart Contract</span>
-                <br />
-                <span className="text-white">Audits</span>
-              </h1>
-              <p className="text-sm text-gray-400 mb-6 max-w-sm leading-relaxed">
-                Advanced AI-powered security analysis combined with expert manual review. Protect your DeFi protocol from exploits before they happen.
-              </p>
-              <div className="flex flex-col gap-3 justify-center mb-8">
-                <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="bg-lime-400 text-black px-6 py-3 rounded-xl text-base font-bold hover:bg-lime-300 transition-all cursor-pointer pulse-glow">
-                  Start Free Audit
-                </button>
-                <button onClick={() => window.open('https://github.com/Hexific/audit-reports', '_blank')} className="bg-white/5 border border-white/10 px-6 py-3 rounded-xl text-base font-semibold hover:bg-white/8 transition-all cursor-pointer text-gray-200">
-                  View Sample Report
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* Stats bar - mobile */}
-          <div className="border-t border-white/[0.07] bg-[#0a0b10]/60">
-            <div className="grid grid-cols-3">
-              <div className="py-4 px-3 text-center border-r border-white/[0.07]">
-                <div className="text-xl font-bold text-white mb-0.5">{displayVulns}</div>
-                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Vulns Found</div>
-              </div>
-              <div className="py-4 px-3 text-center border-r border-white/[0.07]">
-                <div className="text-xl font-bold text-white mb-0.5">{displayContracts}</div>
-                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Contracts</div>
-              </div>
-              <div className="py-4 px-3 text-center">
-                <div className="text-xl font-bold text-white mb-0.5">24h</div>
-                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Avg Response</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Desktop hero — split layout: left text + right visual */}
-        <section className="hidden md:flex relative min-h-screen flex-col floating-orbs cyber-grid">
-          {/* Top section: content */}
-          <div className="flex-1 flex items-center pt-28">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-              <div className="grid grid-cols-2 gap-16 items-center">
-                {/* Left: text */}
-                <div className="slide-up">
-                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-6">
-                    <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
-                    <span className="text-sm font-medium text-gray-300">Trusted by 50+ Web3 Projects</span>
-                  </div>
-                  <h1 className="text-5xl md:text-6xl xl:text-7xl font-black mb-6 leading-[1.05]">
-                    <span className="gradient-text">Bulletproof</span>
-                    <br />
-                    <span className="text-white">Smart Contract</span>
-                    <br />
-                    <span className="text-white">Audits</span>
-                  </h1>
-                  <p className="text-lg text-gray-400 mb-8 max-w-lg leading-relaxed">
-                    Advanced AI-powered security analysis combined with expert manual review. Protect your DeFi protocol from exploits before they happen.
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="bg-lime-400 text-black px-8 py-4 rounded-xl text-base font-bold hover:bg-lime-300 transition-all pulse-glow cursor-pointer">
-                      Start Free Audit
-                    </button>
-                    <button onClick={() => window.open('https://github.com/Hexific/audit-reports', '_blank')} className="bg-white/5 border border-white/[0.08] px-8 py-4 rounded-xl text-base font-semibold hover:bg-white/8 transition-all cursor-pointer text-gray-200 hover:border-white/20">
-                      View Sample Report →
-                    </button>
-                  </div>
+      <section className="relative min-h-screen flex flex-col pt-24 md:pt-0 floating-orbs cyber-grid">
+        <div className="flex-1 flex items-center md:pt-28 pb-8 md:pb-0">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-0 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+              <div className="slide-up">
+                <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 md:px-4 md:py-2 mb-5 md:mb-6">
+                  <div className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
+                  <span className="text-xs md:text-sm font-medium text-gray-300">Trusted by 50+ Web3 Projects</span>
                 </div>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl md:text-6xl xl:text-7xl font-black mb-4 md:mb-6 leading-tight md:leading-[1.05]">
+                  <span className="gradient-text">Smart Contract</span>
+                  <br />
+                  <span className="text-white">Audit Services</span>
+                </h1>
+                <p className="text-sm md:text-lg text-gray-400 mb-6 md:mb-8 max-w-sm md:max-w-lg leading-relaxed">
+                  Advanced AI-powered security analysis combined with expert manual review. Protect your DeFi protocol from exploits before they happen.
+                </p>
+                <div className="flex flex-col md:flex-row gap-3 md:gap-4 mb-8 md:mb-0">
+                  <button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="bg-lime-400 text-black px-6 py-3 md:px-8 md:py-4 rounded-xl text-base font-bold hover:bg-lime-300 transition-all cursor-pointer pulse-glow">
+                    Start Free Audit
+                  </button>
+                  <button onClick={() => window.open('https://github.com/Hexific/audit-reports', '_blank')} className="bg-white/5 border border-white/10 md:border-white/[0.08] px-6 py-3 md:px-8 md:py-4 rounded-xl text-base font-semibold hover:bg-white/8 transition-all cursor-pointer text-gray-200 md:hover:border-white/20">
+                    View Sample Report<span className="hidden md:inline"> →</span>
+                  </button>
+                </div>
+              </div>
 
-                {/* Right: Security visual */}
-                <div className="flex items-center justify-center">
+              {/* Right: Security visual (desktop only) */}
+              <div className="hidden md:flex items-center justify-center">
                   <div className="relative w-80 h-80 xl:w-96 xl:h-96">
                     {/* Outer ring */}
                     <div className="absolute inset-0 rounded-full border border-lime-400/10 ring-rotate" style={{ animationDuration: '25s' }}>
@@ -748,8 +694,26 @@ export default function Page() {
             </div>
           </div>
 
-          {/* Bottom stats bar with dividers */}
-          <div className="border-t border-white/[0.07] bg-[#0a0b10]/40 backdrop-blur-sm">
+          {/* Stats bar — mobile (compact 3-col) */}
+          <div className="md:hidden border-t border-white/[0.07] bg-[#0a0b10]/60">
+            <div className="grid grid-cols-3">
+              <div className="py-4 px-3 text-center border-r border-white/[0.07]">
+                <div className="text-xl font-bold text-white mb-0.5">{displayVulns}</div>
+                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Vulns Found</div>
+              </div>
+              <div className="py-4 px-3 text-center border-r border-white/[0.07]">
+                <div className="text-xl font-bold text-white mb-0.5">{displayContracts}</div>
+                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Contracts</div>
+              </div>
+              <div className="py-4 px-3 text-center">
+                <div className="text-xl font-bold text-white mb-0.5">24h</div>
+                <div className="text-[11px] text-gray-500 uppercase tracking-wide">Avg Response</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom stats bar — desktop */}
+          <div className="hidden md:block border-t border-white/[0.07] bg-[#0a0b10]/40 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex items-stretch divide-x divide-white/[0.07]">
                 <div className="flex-1 py-5 px-6">
@@ -791,7 +755,6 @@ export default function Page() {
             </div>
           </div>
         </section>
-      </div>
       {/* ═══════════════════════════════════════
            SERVICES SECTION — Bento Grid, Web3-native
            ═══════════════════════════════════════ */}

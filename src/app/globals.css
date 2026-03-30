@@ -120,6 +120,7 @@
   }
   html {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -336,6 +337,11 @@
 
 .carousel-track {
   animation: carouselScroll 50s linear infinite;
+  width: fit-content;
+}
+
+.carousel-track:hover {
+  animation-play-state: paused;
 }
 
 .carousel-slide {
@@ -428,4 +434,37 @@
    ============================================ */
 .footer-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Home page — feature cards + bento service cards */
+.feature-card:hover {
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.service-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 2px;
+  background: linear-gradient(135deg, transparent 40%, rgba(214, 237, 23, 0.2) 50%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.service-card:hover::before {
+  opacity: 1;
 }
