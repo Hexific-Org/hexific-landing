@@ -6,6 +6,23 @@ import Link from 'next/link';
 import FreeAuditUpload from '@/components/FreeAuditUpload';
 import { WalletConnectButton } from "@/components/wallet-connect-button";
 
+type RugRiskResult = {
+  risk_score?: number;
+  risk_level?: 'HIGH' | 'MEDIUM' | 'LOW' | string;
+  reasons?: string[];
+  metrics?: {
+    top_holder_percent?: number;
+    top10_holder_percent?: number;
+    total_holders?: number;
+    token_age_days?: number;
+    mint_authority_active?: boolean;
+    freeze_authority_active?: boolean;
+    clustered_wallets_detected?: boolean;
+    suspected_cluster_size?: number;
+    liquidity_estimate_usd?: number;
+  };
+};
+
 export default function Page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countersStarted, setCountersStarted] = useState(false);
@@ -24,9 +41,7 @@ export default function Page() {
   const [mintInput, setMintInput] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
-  const [analysisResult, setAnalysisResult] = useState<any | null>(null);
-
-
+  const [analysisResult, setAnalysisResult] = useState<RugRiskResult | null>(null);
   const carouselAnimNameRef = useRef<string>('');
   const carouselAnimDurationSecRef = useRef<number>(0);
   const carouselAnimTimingRef = useRef<string>('linear');
