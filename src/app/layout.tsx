@@ -54,6 +54,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         {/* Google Analytics */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-8V9N97MJ33"
           strategy="afterInteractive"
@@ -67,7 +69,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.className} ${geistSans.variable} ${geistMono.variable}`}>
         {/* <Providers> */}
           <SolanaProvider>{children}</SolanaProvider>
         {/* </Providers> */}

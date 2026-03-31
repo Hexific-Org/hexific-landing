@@ -81,37 +81,13 @@
 }
 
 .dark {
-  --background: #08090d;
-  --foreground: #f5f5f7;
-  --card: #0c0e14;
-  --card-foreground: #f5f5f7;
-  --popover: #0c0e14;
-  --popover-foreground: #f5f5f7;
-  --primary: oklch(0.88 0.21 120);
-  --primary-foreground: oklch(0.10 0 0);
-  --secondary: #12151c;
-  --secondary-foreground: #f5f5f7;
-  --muted: #12151c;
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: #12151c;
-  --accent-foreground: #f5f5f7;
+  /* Only overrides that differ from :root are kept here. */
   --destructive: oklch(0.704 0.191 22.216);
-  --border: rgb(255 255 255 / 6%);
-  --input: rgb(255 255 255 / 8%);
-  --ring: oklch(0.88 0.21 120 / 40%);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: #0a0c11;
-  --sidebar-foreground: #f5f5f7;
-  --sidebar-primary: oklch(0.88 0.21 120);
-  --sidebar-primary-foreground: oklch(0.10 0 0);
-  --sidebar-accent: #12151c;
-  --sidebar-accent-foreground: #f5f5f7;
-  --sidebar-border: rgb(255 255 255 / 6%);
-  --sidebar-ring: oklch(0.88 0.21 120 / 40%);
 }
 
 @layer base {
@@ -120,6 +96,7 @@
   }
   html {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -336,6 +313,11 @@
 
 .carousel-track {
   animation: carouselScroll 50s linear infinite;
+  width: fit-content;
+}
+
+.carousel-track:hover {
+  animation-play-state: paused;
 }
 
 .carousel-slide {
@@ -428,4 +410,37 @@
    ============================================ */
 .footer-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Home page — feature cards + bento service cards */
+.feature-card:hover {
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.service-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  padding: 2px;
+  background: linear-gradient(135deg, transparent 40%, rgba(214, 237, 23, 0.2) 50%, transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.service-card:hover::before {
+  opacity: 1;
 }
