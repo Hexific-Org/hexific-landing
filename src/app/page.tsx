@@ -105,7 +105,7 @@ export default function Page() {
       track.style.transform = `translateX(${currentTranslateX + walk}px)`;
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
+    const handleMouseUp = () => {
       setIsDragging(false);
       track.style.cursor = 'grab';
 
@@ -937,7 +937,7 @@ export default function Page() {
                     ['Oracle manipulation risks', 'lime'],
                     ['Access control & proxy upgrades', 'lime'],
                     ['Cross-chain bridge vulnerabilities', 'lime'],
-                  ].map(([text, color]) => (
+                  ].map(([text]) => (
                     <div key={text} className="flex items-center gap-3">
                       <div className="w-4 h-4 rounded-full bg-lime-400/10 border border-lime-400/25 flex items-center justify-center flex-shrink-0">
                         <svg className="w-2.5 h-2.5 text-lime-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
